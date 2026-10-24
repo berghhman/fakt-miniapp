@@ -100,10 +100,9 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
 .film-veil{position:absolute;left:0;right:0;top:0;height:var(--copy-h,180px);pointer-events:none;
   background:linear-gradient(var(--film) 58%, rgba(223,226,248,0))}
 .ch{position:absolute;left:var(--gutter);right:var(--gutter);top:20px;opacity:0;will-change:opacity,transform}
-.ch h2{font-size:clamp(27px,7.6vw,33px);font-weight:800;line-height:1.04;letter-spacing:-.022em;max-width:13ch;margin:0 0 9px}
+.ch h1,.ch h2{font-size:clamp(27px,7.6vw,33px);font-weight:800;line-height:1.04;letter-spacing:-.022em;max-width:13ch;margin:0 0 9px}
 .ch p{font-size:15.5px;line-height:1.4;color:var(--film-muted);max-width:30ch}
-.ch .fakt{font-weight:900;font-size:clamp(84px,28vw,124px);line-height:.8;letter-spacing:-.035em;color:var(--film-ink);
-  margin:6px 0 14px -4px;white-space:nowrap}
+.ch .brandmark{display:block;font-weight:900;font-size:19px;letter-spacing:.06em;line-height:1;color:var(--film-ink);margin:4px 0 14px}
 .film-stamp{position:absolute;color:var(--film-ink);opacity:0;pointer-events:none;will-change:transform,opacity}
 .film-stamp svg{width:100%;height:100%;display:block}
 .film-hint{display:flex;align-items:center;gap:6px;margin-top:14px;font-size:13.5px;font-weight:600;color:var(--film-ink)}
@@ -119,13 +118,9 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
   font-weight:800;font-size:15px;line-height:1.1;transform:rotate(-4deg);letter-spacing:.01em}
 .facts li:nth-child(2) .seal{transform:rotate(3deg)}
 .facts li:nth-child(3) .seal{transform:rotate(-2deg)}
+.facts li:nth-child(4) .seal{transform:rotate(2.5deg)}
 .facts p{font-size:15px;color:var(--muted);margin-top:8px;max-width:34ch}
 
-/* ============ Подпись бренда внизу ============ */
-.sign{margin:40px calc(-1 * var(--gutter)) 0;overflow:hidden;padding:0 var(--gutter)}
-.sign .big{font-weight:900;font-size:min(calc((100vw - 2 * var(--gutter)) / 2.62), 180px);line-height:.78;letter-spacing:-.04em;color:var(--ink);
-  margin-left:-.04em;white-space:nowrap;user-select:none}
-.sign p{font-size:13px;color:var(--muted);margin-bottom:14px}
 
 /* ============ Квиз ============ */
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;min-height:28px}
@@ -302,68 +297,83 @@ const SERVICES = [
   { id:"site", icon:"site", title:"Сайт", home:"Сайты и лендинги",
     desc:"Лендинги, визитки и каталоги, которые собирают заявки",
     scales:[
-      { id:"landing", title:"Лендинг", desc:"Одна страница под услугу или рекламу", price:[30,55], weeks:[1,2] },
-      { id:"multi",   title:"Сайт на 3–7 страниц", desc:"Услуги, цены, работы, контакты", price:[50,90], weeks:[2,4] },
-      { id:"catalog", title:"Каталог или магазин", desc:"Товары, фильтры, корзина", price:[90,180], weeks:[4,7] },
+      { id:"landing", title:"Лендинг", desc:"Одна страница под услугу или рекламу", price:[20,35], weeks:[1,2] },
+      { id:"multi",   title:"Сайт на 3–7 страниц", desc:"Услуги, цены, работы, контакты", price:[35,60], weeks:[2,3] },
+      { id:"catalog", title:"Каталог или магазин", desc:"Товары, фильтры, корзина", price:[60,120], weeks:[3,6] },
     ],
     extras:[
-      { id:"quiz",  title:"Квиз или калькулятор", desc:"Как этот, только на сайте", price:[10,20], weeks:.5 },
-      { id:"texts", title:"Тексты под ключ", desc:"Напишем сами, вам — только проверить", price:[8,15], weeks:.5 },
-      { id:"seo",   title:"Базовое SEO", desc:"Чтобы сайт находили в Яндексе", price:[10,20], weeks:.5 },
-      { id:"pay",   title:"Онлайн-оплата", desc:"ЮKassa, СБП, карты", price:[10,15], weeks:.5 },
-      { id:"crm",   title:"Заявки в Telegram и CRM", desc:"Ни одна заявка не потеряется", price:[5,10], weeks:0 },
+      { id:"quiz",  title:"Квиз или калькулятор", desc:"Как этот, только на сайте", price:[7,12], weeks:.5 },
+      { id:"texts", title:"Тексты под ключ", desc:"Напишем сами, вам — только проверить", price:[5,10], weeks:.5 },
+      { id:"seo",   title:"SEO и GEO-основа", desc:"Чтобы находили в Яндексе и советовали нейросети", price:[7,12], weeks:.5 },
+      { id:"pay",   title:"Онлайн-оплата", desc:"ЮKassa, СБП, карты", price:[7,10], weeks:.5 },
+      { id:"crm",   title:"Заявки в Telegram и CRM", desc:"Ни одна заявка не потеряется", price:[3,6], weeks:0 },
     ]},
   { id:"bot", icon:"bot", title:"Telegram-бот", home:"Telegram-боты",
     desc:"Принимают заявки, записывают и отвечают клиентам круглосуточно",
     scales:[
-      { id:"lead",  title:"Бот-визитка с заявками", desc:"Меню, ответы на частые вопросы, заявка", price:[15,25], weeks:[1,1] },
-      { id:"quiz",  title:"Бот-квиз с расчётом", desc:"Задаёт вопросы и называет цену", price:[25,40], weeks:[1,2] },
-      { id:"book",  title:"Бот записи или заказов", desc:"Расписание, напоминания, отмены", price:[35,60], weeks:[2,3] },
+      { id:"lead",  title:"Бот-визитка с заявками", desc:"Меню, ответы на частые вопросы, заявка", price:[10,18], weeks:[1,1] },
+      { id:"quiz",  title:"Бот-квиз с расчётом", desc:"Задаёт вопросы и называет цену", price:[18,28], weeks:[1,2] },
+      { id:"book",  title:"Бот записи или заказов", desc:"Расписание, напоминания, отмены", price:[25,40], weeks:[2,3] },
     ],
     extras:[
-      { id:"ai",    title:"AI-консультант", desc:"Отвечает на вопросы как живой менеджер", price:[20,40], weeks:1 },
-      { id:"mail",  title:"Рассылки по базе", desc:"Акции и новости всем подписчикам", price:[5,10], weeks:0 },
-      { id:"pay",   title:"Оплата в боте", desc:"Клиент платит, не выходя из чата", price:[10,15], weeks:.5 },
-      { id:"table", title:"Таблица заявок", desc:"Все заявки в Google-таблице", price:[8,15], weeks:.5 },
+      { id:"ai",    title:"AI-консультант", desc:"Отвечает на вопросы как живой менеджер", price:[15,25], weeks:1 },
+      { id:"mail",  title:"Рассылки по базе", desc:"Акции и новости всем подписчикам", price:[3,6], weeks:0 },
+      { id:"pay",   title:"Оплата в боте", desc:"Клиент платит, не выходя из чата", price:[7,10], weeks:.5 },
+      { id:"table", title:"Таблица заявок", desc:"Все заявки в Google-таблице", price:[5,8], weeks:.5 },
     ]},
   { id:"app", icon:"app", title:"Мини-приложение", home:"Мини-приложения в Telegram",
     desc:"Магазин или запись прямо в Telegram — как это приложение",
     scales:[
-      { id:"showcase", title:"Витрина или каталог", desc:"Товары или услуги с фото и ценами", price:[60,100], weeks:[3,4] },
-      { id:"shop",     title:"Магазин с корзиной", desc:"Каталог, корзина, оформление заказа", price:[100,180], weeks:[4,7] },
-      { id:"booking",  title:"Онлайн-запись", desc:"Мастера, свободное время, подтверждение", price:[70,120], weeks:[3,5] },
+      { id:"showcase", title:"Витрина или каталог", desc:"Товары или услуги с фото и ценами", price:[40,65], weeks:[2,3] },
+      { id:"shop",     title:"Магазин с корзиной", desc:"Каталог, корзина, оформление заказа", price:[65,120], weeks:[3,6] },
+      { id:"booking",  title:"Онлайн-запись", desc:"Мастера, свободное время, подтверждение", price:[45,80], weeks:[3,4] },
     ],
     extras:[
-      { id:"pay",     title:"Онлайн-оплата", desc:"СБП и карты внутри Telegram", price:[15,25], weeks:.5 },
-      { id:"loyalty", title:"Бонусы и скидки", desc:"Кешбэк, промокоды, уровни клиента", price:[20,35], weeks:1 },
-      { id:"admin",   title:"Админка для товаров", desc:"Меняйте цены и фото сами", price:[20,40], weeks:1 },
-      { id:"1c",      title:"Связь с 1С или МойСклад", desc:"Остатки и заказы синхронизируются", price:[25,50], weeks:1.5 },
+      { id:"pay",     title:"Онлайн-оплата", desc:"СБП и карты внутри Telegram", price:[10,15], weeks:.5 },
+      { id:"loyalty", title:"Бонусы и скидки", desc:"Кешбэк, промокоды, уровни клиента", price:[12,20], weeks:1 },
+      { id:"admin",   title:"Админка для товаров", desc:"Меняйте цены и фото сами", price:[12,25], weeks:1 },
+      { id:"1c",      title:"Связь с 1С или МойСклад", desc:"Остатки и заказы синхронизируются", price:[18,30], weeks:1.5 },
     ]},
   { id:"ads", icon:"ads", title:"Яндекс Директ", home:"Реклама в Яндекс Директе",
     desc:"Настройка рекламы, которая приводит заявки, а не клики",
     scales:[
-      { id:"search", title:"Поисковая кампания", desc:"Показы тем, кто ищет вашу услугу", price:[20,30], weeks:[1,1] },
-      { id:"rsya",   title:"Поиск и РСЯ", desc:"Плюс баннеры на сайтах и в приложениях", price:[30,45], weeks:[1,2] },
-      { id:"full",   title:"Под ключ с посадочной", desc:"Кампании, квиз-лендинг, аналитика", price:[50,80], weeks:[2,3] },
+      { id:"search", title:"Поисковая кампания", desc:"Показы тем, кто ищет вашу услугу", price:[12,18], weeks:[1,1] },
+      { id:"rsya",   title:"Поиск и РСЯ", desc:"Плюс баннеры на сайтах и в приложениях", price:[18,28], weeks:[1,2] },
+      { id:"full",   title:"Под ключ с посадочной", desc:"Кампании, квиз-лендинг, аналитика", price:[30,50], weeks:[2,3] },
     ],
     extras:[
-      { id:"lead",    title:"Ведение рекламы", desc:"Оптимизация и отчёты каждую неделю", monthly:[15,25] },
-      { id:"metrika", title:"Метрика и цели", desc:"Видно, откуда пришла каждая заявка", price:[5,10], weeks:0 },
-      { id:"creo",    title:"Креативы для РСЯ", desc:"Баннеры и тексты объявлений", price:[5,15], weeks:.5 },
-      { id:"rivals",  title:"Разбор конкурентов", desc:"Что и за сколько рекламируют они", price:[5,10], weeks:.5 },
+      { id:"lead",    title:"Ведение рекламы", desc:"Оптимизация и отчёты каждую неделю", monthly:[10,15] },
+      { id:"metrika", title:"Метрика и цели", desc:"Видно, откуда пришла каждая заявка", price:[3,6], weeks:0 },
+      { id:"creo",    title:"Креативы для РСЯ", desc:"Баннеры и тексты объявлений", price:[3,8], weeks:.5 },
+      { id:"rivals",  title:"Разбор конкурентов", desc:"Что и за сколько рекламируют они", price:[3,6], weeks:.5 },
+    ]},
+  { id:"seo", icon:"seo", title:"SEO и GEO", home:"SEO и GEO-продвижение",
+    desc:"Чтобы вас находили в Яндексе, на картах и советовали нейросети",
+    scales:[
+      { id:"audit", title:"Аудит и план", desc:"Разбор сайта, конкурентов и того, что о вас отвечают нейросети", price:[8,15], weeks:[1,1] },
+      { id:"start", title:"SEO-старт под ключ", desc:"Структура, мета-теги, скорость, Вебмастер и Метрика", price:[20,35], weeks:[2,3] },
+      { id:"geo",   title:"SEO и GEO вместе", desc:"Плюс оптимизация под Алису, Нейро и ChatGPT: факты, ответы, разметка", price:[30,50], weeks:[3,4] },
+    ],
+    extras:[
+      { id:"maps",    title:"Яндекс Карты и 2ГИС", desc:"Карточки, фото и отзывы — чтобы находили рядом", price:[5,10], weeks:.5 },
+      { id:"content", title:"Статьи и ответы для нейросетей", desc:"Экспертные тексты и FAQ, которые удобно цитировать ИИ", price:[8,15], weeks:1 },
+      { id:"schema",  title:"Микроразметка", desc:"Услуги, цены и отзывы понятны поисковикам и ИИ", price:[3,6], weeks:.5 },
+      { id:"monthly", title:"Ежемесячное продвижение", desc:"Позиции, упоминания в нейросетях, отчёт", monthly:[12,20] },
     ]},
   { id:"pack", icon:"pack", title:"Комплекс под ключ", home:null,
-    desc:"Сайт или приложение, бот и реклама — одной командой",
+    desc:"Сайт или приложение, бот, реклама и SEO — одной командой",
     scales:[
-      { id:"site_ads",   title:"Сайт и реклама", desc:"Лендинг плюс запуск Директа", price:[60,100], weeks:[2,3] },
-      { id:"site_bot_ads", title:"Сайт, бот и реклама", desc:"Заявки с сайта и рекламы — в бота", price:[85,140], weeks:[3,4] },
-      { id:"app_bot_ads",  title:"Мини-приложение, бот и реклама", desc:"Продажи прямо в Telegram", price:[120,220], weeks:[4,7] },
+      { id:"site_ads",     title:"Сайт и реклама", desc:"Лендинг плюс запуск Директа", price:[40,65], weeks:[2,3] },
+      { id:"site_seo",     title:"Сайт, SEO и GEO", desc:"Сайт, который находят в поиске и советуют нейросети", price:[45,75], weeks:[3,4] },
+      { id:"site_bot_ads", title:"Сайт, бот и реклама", desc:"Заявки с сайта и рекламы — в бота", price:[55,90], weeks:[3,4] },
+      { id:"app_bot_ads",  title:"Мини-приложение, бот и реклама", desc:"Продажи прямо в Telegram", price:[80,140], weeks:[4,6] },
     ],
     extras:[
-      { id:"ai",    title:"AI-консультант", desc:"Отвечает клиентам круглосуточно", price:[20,40], weeks:1 },
-      { id:"lead",  title:"Ведение рекламы", desc:"Оптимизация и отчёты каждую неделю", monthly:[15,25] },
-      { id:"texts", title:"Тексты и обработка фото", desc:"Контент берём на себя", price:[10,20], weeks:.5 },
-      { id:"crm",   title:"CRM для заявок", desc:"Воронка, статусы, напоминания", price:[10,20], weeks:.5 },
+      { id:"seo",   title:"SEO и GEO-основа", desc:"Чтобы находили в Яндексе и советовали нейросети", price:[7,12], weeks:.5 },
+      { id:"ai",    title:"AI-консультант", desc:"Отвечает клиентам круглосуточно", price:[15,25], weeks:1 },
+      { id:"lead",  title:"Ведение рекламы", desc:"Оптимизация и отчёты каждую неделю", monthly:[10,15] },
+      { id:"texts", title:"Тексты и обработка фото", desc:"Контент берём на себя", price:[7,12], weeks:.5 },
+      { id:"crm",   title:"CRM для заявок", desc:"Воронка, статусы, напоминания", price:[7,12], weeks:.5 },
     ]},
 ];
 
@@ -384,6 +394,7 @@ const I = {
   bot:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4 3 11l6 2 2 6 3.5-4.5L19 18z"/><path d="m9 13 7-5"/></svg>',
   app:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M9.5 7h5M9.5 10.5h5M9.5 14h3"/></svg>',
   ads:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m20.5 20.5-4.8-4.8M8.5 11h5M11 8.5v5"/></svg>',
+  seo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5 11.6 8.4 16.5 10 11.6 11.6 10 16.5 8.4 11.6 3.5 10 8.4 8.4z"/><path d="M18 14.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg>',
   pack:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3.5 7.5 12 12l8.5-4.5z"/><path d="M3.5 12 12 16.5 20.5 12M3.5 16.5 12 21l8.5-4.5"/></svg>',
   check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
   down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
@@ -521,7 +532,7 @@ function Home(){
       <div class="film-stage">
         <canvas aria-hidden="true"></canvas>
         <div class="film-veil"></div>
-        ${ch(-1, .12, `<h1 class="fakt">${CONFIG.BRAND}</h1><p>Сайты, боты и&nbsp;реклама с&nbsp;оплатой по&nbsp;факту</p><span class="film-hint" aria-hidden="true">${I.down}Листайте — покажем, как это работает</span>`)}
+        ${ch(-1, .12, `<span class="brandmark">${CONFIG.BRAND}</span><h1>Сайты, боты, реклама и&nbsp;SEO с&nbsp;оплатой по&nbsp;факту</h1><span class="film-hint" aria-hidden="true">${I.down}Листайте — покажем, как это работает</span>`)}
         ${ch(.16, .37, `<h2>Заявки летят отовсюду</h2><p>Чаты, звонки, сайт, реклама — и&nbsp;часть теряется по&nbsp;дороге.</p>`)}
         ${ch(.41, .55, `<h2>${CONFIG.BRAND} собирает их в&nbsp;систему</h2><p>Сайт, бот и&nbsp;реклама работают вместе. Каждая заявка — у&nbsp;вас в&nbsp;Telegram.</p>`)}
         ${ch(.58, .80, `<h2>Сначала вы видите результат</h2><p>Живой проект, который можно потрогать, а&nbsp;не&nbsp;макет и&nbsp;обещания.</p>`)}
@@ -538,11 +549,12 @@ function Home(){
       <li><div class="row"><b>Оплата</b><span class="seal">по факту</span></div><p>Платите, когда проект запущен и&nbsp;работает так, как договорились.</p></li>
       <li><div class="row"><b>Сроки</b><span class="seal">по факту</span></div><p>Срок фиксируем в&nbsp;смете, промежуточный результат показываем каждую неделю.</p></li>
       <li><div class="row"><b>Отчёт</b><span class="seal">по факту</span></div><p>Считаем заявки и&nbsp;продажи, а&nbsp;не&nbsp;клики и&nbsp;показы.</p></li>
+      <li><div class="row"><b>Поиск</b><span class="seal">по факту</span></div><p>Смотрим, где вас находят: Яндекс, карты и&nbsp;ответы нейросетей&nbsp;— Алисы, Нейро и&nbsp;ChatGPT.</p></li>
     </ul>
     <h2>Что делаем</h2>
     <ul class="services">${rows}</ul>
     <p class="selfnote">Эта анимация и&nbsp;расчёт стоимости — тоже наша работа. Такое&nbsp;же можно сделать для вашего бизнеса.</p>
-    <div class="sign" aria-hidden="true"><p>${CONFIG.BRAND_NOTE}</p><div class="big">${CONFIG.BRAND}</div></div>`;
+`;
 }
 
 function optRow({ id, title, desc, right="", icon=null, checked, multi=false, group }){
@@ -797,9 +809,6 @@ function mountFilm(){
       c.el.style.transform = `translateY(${((1 - o) * (cur < c.from + fade ? 12 : -12)).toFixed(1)}px)`;
       c.el.style.visibility = o > 0 ? "visible" : "hidden";
     }
-    // интро: логотип разъезжается и уходит вверх
-    const intro = chs[0] && chs[0].el.querySelector(".fakt");
-    if (intro) intro.style.letterSpacing = `${(-.035 + cur * 1.2).toFixed(3)}em`;
     // печать опускается на кольцо
     const t = clamp((cur - .9) / .07), e = ease(t);
     stamp.style.opacity = t > 0 ? Math.min(1, t * 1.8).toFixed(3) : "0";
