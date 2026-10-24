@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>ФАКТ — расчёт проекта</title>
+<script src="https://telegram.org/js/telegram-web-app.js?59"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ Цвета и шрифты ============ */
+:root{
+  --desk:#DFE2F8;      /* фон, «стол» — совпадает с фоном видео */
+  --surface:#FFFFFF;   /* строки вариантов */
+  --text:#131846;
+  --muted:#626A8C;
+  --line:#C8CDEB;
+  --ink:#2433C4;       /* синие чернила печати — главный акцент */
+  --ink-soft:#DCE0FA;
+  --on-ink:#FFFFFF;
+  --paper:#FFFFFF;     /* чек всегда бумажный */
+  --paper-text:#1A1B2E;
+  --paper-muted:#6E7088;
+  --stamp:#2433C4;
+  --marker:#FFE45C;
+  --film:#DFE2F8;      /* сцена с анимацией всегда светлая */
+  --film-text:#131846;
+  --film-muted:#4B5285;
+  --film-ink:#2433C4;
+  --danger:#C42F2F;
+  --ui:"Geologica", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --gutter:20px;
+  --safe-b:env(safe-area-inset-bottom, 0px);
+}
+:root[data-theme="dark"]{
+  --desk:#0F1333;
+  --surface:#191E4A;
+  --text:#ECEEFF;
+  --muted:#A0A7CE;
+  --line:#2D336A;
+  --ink:#8E9BFF;
+  --ink-soft:#252C68;
+  --on-ink:#0F1333;
+  --stamp:#8E9BFF;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{background:var(--desk);color:var(--text)}
+body{font-family:var(--ui);font-size:16px;line-height:1.5;min-height:100vh;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:6px}
+
+#app{max-width:520px;margin:0 auto;padding:16px var(--gutter) calc(170px + var(--safe-b))}
+.screen{animation:enter .26s ease-out}
+@keyframes enter{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+.screen.back{animation-name:enter-back}
+@keyframes enter-back{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+
+/* ============ Главный экран ============ */
+.terms{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:36px}
+.terms div{background:var(--surface);padding:14px 14px 13px}
+.terms b{display:block;font-size:20px;font-weight:700;letter-spacing:-.01em}
+.terms span{font-size:13px;color:var(--muted);line-height:1.35;display:block;margin-top:2px}
+
+h2{font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
+.services{list-style:none;margin-bottom:36px;border-top:1px solid var(--line)}
+.services li{display:grid;grid-template-columns:40px 1fr auto;gap:14px;align-items:start;
+  padding:16px 0;border-bottom:1px solid var(--line)}
+.services .ico{width:40px;height:40px;border-radius:11px;background:var(--ink-soft);color:var(--ink);
+  display:grid;place-items:center}
+.services .ico svg{width:22px;height:22px}
+.services h3{font-size:16px;font-weight:600;line-height:1.3}
+.services p{font-size:14px;color:var(--muted);line-height:1.4;margin-top:3px}
+.services .from{font-size:13px;color:var(--muted);white-space:nowrap;padding-top:2px}
+.services .from b{color:var(--text);font-weight:600}
+
+.selfnote{font-size:14px;color:var(--muted);border-left:3px solid var(--ink);padding:4px 0 4px 14px;margin-bottom:12px}
+
+
+/* ============ Кино на скролле ============ */
+.film{position:relative;height:calc(var(--stage-h,100vh) * 6);margin:-16px calc(-1 * var(--gutter)) 28px;
+  background:var(--film);color:var(--film-text);border-radius:0 0 28px 28px}
+.film-stage{position:sticky;top:0;height:var(--stage-h,100vh);overflow:hidden;border-radius:inherit}
+.film canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.film-veil{position:absolute;left:0;right:0;top:0;height:var(--copy-h,180px);pointer-events:none;
+  background:linear-gradient(var(--film) 58%, rgba(223,226,248,0))}
+.ch{position:absolute;left:var(--gutter);right:var(--gutter);top:20px;opacity:0;will-change:opacity,transform}
+.ch h2{font-size:clamp(27px,7.6vw,33px);font-weight:800;line-height:1.04;letter-spacing:-.022em;max-width:13ch;margin:0 0 9px}
+.ch p{font-size:15.5px;line-height:1.4;color:var(--film-muted);max-width:30ch}
+.ch .fakt{font-weight:900;font-size:clamp(84px,28vw,124px);line-height:.8;letter-spacing:-.035em;color:var(--film-ink);
+  margin:6px 0 14px -4px;white-space:nowrap}
+.film-stamp{position:absolute;color:var(--film-ink);opacity:0;pointer-events:none;will-change:transform,opacity}
+.film-stamp svg{width:100%;height:100%;display:block}
+.film-hint{display:flex;align-items:center;gap:6px;margin-top:14px;font-size:13.5px;font-weight:600;color:var(--film-ink)}
+.film-hint svg{width:18px;height:18px;flex:none;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+/* ============ Почему ФАКТ ============ */
+.facts{list-style:none;margin:0 0 38px;border-top:1px solid var(--line)}
+.facts li{padding:18px 0 17px;border-bottom:1px solid var(--line)}
+.facts .row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.facts b{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.seal{display:inline-block;border:2px solid var(--ink);color:var(--ink);border-radius:7px;padding:3px 9px 4px;
+  font-weight:800;font-size:15px;line-height:1.1;transform:rotate(-4deg);letter-spacing:.01em}
+.facts li:nth-child(2) .seal{transform:rotate(3deg)}
+.facts li:nth-child(3) .seal{transform:rotate(-2deg)}
+.facts p{font-size:15px;color:var(--muted);margin-top:8px;max-width:34ch}
+
+/* ============ Подпись бренда внизу ============ */
+.sign{margin:40px calc(-1 * var(--gutter)) 0;overflow:hidden;padding:0 var(--gutter)}
+.sign .big{font-weight:900;font-size:min(calc((100vw - 2 * var(--gutter)) / 2.62), 180px);line-height:.78;letter-spacing:-.04em;color:var(--ink);
+  margin-left:-.04em;white-space:nowrap;user-select:none}
+.sign p{font-size:13px;color:var(--muted);margin-bottom:14px}
+
+/* ============ Квиз ============ */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;min-height:28px}
+.backlink{display:none;align-items:center;gap:4px;color:var(--muted);font-size:15px;padding:4px 6px 4px 0}
+.backlink svg{width:18px;height:18px}
+.no-tg .backlink{display:inline-flex}
+.progress{flex:1;display:flex;align-items:center;gap:12px;justify-content:flex-end}
+.progress .count{font-size:13px;color:var(--muted);white-space:nowrap}
+.progress .bar{width:96px;height:4px;border-radius:2px;background:var(--line);overflow:hidden}
+.progress .bar i{display:block;height:100%;background:var(--ink);border-radius:2px;transition:width .3s ease}
+
+.q h1{font-size:28px;font-weight:750;line-height:1.12;letter-spacing:-.02em;margin-bottom:8px}
+.q .hint{color:var(--muted);font-size:15px;margin-bottom:22px}
+
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;text-align:left;width:100%;
+  background:var(--surface);border:1.5px solid transparent;border-radius:14px;padding:15px 16px;
+  transition:border-color .15s, background .15s}
+.opt.has-ico{grid-template-columns:36px 1fr auto}
+.opt .ico{width:36px;height:36px;border-radius:10px;background:var(--ink-soft);color:var(--ink);display:grid;place-items:center}
+.opt .ico svg{width:20px;height:20px}
+.opt b{display:block;font-weight:600;font-size:16px;line-height:1.3}
+.opt small{display:block;font-size:14px;color:var(--muted);line-height:1.35;margin-top:2px}
+.opt .price{font-size:13px;color:var(--muted);white-space:nowrap;text-align:right}
+.opt .mark{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;flex:none}
+.opt.multi .mark{border-radius:7px}
+.opt .mark svg{width:14px;height:14px;opacity:0;color:var(--on-ink)}
+.opt[aria-checked="true"]{border-color:var(--ink)}
+.opt[aria-checked="true"] .mark{background:var(--ink);border-color:var(--ink)}
+.opt[aria-checked="true"] .mark svg{opacity:1}
+.opt .right{display:flex;align-items:center;gap:10px}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--surface);border:1.5px solid transparent;border-radius:999px;padding:10px 16px;font-size:15px;font-weight:500}
+.chip[aria-checked="true"]{border-color:var(--ink);color:var(--ink)}
+
+/* полоска предварительной суммы */
+.peek{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + var(--safe-b));width:calc(100% - 2*var(--gutter));max-width:480px;
+  background:var(--paper);color:var(--paper-text);border-radius:12px 12px 4px 4px;padding:11px 14px;
+  display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:14px;
+  box-shadow:0 10px 30px -12px rgba(15,19,51,.35);z-index:5;transition:bottom .2s}
+.peek b{font-weight:600}
+.no-tg .peek{bottom:calc(84px + var(--safe-b))}
+
+/* ============ Чек-смета ============ */
+.result h1{font-size:28px;font-weight:750;line-height:1.12;letter-spacing:-.02em;margin-bottom:8px}
+.result .hint{color:var(--muted);font-size:15px;margin-bottom:22px}
+
+.receipt{--stamp:#2433C4;position:relative;background:var(--paper);color:var(--paper-text);font-family:var(--mono);
+  font-size:14px;line-height:1.45;padding:22px 18px 26px;margin:14px 0 34px;
+  box-shadow:0 18px 40px -22px rgba(15,19,51,.45)}
+.receipt::before,.receipt::after{content:"";position:absolute;left:0;right:0;height:10px;
+  background:radial-gradient(circle at 7px 0, var(--desk) 6.5px, transparent 7px) repeat-x;background-size:14px 10px}
+.receipt::before{top:0}
+.receipt::after{bottom:0;transform:scaleY(-1)}
+.r-head{text-align:center;margin-bottom:14px}
+.r-head .wm{font-family:var(--ui);font-weight:900;font-size:20px;letter-spacing:.06em;color:var(--stamp)}
+.r-head div{font-size:12.5px;color:var(--paper-muted)}
+.r-cut{border:0;border-top:1.5px dashed #C9CBD8;margin:12px 0}
+.r-row{display:flex;align-items:baseline;gap:6px}
+.r-row .l{flex:0 1 auto}
+.r-row .dots{flex:1;border-bottom:1.5px dotted #B9BBCB;transform:translateY(-4px);min-width:12px}
+.r-row .v{flex:none;white-space:nowrap}
+.r-row + .r-row{margin-top:6px}
+.r-sub{font-size:12.5px;color:var(--paper-muted)}
+.r-total{display:flex;justify-content:space-between;align-items:baseline;font-weight:600;font-size:15px}
+.r-total .sum{font-size:21px;font-weight:600;padding:0 4px;
+  background:linear-gradient(transparent 52%, var(--marker) 52% 92%, transparent 92%)}
+.r-foot{font-size:12.5px;color:var(--paper-muted);margin-top:12px;padding-right:128px;min-height:118px}
+.r-group{font-family:var(--ui);font-weight:700;font-size:15px;margin-bottom:8px}
+.receipt .stamp{position:absolute;right:6px;bottom:16px;width:128px;height:128px;transform:rotate(-14deg);opacity:.9;pointer-events:none}
+.receipt .stamp.land{animation:land .5s cubic-bezier(.2,.9,.3,1.25) .45s both}
+@keyframes land{0%{opacity:0;transform:rotate(-24deg) scale(1.7)}60%{opacity:.95}100%{opacity:.9;transform:rotate(-14deg) scale(1)}}
+
+/* форма */
+.form h2{margin-bottom:4px}
+.form .hint{color:var(--muted);font-size:15px;margin-bottom:16px}
+.field{display:block;margin-bottom:12px}
+.field span{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
+.field input,.field textarea{width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;
+  padding:13px 14px;font-size:16px;outline:none;transition:border-color .15s;resize:none}
+.field input:focus,.field textarea:focus{border-color:var(--ink)}
+.field.err input{border-color:var(--danger)}
+.field .msg{display:none;color:var(--danger);font-size:13px;margin-top:5px}
+.field.err .msg{display:block}
+.toggle{display:flex;gap:12px;align-items:center;justify-content:space-between;background:var(--surface);border-radius:12px;padding:13px 14px;margin-bottom:14px;width:100%;text-align:left}
+.toggle .sw{width:44px;height:26px;border-radius:13px;background:var(--line);position:relative;flex:none;transition:background .2s}
+.toggle .sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.toggle[aria-checked="true"] .sw{background:var(--ink)}
+.toggle[aria-checked="true"] .sw::after{transform:translateX(18px)}
+.privacy{font-size:12.5px;color:var(--muted);margin-top:6px}
+.error-box{display:none;background:var(--surface);border:1.5px solid var(--danger);border-radius:12px;padding:12px 14px;font-size:14px;margin-top:12px}
+.error-box.on{display:block}
+.error-box button{color:var(--ink);font-weight:600;margin-top:6px;text-decoration:underline;text-underline-offset:3px}
+
+/* ============ Готово ============ */
+.done{padding-top:24px}
+.done .stamp{width:150px;height:150px;transform:rotate(-10deg);margin:0 0 26px -6px;display:block}
+.done h1{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-bottom:12px}
+.done p{color:var(--muted);max-width:34ch;margin-bottom:10px}
+.textlink{color:var(--ink);font-weight:600;margin-top:22px;display:inline-block;text-decoration:underline;text-underline-offset:4px}
+
+/* ============ Кнопка вне Telegram ============ */
+.cta{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + var(--safe-b));
+  width:calc(100% - 2*var(--gutter));max-width:480px;height:56px;border-radius:14px;
+  background:var(--ink);color:var(--on-ink);font-weight:650;font-size:17px;z-index:6;
+  box-shadow:0 12px 26px -12px rgba(36,51,196,.6)}
+.cta[disabled]{opacity:.45}
+.no-tg .cta.on{display:block}
+
+@media (prefers-reduced-motion:reduce){
+  .film-hint svg{animation:none}
+  .screen,.receipt .stamp.land{animation:none}
+  .progress .bar i,.opt,.toggle .sw,.toggle .sw::after{transition:none}
+}
+</style>
+</head>
+<body>
+<main id="app" aria-live="polite"></main>
+<div id="peek" class="peek" hidden></div>
+<button id="cta" class="cta" type="button"></button>
+
+<!-- Печать-штамп (используется на главной, в смете и на финальном экране) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="inky" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.5 1.5" result="holes"/>
+      <feComposite in="SourceGraphic" in2="holes" operator="in" result="cut"/>
+      <feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="1" seed="3" result="w"/>
+      <feDisplacementMap in="cut" in2="w" scale="2.2"/>
+    </filter>
+    <path id="ring" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/>
+    <symbol id="stamp" viewBox="0 0 200 200">
+      <g fill="none" stroke="currentColor" filter="url(#inky)">
+        <circle cx="100" cy="100" r="94" stroke-width="5"/>
+        <circle cx="100" cy="100" r="86" stroke-width="1.6"/>
+        <circle cx="100" cy="100" r="55" stroke-width="1.6"/>
+        <text fill="currentColor" stroke="none" font-family="Geologica, sans-serif" font-weight="800" font-size="17.5" letter-spacing="3.2">
+          <textPath href="#ring" startOffset="0">ОПЛАТА ПО ФАКТУ ★ ОПЛАТА ПО ФАКТУ ★</textPath>
+        </text>
+        <text x="100" y="98" text-anchor="middle" fill="currentColor" stroke="none" font-family="Geologica, sans-serif" font-weight="900" font-size="30">0 ₽</text>
+        <text x="100" y="121" text-anchor="middle" fill="currentColor" stroke="none" font-family="Geologica, sans-serif" font-weight="700" font-size="13" letter-spacing="1">ПРЕДОПЛАТА</text>
+      </g>
+    </symbol>
+    <symbol id="stamp-ring" viewBox="0 0 200 200">
+      <g fill="none" stroke="currentColor" filter="url(#inky)">
+        <circle cx="100" cy="100" r="94" stroke-width="5"/>
+        <circle cx="100" cy="100" r="86" stroke-width="1.6"/>
+        <text fill="currentColor" stroke="none" font-family="Geologica, sans-serif" font-weight="800" font-size="17.5" letter-spacing="3.2">
+          <textPath href="#ring" startOffset="0">ОПЛАТА ПО ФАКТУ ★ ОПЛАТА ПО ФАКТУ ★</textPath>
+        </text>
+        <text x="100" y="112" text-anchor="middle" fill="currentColor" stroke="none" font-family="Geologica, sans-serif" font-weight="900" font-size="34">0 ₽</text>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<script>
+/* ==========================================================
+   НАСТРОЙКИ — меняйте только здесь
+   ========================================================== */
+const CONFIG = {
+  BRAND: "ФАКТ",                 // название студии (меняется везде)
+  BRAND_NOTE: "digital-студия",  // подпись рядом с логотипом
+  OWNER_NAME: "Дмитрий",         // кто отвечает на заявки
+  OWNER_USERNAME: "",            // ваш @username без @ — для запасной кнопки «Написать»
+  API_URL: "",                   // адрес функции Yandex Cloud, например https://functions.yandexcloud.net/d4e...
+};
+
+/* Цены — в тысячах рублей [от, до]. Сроки — в неделях [от, до].
+   Это стартовые вилки, поправьте под себя. */
+const SERVICES = [
+  { id:"site", icon:"site", title:"Сайт", home:"Сайты и лендинги",
+    desc:"Лендинги, визитки и каталоги, которые собирают заявки",
+    scales:[
+      { id:"landing", title:"Лендинг", desc:"Одна страница под услугу или рекламу", price:[30,55], weeks:[1,2] },
+      { id:"multi",   title:"Сайт на 3–7 страниц", desc:"Услуги, цены, работы, контакты", price:[50,90], weeks:[2,4] },
+      { id:"catalog", title:"Каталог или магазин", desc:"Товары, фильтры, корзина", price:[90,180], weeks:[4,7] },
+    ],
+    extras:[
+      { id:"quiz",  title:"Квиз или калькулятор", desc:"Как этот, только на сайте", price:[10,20], weeks:.5 },
+      { id:"texts", title:"Тексты под ключ", desc:"Напишем сами, вам — только проверить", price:[8,15], weeks:.5 },
+      { id:"seo",   title:"Базовое SEO", desc:"Чтобы сайт находили в Яндексе", price:[10,20], weeks:.5 },
+      { id:"pay",   title:"Онлайн-оплата", desc:"ЮKassa, СБП, карты", price:[10,15], weeks:.5 },
+      { id:"crm",   title:"Заявки в Telegram и CRM", desc:"Ни одна заявка не потеряется", price:[5,10], weeks:0 },
+    ]},
+  { id:"bot", icon:"bot", title:"Telegram-бот", home:"Telegram-боты",
+    desc:"Принимают заявки, записывают и отвечают клиентам круглосуточно",
+    scales:[
+      { id:"lead",  title:"Бот-визитка с заявками", desc:"Меню, ответы на частые вопросы, заявка", price:[15,25], weeks:[1,1] },
+      { id:"quiz",  title:"Бот-квиз с расчётом", desc:"Задаёт вопросы и называет цену", price:[25,40], weeks:[1,2] },
+      { id:"book",  title:"Бот записи или заказов", desc:"Расписание, напоминания, отмены", price:[35,60], weeks:[2,3] },
+    ],
+    extras:[
+      { id:"ai",    title:"AI-консультант", desc:"Отвечает на вопросы как живой менеджер", price:[20,40], weeks:1 },
+      { id:"mail",  title:"Рассылки по базе", desc:"Акции и новости всем подписчикам", price:[5,10], weeks:0 },
+      { id:"pay",   title:"Оплата в боте", desc:"Клиент платит, не выходя из чата", price:[10,15], weeks:.5 },
+      { id:"table", title:"Таблица заявок", desc:"Все заявки в Google-таблице", price:[8,15], weeks:.5 },
+    ]},
+  { id:"app", icon:"app", title:"Мини-приложение", home:"Мини-приложения в Telegram",
+    desc:"Магазин или запись прямо в Telegram — как это приложение",
+    scales:[
+      { id:"showcase", title:"Витрина или каталог", desc:"Товары или услуги с фото и ценами", price:[60,100], weeks:[3,4] },
+      { id:"shop",     title:"Магазин с корзиной", desc:"Каталог, корзина, оформление заказа", price:[100,180], weeks:[4,7] },
+      { id:"booking",  title:"Онлайн-запись", desc:"Мастера, свободное время, подтверждение", price:[70,120], weeks:[3,5] },
+    ],
+    extras:[
+      { id:"pay",     title:"Онлайн-оплата", desc:"СБП и карты внутри Telegram", price:[15,25], weeks:.5 },
+      { id:"loyalty", title:"Бонусы и скидки", desc:"Кешбэк, промокоды, уровни клиента", price:[20,35], weeks:1 },
+      { id:"admin",   title:"Админка для товаров", desc:"Меняйте цены и фото сами", price:[20,40], weeks:1 },
+      { id:"1c",      title:"Связь с 1С или МойСклад", desc:"Остатки и заказы синхронизируются", price:[25,50], weeks:1.5 },
+    ]},
+  { id:"ads", icon:"ads", title:"Яндекс Директ", home:"Реклама в Яндекс Директе",
+    desc:"Настройка рекламы, которая приводит заявки, а не клики",
+    scales:[
+      { id:"search", title:"Поисковая кампания", desc:"Показы тем, кто ищет вашу услугу", price:[20,30], weeks:[1,1] },
+      { id:"rsya",   title:"Поиск и РСЯ", desc:"Плюс баннеры на сайтах и в приложениях", price:[30,45], weeks:[1,2] },
+      { id:"full",   title:"Под ключ с посадочной", desc:"Кампании, квиз-лендинг, аналитика", price:[50,80], weeks:[2,3] },
+    ],
+    extras:[
+      { id:"lead",    title:"Ведение рекламы", desc:"Оптимизация и отчёты каждую неделю", monthly:[15,25] },
+      { id:"metrika", title:"Метрика и цели", desc:"Видно, откуда пришла каждая заявка", price:[5,10], weeks:0 },
+      { id:"creo",    title:"Креативы для РСЯ", desc:"Баннеры и тексты объявлений", price:[5,15], weeks:.5 },
+      { id:"rivals",  title:"Разбор конкурентов", desc:"Что и за сколько рекламируют они", price:[5,10], weeks:.5 },
+    ]},
+  { id:"pack", icon:"pack", title:"Комплекс под ключ", home:null,
+    desc:"Сайт или приложение, бот и реклама — одной командой",
+    scales:[
+      { id:"site_ads",   title:"Сайт и реклама", desc:"Лендинг плюс запуск Директа", price:[60,100], weeks:[2,3] },
+      { id:"site_bot_ads", title:"Сайт, бот и реклама", desc:"Заявки с сайта и рекламы — в бота", price:[85,140], weeks:[3,4] },
+      { id:"app_bot_ads",  title:"Мини-приложение, бот и реклама", desc:"Продажи прямо в Telegram", price:[120,220], weeks:[4,7] },
+    ],
+    extras:[
+      { id:"ai",    title:"AI-консультант", desc:"Отвечает клиентам круглосуточно", price:[20,40], weeks:1 },
+      { id:"lead",  title:"Ведение рекламы", desc:"Оптимизация и отчёты каждую неделю", monthly:[15,25] },
+      { id:"texts", title:"Тексты и обработка фото", desc:"Контент берём на себя", price:[10,20], weeks:.5 },
+      { id:"crm",   title:"CRM для заявок", desc:"Воронка, статусы, напоминания", price:[10,20], weeks:.5 },
+    ]},
+];
+
+const NICHES = ["Строительство и ремонт","Салон, барбершоп, SPA","Магазин или шоурум","Медицина и здоровье",
+  "Обучение и репетиторы","Авто и сервис","Недвижимость","Кафе и доставка","Другое"];
+
+const URGENCY = [
+  { id:"normal", title:"В течение месяца", desc:"Обычный темп", k:1, w:1 },
+  { id:"rush",   title:"Как можно быстрее", desc:"Ставим в приоритет: +25% к стоимости", k:1.25, w:.65 },
+  { id:"later",  title:"Пока присматриваюсь", desc:"Хочу понять бюджет", k:1, w:1 },
+];
+
+/* ==========================================================
+   Иконки
+   ========================================================== */
+const I = {
+  site:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/></svg>',
+  bot:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4 3 11l6 2 2 6 3.5-4.5L19 18z"/><path d="m9 13 7-5"/></svg>',
+  app:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M9.5 7h5M9.5 10.5h5M9.5 14h3"/></svg>',
+  ads:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m20.5 20.5-4.8-4.8M8.5 11h5M11 8.5v5"/></svg>',
+  pack:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3.5 7.5 12 12l8.5-4.5z"/><path d="M3.5 12 12 16.5 20.5 12M3.5 16.5 12 21l8.5-4.5"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>',
+};
+const stampSvg = (cls="") => `<svg class="stamp ${cls}" style="color:var(--stamp)" aria-hidden="true"><use href="#stamp"/></svg>`;
+
+/* ==========================================================
+   Telegram
+   ========================================================== */
+const tg = window.Telegram && window.Telegram.WebApp;
+const IN_TG = !!(tg && tg.initData);
+const can = v => IN_TG && tg.isVersionAtLeast && tg.isVersionAtLeast(v);
+const haptic = {
+  tap(){ if (can("6.1")) tg.HapticFeedback.selectionChanged(); },
+  ok(){ if (can("6.1")) tg.HapticFeedback.notificationOccurred("success"); },
+  err(){ if (can("6.1")) tg.HapticFeedback.notificationOccurred("error"); },
+  thud(){ if (can("6.1")) tg.HapticFeedback.impactOccurred("heavy"); },
+};
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function applyTheme(){
+  const dark = IN_TG ? tg.colorScheme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  if (IN_TG){
+    const desk = css("--desk");
+    if (can("6.1")) { tg.setHeaderColor(desk); tg.setBackgroundColor(desk); }
+    if (can("7.10")) tg.setBottomBarColor(desk);
+  }
+  syncButton();
+}
+
+/* Главная кнопка: в Telegram — нативная MainButton, в браузере — своя */
+let btn = { text:"", active:true, visible:false, action:null };
+const cta = document.getElementById("cta");
+function setButton(text, action, active=true){ btn = { text, action, active, visible:!!text }; syncButton(); }
+function hideButton(){ btn.visible = false; syncButton(); }
+function syncButton(){
+  if (IN_TG){
+    const mb = tg.MainButton;
+    if (!btn.visible){ mb.hide(); return; }
+    mb.setParams({ text:btn.text, color: btn.active ? css("--ink") : css("--line"),
+      text_color: btn.active ? css("--on-ink") : css("--muted"), is_active: btn.active, is_visible:true });
+  } else {
+    cta.classList.toggle("on", btn.visible);
+    cta.textContent = btn.text;
+    cta.disabled = !btn.active;
+  }
+}
+function onMain(){ if (btn.active && btn.action) btn.action(); }
+if (IN_TG) tg.MainButton.onClick(onMain); else { cta.addEventListener("click", onMain); document.body.classList.add("no-tg"); }
+
+function setBack(show){
+  if (!IN_TG) return;
+  if (show) tg.BackButton.show(); else tg.BackButton.hide();
+}
+if (IN_TG) tg.BackButton.onClick(goBack);
+
+/* ==========================================================
+   Состояние и расчёт
+   ========================================================== */
+const S = { screen:"home", service:null, scale:null, extras:new Set(), niche:null, urgency:null,
+  name:"", phone:"", comment:"", inTg:true, sent:false };
+const trail = [];
+const tgUser = IN_TG && tg.initDataUnsafe && tg.initDataUnsafe.user;
+if (tgUser) S.name = [tgUser.first_name, tgUser.last_name].filter(Boolean).join(" ");
+
+const svc = () => SERVICES.find(s => s.id === S.service);
+const scl = () => svc() && svc().scales.find(x => x.id === S.scale);
+const urg = () => URGENCY.find(u => u.id === S.urgency);
+const r5 = n => Math.max(5, Math.round(n / 5) * 5);
+const fmtRange = ([a,b]) => a === b ? `${a}` : `${a}–${b}`;
+const plural = (n, f) => { const m10=n%10, m100=n%100; return f[(m10===1&&m100!==11)?0:(m10>=2&&m10<=4&&(m100<10||m100>=20))?1:2]; };
+const weeksText = ([a,b]) => `${a === b ? a : a + "–" + b} ${plural(b, ["неделя","недели","недель"])}`;
+
+function estimate(){
+  const s = svc(), sc = scl(); if (!s || !sc) return null;
+  const items = [{ label: sc.title, price: sc.price }];
+  let min = sc.price[0], max = sc.price[1], wk = 0, monthly = null;
+  for (const e of s.extras){
+    if (!S.extras.has(e.id)) continue;
+    if (e.monthly){ monthly = e.monthly; continue; }
+    items.push({ label: e.title, price: e.price }); min += e.price[0]; max += e.price[1]; wk += e.weeks || 0;
+  }
+  const u = urg() || URGENCY[0];
+  min = r5(min * u.k); max = r5(max * u.k);
+  let wMin = sc.weeks[0] + Math.floor(wk / 2), wMax = Math.ceil(sc.weeks[1] + wk);
+  wMin = Math.max(1, Math.round(wMin * u.w)); wMax = Math.max(wMin, Math.round(wMax * u.w));
+  return { items, min, max, weeks:[wMin, wMax], monthly, rush: u.k > 1 };
+}
+
+/* ==========================================================
+   Экраны
+   ========================================================== */
+const app = document.getElementById("app");
+const peek = document.getElementById("peek");
+const QUIZ = ["service","scale","extras","niche","urgency"];
+
+function go(screen, opts = {}){
+  if (!opts.back && S.screen !== screen) trail.push(S.screen);
+  S.screen = screen;
+  render(opts.back);
+  window.scrollTo({ top:0 });
+}
+function goBack(){
+  const prev = trail.pop();
+  if (prev) { S.screen = prev; render(true); window.scrollTo({ top:0 }); }
+}
+
+function render(back){
+  const fn = { home:Home, service:QService, scale:QScale, extras:QExtras, niche:QNiche, urgency:QUrgency, result:Result, done:Done }[S.screen];
+  app.innerHTML = `<section class="screen${back ? " back" : ""}">${fn()}</section>`;
+  bind();
+  mountFilm();
+  setBack(S.screen !== "home" && S.screen !== "done");
+  updatePeek();
+  const tgFocus = app.querySelector("h1"); if (tgFocus) tgFocus.setAttribute("tabindex","-1");
+}
+
+function topbar(){
+  const i = QUIZ.indexOf(S.screen);
+  const count = i >= 0 ? `<span class="count">Шаг ${i+1} из ${QUIZ.length}</span><span class="bar"><i style="width:${(i+1)/QUIZ.length*100}%"></i></span>` : "";
+  return `<div class="topbar"><button class="backlink" data-act="back" type="button">${I.back}Назад</button><div class="progress">${count}</div></div>`;
+}
+
+function Home(){
+  const rows = SERVICES.filter(s => s.home).map(s => {
+    const from = Math.min(...s.scales.map(x => x.price[0]));
+    return `<li><span class="ico">${I[s.icon]}</span><div><h3>${s.home}</h3><p>${s.desc}</p></div><span class="from">от <b>${from}</b> тыс</span></li>`;
+  }).join("");
+  setButton("Рассчитать стоимость", () => go("service"));
+  const ch = (from, to, inner) => `<div class="ch" data-from="${from}" data-to="${to}">${inner}</div>`;
+  return `
+    <div class="film" aria-label="Анимация о студии ${CONFIG.BRAND}">
+      <div class="film-stage">
+        <canvas aria-hidden="true"></canvas>
+        <div class="film-veil"></div>
+        ${ch(-1, .12, `<h1 class="fakt">${CONFIG.BRAND}</h1><p>Сайты, боты и&nbsp;реклама с&nbsp;оплатой по&nbsp;факту</p><span class="film-hint" aria-hidden="true">${I.down}Листайте — покажем, как это работает</span>`)}
+        ${ch(.16, .37, `<h2>Заявки летят отовсюду</h2><p>Чаты, звонки, сайт, реклама — и&nbsp;часть теряется по&nbsp;дороге.</p>`)}
+        ${ch(.41, .55, `<h2>${CONFIG.BRAND} собирает их в&nbsp;систему</h2><p>Сайт, бот и&nbsp;реклама работают вместе. Каждая заявка — у&nbsp;вас в&nbsp;Telegram.</p>`)}
+        ${ch(.58, .80, `<h2>Сначала вы видите результат</h2><p>Живой проект, который можно потрогать, а&nbsp;не&nbsp;макет и&nbsp;обещания.</p>`)}
+        ${ch(.86, 2, `<h2>Потом платите. По&nbsp;факту.</h2><p>Ни рубля вперёд — 0&nbsp;₽ предоплаты.</p>`)}
+        <div class="film-stamp"><svg aria-hidden="true"><use href="#stamp-ring"/></svg></div>
+      </div>
+    </div>
+    <div class="terms">
+      <div><b>0 ₽</b><span>предоплаты</span></div>
+      <div><b>1 минута</b><span>на расчёт стоимости</span></div>
+    </div>
+    <h2>Почему ${CONFIG.BRAND}</h2>
+    <ul class="facts">
+      <li><div class="row"><b>Оплата</b><span class="seal">по факту</span></div><p>Платите, когда проект запущен и&nbsp;работает так, как договорились.</p></li>
+      <li><div class="row"><b>Сроки</b><span class="seal">по факту</span></div><p>Срок фиксируем в&nbsp;смете, промежуточный результат показываем каждую неделю.</p></li>
+      <li><div class="row"><b>Отчёт</b><span class="seal">по факту</span></div><p>Считаем заявки и&nbsp;продажи, а&nbsp;не&nbsp;клики и&nbsp;показы.</p></li>
+    </ul>
+    <h2>Что делаем</h2>
+    <ul class="services">${rows}</ul>
+    <p class="selfnote">Эта анимация и&nbsp;расчёт стоимости — тоже наша работа. Такое&nbsp;же можно сделать для вашего бизнеса.</p>
+    <div class="sign" aria-hidden="true"><p>${CONFIG.BRAND_NOTE}</p><div class="big">${CONFIG.BRAND}</div></div>`;
+}
+
+function optRow({ id, title, desc, right="", icon=null, checked, multi=false, group }){
+  return `<button type="button" class="opt${icon ? " has-ico" : ""}${multi ? " multi" : ""}" role="${multi ? "checkbox" : "radio"}"
+    aria-checked="${checked}" data-${group}="${id}">
+    ${icon ? `<span class="ico">${I[icon]}</span>` : ""}
+    <span><b>${title}</b>${desc ? `<small>${desc}</small>` : ""}</span>
+    <span class="right">${right ? `<span class="price">${right}</span>` : ""}<span class="mark">${I.check}</span></span>
+  </button>`;
+}
+
+function QService(){
+  hideButton();
+  return `${topbar()}<div class="q">
+    <h1>Что нужно вашему бизнесу?</h1>
+    <p class="hint">Выберите главное — детали уточним дальше.</p>
+    <div class="opts" role="radiogroup">${SERVICES.map(s => optRow({ id:s.id, title:s.title, desc:s.desc, icon:s.icon, checked:S.service===s.id, group:"service" })).join("")}</div>
+  </div>`;
+}
+function QScale(){
+  hideButton();
+  const s = svc();
+  return `${topbar()}<div class="q">
+    <h1>${s.id === "ads" ? "Какой запуск нужен?" : s.id === "pack" ? "Какой комплект?" : "Какой масштаб?"}</h1>
+    <p class="hint">Цены — в тысячах рублей.</p>
+    <div class="opts" role="radiogroup">${s.scales.map(x => optRow({ id:x.id, title:x.title, desc:x.desc, right:fmtRange(x.price), checked:S.scale===x.id, group:"scale" })).join("")}</div>
+  </div>`;
+}
+function QExtras(){
+  const s = svc();
+  const label = () => S.extras.size ? "Дальше" : "Ничего не нужно, дальше";
+  setButton(label(), () => go("niche"));
+  return `${topbar()}<div class="q">
+    <h1>Что добавить?</h1>
+    <p class="hint">Можно выбрать несколько или пропустить.</p>
+    <div class="opts">${s.extras.map(e => optRow({ id:e.id, title:e.title, desc:e.desc,
+      right: e.monthly ? `${fmtRange(e.monthly)}/мес` : `+${fmtRange(e.price)}`, checked:S.extras.has(e.id), multi:true, group:"extra" })).join("")}</div>
+  </div>`;
+}
+function QNiche(){
+  hideButton();
+  return `${topbar()}<div class="q">
+    <h1>Чем занимается бизнес?</h1>
+    <p class="hint">Так подготовим примеры именно из вашей сферы.</p>
+    <div class="chips" role="radiogroup">${NICHES.map(n => `<button type="button" class="chip" role="radio" aria-checked="${S.niche===n}" data-niche="${n}">${n}</button>`).join("")}</div>
+  </div>`;
+}
+function QUrgency(){
+  hideButton();
+  return `${topbar()}<div class="q">
+    <h1>Когда нужно запустить?</h1>
+    <p class="hint">От этого зависят сроки и стоимость.</p>
+    <div class="opts" role="radiogroup">${URGENCY.map(u => optRow({ id:u.id, title:u.title, desc:u.desc, checked:S.urgency===u.id, group:"urgency" })).join("")}</div>
+  </div>`;
+}
+
+function receiptHtml(e, landed){
+  const today = new Date().toLocaleDateString("ru-RU");
+  const no = String(1000 + Math.floor(Math.random()*9000));
+  const rows = e.items.map(it => `<div class="r-row"><span class="l">${it.label}</span><span class="dots"></span><span class="v">${fmtRange(it.price)}</span></div>`).join("");
+  return `<div class="receipt" role="group" aria-label="Предварительная смета">
+    <div class="r-head"><div class="wm">${CONFIG.BRAND}</div><div>Предварительная смета № ${no}</div><div>от ${today}</div></div>
+    <hr class="r-cut">
+    <div class="r-group">${svc().title}</div>
+    ${rows}
+    ${e.rush ? `<div class="r-row"><span class="l">Срочный запуск</span><span class="dots"></span><span class="v">+25%</span></div>` : ""}
+    <div class="r-sub" style="margin-top:8px">в тысячах рублей</div>
+    <hr class="r-cut">
+    <div class="r-total"><span>Итого</span><span class="sum">${fmtRange([e.min,e.max])} тыс ₽</span></div>
+    <div class="r-row" style="margin-top:8px"><span class="l">Срок</span><span class="dots"></span><span class="v">${weeksText(e.weeks)}</span></div>
+    ${e.monthly ? `<div class="r-row"><span class="l">Ведение</span><span class="dots"></span><span class="v">${fmtRange(e.monthly)} тыс/мес</span></div>` : ""}
+    <div class="r-row"><span class="l">Предоплата</span><span class="dots"></span><span class="v">0 ₽</span></div>
+    <hr class="r-cut">
+    <p class="r-foot">Точная сумма — после бесплатного разбора задачи. Оплата после результата.</p>
+    ${stampSvg(landed ? "land" : "")}
+  </div>`;
+}
+
+function Result(){
+  const e = estimate();
+  setButton("Отправить заявку", submit, S.name.trim().length > 1);
+  return `${topbar()}<div class="result">
+    <h1>Ваша смета готова</h1>
+    <p class="hint">Предварительный расчёт по вашим ответам.</p>
+    ${receiptHtml(e, true)}
+    <div class="form">
+      <h2>Куда прислать точный расчёт?</h2>
+      <p class="hint">${CONFIG.OWNER_NAME} посмотрит задачу и ответит в течение рабочего дня.</p>
+      <label class="field" id="f-name"><span>Как к вам обращаться</span>
+        <input id="name" autocomplete="given-name" maxlength="60" value="${esc(S.name)}" placeholder="Имя">
+        <span class="msg">Напишите имя, чтобы мы знали, как обращаться</span></label>
+      <label class="field"><span>Телефон, если удобнее созвониться</span>
+        <input id="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" value="${esc(S.phone)}" placeholder="+7"></label>
+      <label class="field"><span>Пара слов о задаче</span>
+        <textarea id="comment" rows="3" maxlength="600" placeholder="Например: есть сайт на Тильде, нужен бот для записи">${esc(S.comment)}</textarea></label>
+      ${IN_TG ? `<button type="button" class="toggle" role="switch" aria-checked="${S.inTg}" data-act="intg"><span>Ответить здесь, в Telegram</span><span class="sw"></span></button>` : ""}
+      <p class="privacy">Данные получит только ${CONFIG.OWNER_NAME} — для ответа на заявку.</p>
+      <div class="error-box" id="err"></div>
+    </div>
+  </div>`;
+}
+
+function Done(){
+  setButton(IN_TG ? "Закрыть" : "На главную", () => IN_TG ? tg.close() : (trail.length = 0, go("home", { back:true })));
+  const how = S.phone && !S.inTg ? "позвонит" : IN_TG && S.inTg ? "напишет вам здесь, в Telegram," : "свяжется с вами";
+  return `<div class="done">
+    ${stampSvg()}
+    <h1>${S.sent ? "Заявка отправлена" : "Так будет выглядеть заявка"}</h1>
+    ${S.sent
+      ? `<p>${CONFIG.OWNER_NAME} ${how} в течение рабочего дня. Смета с вашими ответами уже у него.</p>`
+      : `<p>Это демо-режим в браузере. Откройте приложение в Telegram, и заявка сразу придёт владельцу.</p>`}
+    <p>Пока ждёте — подумайте, какие сайты или боты конкурентов вам нравятся. Пригодится на разборе.</p>
+    <button type="button" class="textlink" data-act="restart">Посчитать другой проект</button>
+  </div>`;
+}
+
+/* ==========================================================
+   Обработчики
+   ========================================================== */
+function esc(s){ return String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+const advance = (next) => setTimeout(() => go(next), 220);
+
+function bind(){
+  app.querySelectorAll("[data-service]").forEach(b => b.onclick = () => {
+    if (S.service !== b.dataset.service){ S.scale = null; S.extras.clear(); }
+    S.service = b.dataset.service; haptic.tap(); mark(b, "service"); advance("scale");
+  });
+  app.querySelectorAll("[data-scale]").forEach(b => b.onclick = () => {
+    S.scale = b.dataset.scale; haptic.tap(); mark(b, "scale"); updatePeek(); advance("extras");
+  });
+  app.querySelectorAll("[data-extra]").forEach(b => b.onclick = () => {
+    const id = b.dataset.extra; S.extras.has(id) ? S.extras.delete(id) : S.extras.add(id);
+    b.setAttribute("aria-checked", S.extras.has(id)); haptic.tap(); updatePeek();
+    setButton(S.extras.size ? "Дальше" : "Ничего не нужно, дальше", () => go("niche"));
+  });
+  app.querySelectorAll("[data-niche]").forEach(b => b.onclick = () => {
+    S.niche = b.dataset.niche; haptic.tap(); mark(b, "niche"); advance("urgency");
+  });
+  app.querySelectorAll("[data-urgency]").forEach(b => b.onclick = () => {
+    S.urgency = b.dataset.urgency; haptic.tap(); mark(b, "urgency"); advance("result");
+  });
+  app.querySelectorAll("[data-act=back]").forEach(b => b.onclick = goBack);
+  app.querySelectorAll("[data-act=restart]").forEach(b => b.onclick = () => {
+    Object.assign(S, { service:null, scale:null, niche:null, urgency:null, sent:false }); S.extras.clear();
+    trail.length = 0; trail.push("home"); go("service");
+  });
+  app.querySelectorAll("[data-act=intg]").forEach(b => b.onclick = () => {
+    S.inTg = !S.inTg; b.setAttribute("aria-checked", S.inTg); haptic.tap();
+  });
+  const name = app.querySelector("#name");
+  if (name){
+    name.oninput = () => { S.name = name.value; app.querySelector("#f-name").classList.remove("err"); setButton("Отправить заявку", submit, S.name.trim().length > 1); };
+    app.querySelector("#phone").oninput = e => S.phone = e.target.value;
+    app.querySelector("#comment").oninput = e => S.comment = e.target.value;
+  }
+}
+function mark(btnEl, group){
+  app.querySelectorAll(`[data-${group}]`).forEach(x => x.setAttribute("aria-checked", x === btnEl));
+}
+
+function updatePeek(){
+  const show = ["extras","niche","urgency"].includes(S.screen) && estimate();
+  peek.hidden = !show;
+  if (show){ const e = estimate(); peek.innerHTML = `<span>Предварительно</span><b>${fmtRange([e.min,e.max])} тыс ₽</b>`; }
+}
+
+
+/* ==========================================================
+   Покадровая анимация на скролле
+   ========================================================== */
+const FILM = {
+  count: 139,                                              // кадров в папке frames/
+  src: i => `frames/f${String(i).padStart(3, "0")}.webp`,
+  w: 840, h: 1315,                                         // размер кадра
+  bg: "#DFE2F8",                                           // фон видео
+  ring: { x: .5, y: .5, d: .226 },                         // кольцо в финале: центр и диаметр (доля ширины кадра)
+  fill: .78,                                               // какую часть высоты экрана занимает кадр
+};
+const filmImgs = new Array(FILM.count);
+let filmLoading = false, film = null;
+
+function preloadFilm(){
+  if (filmLoading) return; filmLoading = true;
+  // сначала первый и последний кадр, потом каждый 16-й, 8-й… — анимация работает ещё до полной загрузки
+  const order = [0, FILM.count - 1], seen = new Set(order);
+  for (const step of [16, 8, 4, 2, 1])
+    for (let i = 0; i < FILM.count; i += step) if (!seen.has(i)) { seen.add(i); order.push(i); }
+  let k = 0, active = 0;
+  const pump = () => {
+    while (active < 6 && k < order.length){
+      const i = order[k++], im = new Image(); active++;
+      im.decoding = "async";
+      im.onload = () => { filmImgs[i] = im; active--; if (film) film.loaded(i); pump(); };
+      im.onerror = () => { active--; pump(); };
+      im.src = FILM.src(i);
+    }
+  };
+  pump();
+}
+function nearestFrame(i){
+  if (filmImgs[i]) return filmImgs[i];
+  for (let d = 1; d < FILM.count; d++){
+    if (filmImgs[i - d]) return filmImgs[i - d];
+    if (filmImgs[i + d]) return filmImgs[i + d];
+  }
+  return null;
+}
+function stageHeight(){
+  const h = IN_TG && tg.viewportStableHeight ? tg.viewportStableHeight : window.innerHeight;
+  document.documentElement.style.setProperty("--stage-h", Math.round(h) + "px");
+}
+
+function mountFilm(){
+  const root = app.querySelector(".film");
+  if (!root){ film = null; return; }
+  const stage = root.querySelector(".film-stage"), canvas = root.querySelector("canvas"), ctx = canvas.getContext("2d");
+  const chs = [...root.querySelectorAll(".ch")].map(el => ({ el, from:+el.dataset.from, to:+el.dataset.to }));
+  const stamp = root.querySelector(".film-stamp");
+  const smooth = matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : .18;
+  const clamp = v => Math.min(1, Math.max(0, v));
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  let W = 0, H = 0, dpr = 1, box = null, target = 0, cur = 0, raf = 0, shown = null, landed = false;
+
+  function layout(){
+    W = stage.clientWidth; H = stage.clientHeight; dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    const s = Math.max(W / FILM.w, H * FILM.fill / FILM.h);
+    const w = FILM.w * s, h = FILM.h * s;
+    box = { x:(W - w) / 2, y:H - h, w, h };
+    root.style.setProperty("--copy-h", Math.max(box.y + 56, 170) + "px");
+    const size = FILM.ring.d * w * 200 / 110;               // внутренний круг печати (r=55 из 200) = кольцо из видео
+    Object.assign(stamp.style, { width:size + "px", height:size + "px",
+      left:(box.x + w * FILM.ring.x - size / 2) + "px", top:(box.y + h * FILM.ring.y - size / 2) + "px" });
+    shown = null; paint();
+  }
+  function progress(){
+    const r = root.getBoundingClientRect(), total = root.offsetHeight - H;
+    return total > 0 ? clamp(-r.top / total) : 0;
+  }
+  function paint(){
+    const f = Math.round(cur * (FILM.count - 1)), im = nearestFrame(f);
+    if (im && im !== shown){
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.fillStyle = FILM.bg; ctx.fillRect(0, 0, W, H);
+      ctx.drawImage(im, box.x, box.y, box.w, box.h);
+      shown = im;
+    }
+    const fade = .035;
+    for (const c of chs){
+      const o = clamp((cur - c.from) / fade) * clamp((c.to - cur) / fade);
+      c.el.style.opacity = o.toFixed(3);
+      c.el.style.transform = `translateY(${((1 - o) * (cur < c.from + fade ? 12 : -12)).toFixed(1)}px)`;
+      c.el.style.visibility = o > 0 ? "visible" : "hidden";
+    }
+    // интро: логотип разъезжается и уходит вверх
+    const intro = chs[0] && chs[0].el.querySelector(".fakt");
+    if (intro) intro.style.letterSpacing = `${(-.035 + cur * 1.2).toFixed(3)}em`;
+    // печать опускается на кольцо
+    const t = clamp((cur - .9) / .07), e = ease(t);
+    stamp.style.opacity = t > 0 ? Math.min(1, t * 1.8).toFixed(3) : "0";
+    stamp.style.transform = `scale(${(1.45 - .45 * e).toFixed(3)}) rotate(${(30 - 38 * e).toFixed(2)}deg)`;
+    if (t >= 1 && !landed){ landed = true; haptic.thud(); }
+    if (t < .5) landed = false;
+  }
+  function tick(){
+    cur += (target - cur) * smooth;
+    if (Math.abs(target - cur) < .0004) cur = target;
+    paint();
+    raf = cur !== target ? requestAnimationFrame(tick) : 0;
+  }
+  const api = {
+    scroll(){ target = progress(); if (!raf) raf = requestAnimationFrame(tick); },
+    layout,
+    loaded(i){ if (Math.abs(i - cur * (FILM.count - 1)) <= 16){ shown = null; paint(); } },
+  };
+  film = api;
+  layout(); api.scroll();
+}
+
+window.addEventListener("scroll", () => { if (film) film.scroll(); }, { passive:true });
+window.addEventListener("resize", () => { stageHeight(); if (film) film.layout(); });
+
+/* ==========================================================
+   Отправка заявки
+   ========================================================== */
+function leadPayload(){
+  const s = svc(), sc = scl(), e = estimate();
+  return {
+    service: s.title, scale: sc.title,
+    extras: s.extras.filter(x => S.extras.has(x.id)).map(x => x.title),
+    niche: S.niche, urgency: (urg() || URGENCY[0]).title,
+    estimate: { min:e.min, max:e.max, weeks:weeksText(e.weeks), monthly: e.monthly ? fmtRange(e.monthly) : null },
+    name: S.name.trim(), phone: S.phone.trim(), comment: S.comment.trim(),
+    answerInTelegram: IN_TG ? S.inTg : false,
+  };
+}
+function summaryText(){
+  const l = leadPayload();
+  return `Здравствуйте! Посчитал проект в приложении ${CONFIG.BRAND}: ${l.service} — ${l.scale}` +
+    (l.extras.length ? ` (+ ${l.extras.join(", ")})` : "") + `. Вышло ${l.estimate.min}–${l.estimate.max} тыс ₽. Меня зовут ${l.name}.`;
+}
+
+let sending = false;
+async function submit(){
+  if (sending) return;
+  if (S.name.trim().length < 2){ app.querySelector("#f-name").classList.add("err"); haptic.err(); return; }
+  if (!IN_TG){ S.sent = false; haptic.ok(); go("done"); return; }           // демо в браузере
+  if (!CONFIG.API_URL){ showError("Адрес сервера не указан в настройках приложения."); return; }
+  sending = true;
+  if (IN_TG) tg.MainButton.showProgress(false);
+  try {
+    const r = await fetch(CONFIG.API_URL, { method:"POST", headers:{ "Content-Type":"text/plain;charset=utf-8" },
+      body: JSON.stringify({ initData: tg.initData, lead: leadPayload() }) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.ok) throw new Error(j.error || "http " + r.status);
+    S.sent = true; haptic.ok(); go("done");
+  } catch (err) {
+    console.error(err); showError("Не получилось отправить заявку — похоже, пропал интернет или сервер недоступен.");
+  } finally {
+    sending = false; if (IN_TG) tg.MainButton.hideProgress();
+  }
+}
+function showError(text){
+  haptic.err();
+  const box = app.querySelector("#err"); if (!box) return;
+  const u = CONFIG.OWNER_USERNAME;
+  box.innerHTML = `${text}${u ? `<br><button type="button" id="dm">Написать ${CONFIG.OWNER_NAME} напрямую</button>` : " Попробуйте ещё раз через минуту."}`;
+  box.classList.add("on");
+  const dm = box.querySelector("#dm");
+  if (dm) dm.onclick = () => {
+    const link = `https://t.me/${u}?text=${encodeURIComponent(summaryText())}`;
+    IN_TG ? tg.openTelegramLink(link) : window.open(link, "_blank");
+  };
+}
+
+/* ==========================================================
+   Старт
+   ========================================================== */
+document.title = `${CONFIG.BRAND} — расчёт проекта`;
+if (IN_TG){
+  tg.ready(); tg.expand();
+  if (can("7.7")) tg.disableVerticalSwipes();
+  tg.onEvent("themeChanged", applyTheme);
+  tg.onEvent("viewportChanged", e => { if (e && e.isStateStable){ stageHeight(); if (film) film.layout(); } });
+} else {
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
+}
+stageHeight();
+preloadFilm();
+applyTheme();
+render();
+</script>
+</body>
+</html>
