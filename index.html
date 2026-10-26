@@ -135,27 +135,101 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
 .q h1{font-size:28px;font-weight:750;line-height:1.12;letter-spacing:-.02em;margin-bottom:8px}
 .q .hint{color:var(--muted);font-size:15px;margin-bottom:22px}
 
-.opts{display:flex;flex-direction:column;gap:8px}
-.opt{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;text-align:left;width:100%;
-  background:var(--surface);border:1.5px solid transparent;border-radius:14px;padding:15px 16px;
-  transition:border-color .15s, background .15s}
-.opt.has-ico{grid-template-columns:36px 1fr auto}
-.opt .ico{width:36px;height:36px;border-radius:10px;background:var(--ink-soft);color:var(--ink);display:grid;place-items:center}
-.opt .ico svg{width:20px;height:20px}
-.opt b{display:block;font-weight:600;font-size:16px;line-height:1.3}
-.opt small{display:block;font-size:14px;color:var(--muted);line-height:1.35;margin-top:2px}
-.opt .price{font-size:13px;color:var(--muted);white-space:nowrap;text-align:right}
-.opt .mark{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;flex:none}
-.opt.multi .mark{border-radius:7px}
-.opt .mark svg{width:14px;height:14px;opacity:0;color:var(--on-ink)}
-.opt[aria-checked="true"]{border-color:var(--ink)}
-.opt[aria-checked="true"] .mark{background:var(--ink);border-color:var(--ink)}
-.opt[aria-checked="true"] .mark svg{opacity:1}
-.opt .right{display:flex;align-items:center;gap:10px}
+/* плитки вариантов */
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tiles.list{grid-template-columns:1fr}
+.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;width:100%;min-height:118px;
+  background:var(--surface);border:1.5px solid transparent;border-radius:18px;padding:14px 14px 15px;
+  box-shadow:0 1px 0 rgba(19,24,70,.04);transition:border-color .15s, background .15s, transform .12s;
+  animation:rise .34s cubic-bezier(.2,.8,.3,1) both;animation-delay:calc(var(--i,0) * 35ms)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.tile:active{transform:scale(.97)}
+.t-ico{width:40px;height:40px;border-radius:12px;background:var(--ink-soft);color:var(--ink);display:grid;place-items:center;
+  font-size:21px;line-height:1;font-weight:800;flex:none;transition:background .15s,color .15s}
+.t-ico svg{width:22px;height:22px}
+.t-txt{min-width:0}
+.t-txt b{display:block;font-weight:650;font-size:16px;line-height:1.25;hyphens:auto;-webkit-hyphens:auto}
+.t-txt small{display:block;font-size:13.5px;color:var(--muted);line-height:1.35;margin-top:3px}
+.t-price{font-size:14px;font-weight:650;white-space:nowrap;color:var(--text)}
+.tick{position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);
+  display:grid;place-items:center;transition:background .15s,border-color .15s,transform .2s}
+.tile.multi .tick{border-radius:7px}
+.tick svg{width:13px;height:13px;color:var(--on-ink);opacity:0}
+.tile[aria-checked="true"]{border-color:var(--ink);background:color-mix(in srgb, var(--surface) 88%, var(--ink))}
+.tile[aria-checked="true"] .t-ico{background:var(--ink);color:var(--on-ink)}
+.tile[aria-checked="true"] .tick{background:var(--ink);border-color:var(--ink);animation:tickpop .3s cubic-bezier(.2,.9,.3,1.4)}
+.tile[aria-checked="true"] .tick svg{opacity:1}
+@keyframes tickpop{from{transform:scale(.4)}to{transform:scale(1)}}
+.tiles.list .tile{flex-direction:row;align-items:center;min-height:0;padding:14px 46px 14px 14px;gap:14px}
+.tiles.list .t-txt{flex:1;min-width:0}
+.tiles.list .tick{top:50%;margin-top:-11px}
+.tiles.compact .tile{min-height:0;gap:8px;padding:12px 12px 13px;border-radius:16px}
+.tiles.compact .t-ico{width:34px;height:34px;font-size:18px;border-radius:10px}
+.tiles.compact .t-txt b{font-size:14.5px;font-weight:600;padding-right:14px}
+.tiles.compact .tick{width:20px;height:20px;top:12px;right:10px}
+.tiles.compact .tick svg{width:12px;height:12px}
+
+/* поля ввода — по одному на экран */
+.bigfield{display:block;margin-top:18px}
+.bigfield span{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
+.bigfield input,.bigfield textarea{width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;
+  padding:14px 16px;font-size:20px;font-weight:550;outline:none;transition:border-color .15s;resize:none}
+.bigfield textarea{font-size:16px;font-weight:450;line-height:1.45}
+.bigfield input:focus,.bigfield textarea:focus{border-color:var(--ink)}
+.bigfield.err input{border-color:var(--danger)}
+.reveal{display:none}
+.reveal.on{display:block;animation:rise .3s ease-out both}
+.q-name .bigfield,.q-phone .bigfield{margin-top:4px}
+.q .chips{margin-top:14px}
+.sub{font-size:16px;font-weight:650;margin:24px 0 0}
+.sub span{font-weight:400;color:var(--muted);font-size:14px}
+.sharebtn{width:100%;height:56px;border-radius:14px;background:var(--ink);color:var(--on-ink);font-weight:650;font-size:16.5px;
+  display:flex;align-items:center;justify-content:center;gap:10px;animation:rise .3s ease-out both}
+.sharebtn svg{width:20px;height:20px}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13.5px;margin:16px 0 10px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* бюджет */
+.budget{background:var(--surface);border-radius:20px;padding:20px 18px 18px;animation:rise .3s ease-out both}
+.b-val{display:flex;align-items:baseline;gap:2px}
+.b-val b{font-size:42px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.b-val span{font-size:18px;font-weight:600;color:var(--muted)}
+.b-est{font-size:14px;color:var(--muted);margin-top:8px}
+.b-est b{color:var(--text);font-weight:650}
+.b-track{position:relative;height:44px;margin-top:14px}
+.b-zone{position:absolute;top:50%;height:16px;margin-top:-8px;border-radius:8px;background:var(--marker);opacity:.75}
+.b-track input{position:absolute;inset:0;width:100%;height:44px;margin:0;background:transparent;-webkit-appearance:none;appearance:none}
+.b-track input::-webkit-slider-runnable-track{height:6px;border-radius:3px;
+  background:linear-gradient(90deg,var(--ink) var(--p),color-mix(in srgb,var(--line) 85%,transparent) var(--p))}
+.b-track input::-moz-range-track{height:6px;border-radius:3px;background:var(--line)}
+.b-track input::-moz-range-progress{height:6px;border-radius:3px;background:var(--ink)}
+.b-track input::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;margin-top:-12px;
+  background:#fff;border:3px solid var(--ink);box-shadow:0 4px 12px -3px rgba(36,51,196,.55)}
+.b-track input::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid var(--ink)}
+.b-marks{position:relative;height:18px;font-size:12px;color:var(--muted);margin:0 15px}
+.b-marks span{position:absolute;transform:translateX(-50%)}
+.b-verdict{margin:14px 0 14px;font-size:15px;line-height:1.4;padding:11px 13px;border-radius:12px;background:var(--desk)}
+.b-verdict.ok{background:color-mix(in srgb,#2FA36B 14%,var(--surface))}
+.b-verdict.warn{background:color-mix(in srgb,var(--marker) 38%,var(--surface))}
+.budget.off .b-val b,.budget.off .b-track,.budget.off .b-marks{opacity:.35}
+.budget .toggle{margin:0;background:var(--desk)}
+
+/* заявка на экране сметы */
+.summary{margin:0 0 18px}
+.summary h2{margin-bottom:2px}
+.summary .hint{margin-bottom:10px}
+.srow{display:grid;grid-template-columns:1fr 20px;gap:2px 10px;width:100%;text-align:left;padding:12px 0;border-bottom:1px solid var(--line)}
+.srow .k{font-size:13px;color:var(--muted);grid-column:1}
+.srow .v{font-size:15.5px;font-weight:550;line-height:1.35;grid-column:1;overflow-wrap:anywhere}
+.srow .pen{grid-column:2;grid-row:1/span 2;align-self:center;color:var(--ink)}
+.srow .pen svg{width:18px;height:18px}
+.srow:active{opacity:.6}
 
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{background:var(--surface);border:1.5px solid transparent;border-radius:999px;padding:10px 16px;font-size:15px;font-weight:500}
-.chip[aria-checked="true"]{border-color:var(--ink);color:var(--ink)}
+.chip{background:var(--surface);border:1.5px solid transparent;border-radius:999px;padding:10px 16px;font-size:15px;font-weight:500;
+  transition:border-color .15s,color .15s,transform .12s}
+.chip:active{transform:scale(.96)}
+.chip[aria-checked="true"]{border-color:var(--ink);color:var(--ink);background:color-mix(in srgb, var(--surface) 88%, var(--ink))}
 
 /* полоска предварительной суммы */
 .peek{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + var(--safe-b));width:calc(100% - 2*var(--gutter));max-width:480px;
@@ -195,17 +269,6 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
 .receipt .stamp.land{animation:land .5s cubic-bezier(.2,.9,.3,1.25) .45s both}
 @keyframes land{0%{opacity:0;transform:rotate(-24deg) scale(1.7)}60%{opacity:.95}100%{opacity:.9;transform:rotate(-14deg) scale(1)}}
 
-/* форма */
-.form h2{margin-bottom:4px}
-.form .hint{color:var(--muted);font-size:15px;margin-bottom:16px}
-.field{display:block;margin-bottom:12px}
-.field span{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
-.field input,.field textarea{width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;
-  padding:13px 14px;font-size:16px;outline:none;transition:border-color .15s;resize:none}
-.field input:focus,.field textarea:focus{border-color:var(--ink)}
-.field.err input{border-color:var(--danger)}
-.field .msg{display:none;color:var(--danger);font-size:13px;margin-top:5px}
-.field.err .msg{display:block}
 .toggle{display:flex;gap:12px;align-items:center;justify-content:space-between;background:var(--surface);border-radius:12px;padding:13px 14px;margin-bottom:14px;width:100%;text-align:left}
 .toggle .sw{width:44px;height:26px;border-radius:13px;background:var(--line);position:relative;flex:none;transition:background .2s}
 .toggle .sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
@@ -294,7 +357,8 @@ html.chat-open, html.chat-open body{overflow:hidden}
 @media (prefers-reduced-motion:reduce){
   .film-hint svg{animation:none}
   .screen,.receipt .stamp.land{animation:none}
-  .progress .bar i,.opt,.toggle .sw,.toggle .sw::after{transition:none}
+  .progress .bar i,.tile,.chip,.toggle .sw,.toggle .sw::after{transition:none}
+  .tile,.reveal.on,.sharebtn,.budget,.tile[aria-checked="true"] .tick{animation:none}
   .msg.new,.quick.new,.typing i{animation:none}
 }
 </style>
@@ -439,14 +503,40 @@ const SERVICES = [
     ]},
 ];
 
-const NICHES = ["Строительство и ремонт","Салон, барбершоп, SPA","Магазин или шоурум","Медицина и здоровье",
-  "Обучение и репетиторы","Авто и сервис","Недвижимость","Кафе и доставка","Другое"];
-
-const URGENCY = [
-  { id:"normal", title:"В течение месяца", desc:"Обычный темп", k:1, w:1 },
-  { id:"rush",   title:"Как можно быстрее", desc:"Ставим в приоритет: +25% к стоимости", k:1.25, w:.65 },
-  { id:"later",  title:"Пока присматриваюсь", desc:"Хочу понять бюджет", k:1, w:1 },
+/* Варианты ответов в квизе расчёта. Формат: [id, эмодзи, название, подпись] */
+const GOALS = [
+  ["leads",   "📈", "Больше заявок",      "Чтобы клиенты обращались чаще"],
+  ["booking", "🗓", "Онлайн-запись",       "Клиенты записываются сами"],
+  ["sell",    "🛒", "Продавать онлайн",    "Каталог, корзина, оплата"],
+  ["search",  "🔎", "Чтобы находили",      "Яндекс, карты, нейросети"],
+  ["auto",    "⚡️", "Разгрузить себя",     "Бот ответит на типовые вопросы"],
+  ["image",   "✨", "Выглядеть солиднее",  "Современно вместо устаревшего"],
 ];
+const NICHES = [
+  ["build","🏗","Строительство и ремонт"], ["beauty","💅","Салон, барбершоп, SPA"], ["shop","🛍","Магазин или шоурум"],
+  ["med","🩺","Медицина и здоровье"], ["edu","📚","Обучение и репетиторы"], ["auto","🚗","Авто и сервис"],
+  ["realty","🏢","Недвижимость"], ["food","🍕","Кафе и доставка"], ["b2b","💼","Услуги для бизнеса"], ["other","✏️","Другое"],
+];
+const ASSETS = [
+  ["site","🌐","Сайт"], ["tilda","🧱","Сайт на конструкторе"], ["social","📱","Соцсети или канал"],
+  ["ads","📣","Уже идёт реклама"], ["crm","🗂","CRM или таблица заявок"], ["none","🌱","Пока ничего"],
+];
+const URGENCY = [
+  { id:"rush",    emoji:"🔥", title:"Срочно",                 desc:"В приоритете, +25% к стоимости", k:1.25, w:.65 },
+  { id:"normal",  emoji:"📅", title:"В течение месяца",       desc:"Обычный темп",                   k:1,    w:1 },
+  { id:"quarter", emoji:"🗓", title:"Через 1–3 месяца",        desc:"Спокойно подготовимся",          k:1,    w:1 },
+  { id:"later",   emoji:"👀", title:"Пока присматриваюсь",    desc:"Хочу понять бюджет",             k:1,    w:1 },
+];
+const CONTACTS = [
+  ["tg",   "💬", "Напишите в Telegram", "Ответ в течение рабочего дня"],
+  ["call", "📞", "Позвоните мне",        "Попросим номер на следующем шаге"],
+  ["wa",   "🟢", "Напишите в WhatsApp",  "Попросим номер на следующем шаге"],
+];
+const CALL_TIMES = ["Утром", "Днём", "Вечером", "В любое время"];
+const NOTES = ["Есть пример, который нравится", "Нужен дизайн с нуля", "Есть дизайн или брендбук",
+  "Нужно успеть к сезону", "Нужна связь с CRM или 1С", "Сначала хочу созвониться"];
+/* Шкала бюджета, тыс ₽ (ползунок идёт по этим значениям) */
+const BUDGET_STEPS = [10,15,20,25,30,35,40,45,50,60,70,80,90,100,120,150,200,250,300];
 
 /* ==========================================================
    Иконки
@@ -463,6 +553,8 @@ const I = {
   send:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.4 20.4 21 12 3.4 3.6 3.3 10l12.4 2-12.4 2z"/></svg>',
   reset:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
   chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/></svg>',
+  phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l1.8 4.6-2.3 1.5a11 11 0 0 0 5.9 5.9l1.5-2.3L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5A16.5 16.5 0 0 1 3.5 5.6 1.5 1.5 0 0 1 5 4z"/></svg>',
+  pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg>',
   back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>',
 };
 const stampSvg = (cls="") => `<svg class="stamp ${cls}" style="color:var(--stamp)" aria-hidden="true"><use href="#stamp"/></svg>`;
@@ -522,15 +614,16 @@ if (IN_TG) tg.BackButton.onClick(goBack);
 /* ==========================================================
    Состояние и расчёт
    ========================================================== */
-const S = { screen:"home", service:null, scale:null, extras:new Set(), niche:null, urgency:null,
-  name:"", phone:"", comment:"", inTg:true, sent:false };
+const S = { screen:"home", service:null, scale:null, extras:new Set(), goal:null, niche:null, nicheText:"",
+  assets:new Set(), link:"", budget:null, budgetUnknown:false, urgency:null, contact:null, phone:"", callTime:"",
+  name:"", notes:new Set(), comment:"", answered:new Set(), sent:false };
 const trail = [];
 const tgUser = IN_TG && tg.initDataUnsafe && tg.initDataUnsafe.user;
 if (tgUser) S.name = [tgUser.first_name, tgUser.last_name].filter(Boolean).join(" ");
 
 const svc = () => SERVICES.find(s => s.id === S.service);
 const scl = () => svc() && svc().scales.find(x => x.id === S.scale);
-const urg = () => URGENCY.find(u => u.id === S.urgency);
+const urg = () => URGENCY.find(u => u.id === S.urgency) || URGENCY.find(u => u.id === "normal");
 const r5 = n => Math.max(5, Math.round(n / 5) * 5);
 const fmtRange = ([a,b]) => a === b ? `${a}` : `${a}–${b}`;
 const plural = (n, f) => { const m10=n%10, m100=n%100; return f[(m10===1&&m100!==11)?0:(m10>=2&&m10<=4&&(m100<10||m100>=20))?1:2]; };
@@ -545,7 +638,7 @@ function estimate(){
     if (e.monthly){ monthly = e.monthly; continue; }
     items.push({ label: e.title, price: e.price }); min += e.price[0]; max += e.price[1]; wk += e.weeks || 0;
   }
-  const u = urg() || URGENCY[0];
+  const u = urg();
   min = r5(min * u.k); max = r5(max * u.k);
   let wMin = sc.weeks[0] + Math.floor(wk / 2), wMax = Math.ceil(sc.weeks[1] + wk);
   wMin = Math.max(1, Math.round(wMin * u.w)); wMax = Math.max(wMin, Math.round(wMax * u.w));
@@ -557,10 +650,17 @@ function estimate(){
    ========================================================== */
 const app = document.getElementById("app");
 const peek = document.getElementById("peek");
-const QUIZ = ["service","scale","extras","niche","urgency"];
+/* Квиз расчёта: один вопрос — один экран. Порядок шагов: */
+const QSTEPS = ["service","scale","extras","goal","niche","assets","budget","urgency","contact","phone","name","notes"];
+const stepNeeded = id => id !== "phone" || (S.contact && S.contact !== "tg");
+const activeSteps = () => QSTEPS.filter(stepNeeded);
+const nextScreen = () => activeSteps().find(id => !S.answered.has(id)) || "result";
 
 function go(screen, opts = {}){
-  if (!opts.back && S.screen !== screen) trail.push(S.screen);
+  if (!opts.back && S.screen !== screen){
+    const k = trail.lastIndexOf(screen);                    // вернулись к экрану, который уже был, — без петель в «Назад»
+    if (k >= 0) trail.length = k; else trail.push(S.screen);
+  }
   S.screen = screen;
   render(opts.back);
   window.scrollTo({ top:0 });
@@ -569,9 +669,19 @@ function goBack(){
   const prev = trail.pop();
   if (prev) { S.screen = prev; render(true); window.scrollTo({ top:0 }); }
 }
+let proceedTimer = 0;
+function proceed(step, delay = 260){
+  S.answered.add(step);
+  clearTimeout(proceedTimer);
+  proceedTimer = setTimeout(() => go(nextScreen()), delay);
+}
+function startCalc(){
+  trail.length = 0; S.screen = "home";
+  go(S.answered.size && !S.sent ? nextScreen() : "service");
+}
 
 function render(back){
-  const fn = { home:Home, service:QService, scale:QScale, extras:QExtras, niche:QNiche, urgency:QUrgency, result:Result, done:Done, chat:Chat }[S.screen];
+  const fn = { home:Home, result:Result, done:Done, chat:Chat }[S.screen] || (() => Quiz(S.screen));
   app.innerHTML = `<section class="screen${back ? " back" : ""}">${fn()}</section>`;
   bind();
   mountFilm();
@@ -583,8 +693,10 @@ function render(back){
 }
 
 function topbar(){
-  const i = QUIZ.indexOf(S.screen);
-  const count = i >= 0 ? `<span class="count">Шаг ${i+1} из ${QUIZ.length}</span><span class="bar"><i style="width:${(i+1)/QUIZ.length*100}%"></i></span>` : "";
+  const steps = activeSteps(), i = steps.indexOf(S.screen);
+  const count = i >= 0
+    ? `<span class="count">Вопрос ${i+1} из ${steps.length}</span><span class="bar"><i style="width:${(i+1)/steps.length*100}%"></i></span>`
+    : S.screen === "result" ? `<span class="count">Готово</span><span class="bar"><i style="width:100%"></i></span>` : "";
   return `<div class="topbar"><button class="backlink" data-act="back" type="button">${I.back}Назад</button><div class="progress">${count}</div></div>`;
 }
 
@@ -593,7 +705,7 @@ function Home(){
     const from = Math.min(...s.scales.map(x => x.price[0]));
     return `<li data-chatneed="${s.id}" role="button" tabindex="0"><span class="ico">${I[s.icon]}</span><div><h3>${s.home}</h3><p>${s.desc}</p></div><span class="from">от <b>${from}</b> тыс</span></li>`;
   }).join("");
-  setButton("Рассчитать стоимость", () => go("service"));
+  setButton("Рассчитать стоимость", startCalc);
   const ch = (from, to, inner) => `<div class="ch" data-from="${from}" data-to="${to}">${inner}</div>`;
   return `
     <div class="film" aria-label="Анимация о студии ${CONFIG.BRAND}">
@@ -610,7 +722,7 @@ function Home(){
     </div>
     <div class="terms">
       <div><b>0 ₽</b><span>предоплаты</span></div>
-      <div><b>1 минута</b><span>на расчёт стоимости</span></div>
+      <div><b>2 минуты</b><span>на расчёт стоимости</span></div>
     </div>
     <button type="button" class="chatcard" data-act="open-chat">
       <img src="assistant.webp" alt="">
@@ -633,63 +745,160 @@ function Home(){
 `;
 }
 
-function optRow({ id, title, desc, right="", icon=null, checked, multi=false, group }){
-  return `<button type="button" class="opt${icon ? " has-ico" : ""}${multi ? " multi" : ""}" role="${multi ? "checkbox" : "radio"}"
-    aria-checked="${checked}" data-${group}="${id}">
-    ${icon ? `<span class="ico">${I[icon]}</span>` : ""}
-    <span><b>${title}</b>${desc ? `<small>${desc}</small>` : ""}</span>
-    <span class="right">${right ? `<span class="price">${right}</span>` : ""}<span class="mark">${I.check}</span></span>
+
+/* ---------- плитки вариантов ---------- */
+function tile({ group, id, emoji, icon, title, desc, right, checked, multi, i = 0 }){
+  return `<button type="button" class="tile${multi ? " multi" : ""}" style="--i:${i}" role="${multi ? "checkbox" : "radio"}"
+    aria-checked="${!!checked}" data-${multi ? "toggle" : "pick"}="${group}:${id}">
+    <span class="t-ico">${icon ? I[icon] : emoji}</span>
+    <span class="t-txt"><b>${title}</b>${desc ? `<small>${desc}</small>` : ""}</span>
+    ${right ? `<span class="t-price">${right}</span>` : ""}
+    <span class="tick">${I.check}</span>
   </button>`;
 }
+const tiles = (items, cls = "") => `<div class="tiles ${cls}" role="group">${items.join("")}</div>`;
+const chip = (group, id, text, on, multi) => `<button type="button" class="chip" role="${multi ? "checkbox" : "radio"}"
+  aria-checked="${!!on}" data-${multi ? "toggle" : "pick"}="${group}:${id}">${text}</button>`;
+const nicheTitle = () => S.niche === "other" ? (S.nicheText.trim() || "Другое") : ((NICHES.find(n => n[0] === S.niche) || [])[2] || "");
+const goalTitle = () => (GOALS.find(g => g[0] === S.goal) || [])[2] || "";
+const needsLink = () => ["site","tilda","social"].some(x => S.assets.has(x));
+const pickedMain = (val, text = "Дальше") => val ? { text, ok:true } : null;
 
-function QService(){
-  hideButton();
-  return `${topbar()}<div class="q">
-    <h1>Что нужно вашему бизнесу?</h1>
-    <p class="hint">Выберите главное — детали уточним дальше.</p>
-    <div class="opts" role="radiogroup">${SERVICES.map(s => optRow({ id:s.id, title:s.title, desc:s.desc, icon:s.icon, checked:S.service===s.id, group:"service" })).join("")}</div>
+/* Вопросы квиза. Каждый возвращает заголовок, подсказку, содержимое и главную кнопку */
+const QS = {
+  service: () => ({
+    h:"Что нужно вашему бизнесу?", hint:"Выберите главное — детали уточним дальше.",
+    body: tiles(SERVICES.map((s, i) => tile({ group:"service", id:s.id, icon:s.icon, title:s.title, desc:s.desc, checked:S.service === s.id, i })), "list"),
+    main: pickedMain(S.service) }),
+  scale: () => { const s = svc(); return {
+    h: s.id === "ads" ? "Какой запуск нужен?" : s.id === "pack" ? "Какой комплект?" : "Какой масштаб?",
+    hint:"Цены — в тысячах рублей. Предоплаты нет.",
+    body: tiles(s.scales.map((x, i) => tile({ group:"scale", id:x.id, emoji:["①","②","③","④"][i], title:x.title,
+      desc:`${x.desc} · ${weeksText(x.weeks)}`, right:fmtRange(x.price), checked:S.scale === x.id, i })), "list"),
+    main: pickedMain(S.scale) }; },
+  extras: () => { const s = svc(); return {
+    h:"Что добавить?", hint:"Можно выбрать несколько или пропустить — сумма внизу пересчитается.",
+    body: tiles(s.extras.map((e, i) => tile({ group:"extras", id:e.id, emoji:"+", title:e.title, desc:e.desc, multi:true, i,
+      right: e.monthly ? `${fmtRange(e.monthly)}/мес` : `+${fmtRange(e.price)}`, checked:S.extras.has(e.id) })), "list"),
+    main: { text: S.extras.size ? "Дальше" : "Ничего не нужно — дальше", ok:true } }; },
+  goal: () => ({
+    h:"Какой результат главный?", hint:"Под цель подберём акценты и покажем похожие проекты.",
+    body: tiles(GOALS.map(([id, emoji, title, desc], i) => tile({ group:"goal", id, emoji, title, desc, checked:S.goal === id, i }))),
+    main: pickedMain(S.goal) }),
+  niche: () => ({
+    h:"Чем занимается бизнес?", hint:"Так подготовим примеры именно из вашей сферы.",
+    body: tiles(NICHES.map(([id, emoji, title], i) => tile({ group:"niche", id, emoji, title, checked:S.niche === id, i })), "compact") +
+      `<label class="reveal bigfield" data-reveal="niche"><span>Чем именно занимаетесь?</span>
+        <input data-input="nicheText" maxlength="80" value="${esc(S.nicheText)}" placeholder="Например: печать на футболках" enterkeyhint="next"></label>`,
+    reveal: { niche: S.niche === "other" },
+    main: S.niche === "other" ? { text:"Дальше", ok: S.nicheText.trim().length > 1 } : pickedMain(S.niche) }),
+  assets: () => ({
+    h:"Что у вас уже есть?", hint:"Можно выбрать несколько — так не будем делать лишнего.",
+    body: tiles(ASSETS.map(([id, emoji, title], i) => tile({ group:"assets", id, emoji, title, multi:true, checked:S.assets.has(id), i })), "compact") +
+      `<label class="reveal bigfield" data-reveal="link"><span>Ссылка — ${CONFIG.OWNER_NAME} посмотрит заранее (необязательно)</span>
+        <input data-input="link" type="url" inputmode="url" maxlength="300" value="${esc(S.link)}" placeholder="site.ru или @канал" enterkeyhint="next"></label>`,
+    reveal: { link: needsLink() },
+    main: S.assets.size ? { text:"Дальше", ok:true } : null }),
+  budget: () => ({ h:"На какой бюджет ориентируетесь?", hint:"Двигайте ползунок — сразу скажем, во что укладываемся.",
+    body: budgetHtml(), main: { text:"Дальше", ok:true } }),
+  urgency: () => ({
+    h:"Когда нужно запустить?", hint:"От этого зависят сроки и стоимость.",
+    body: tiles(URGENCY.map((u, i) => tile({ group:"urgency", id:u.id, emoji:u.emoji, title:u.title, desc:u.desc, checked:S.urgency === u.id, i }))),
+    main: pickedMain(S.urgency) }),
+  contact: () => ({
+    h:`Как ${CONFIG.OWNER_DAT} связаться с вами?`, hint:"Разбор задачи и точный расчёт — бесплатно.",
+    body: tiles(CONTACTS.map(([id, emoji, title, desc], i) => tile({ group:"contact", id, emoji, title, desc, checked:S.contact === id, i })), "list"),
+    main: pickedMain(S.contact) }),
+  phone: () => ({
+    h: S.contact === "wa" ? "Номер для WhatsApp" : "Куда позвонить?", hint:"Номер увидит только " + CONFIG.OWNER_NAME + ".",
+    body: (can("6.9") ? `<button type="button" class="sharebtn" data-act="share-phone">${I.phone}Поделиться номером из Telegram</button>
+        <div class="or"><span>или введите вручную</span></div>` : "") +
+      `<label class="bigfield" id="f-phone"><span>Телефон</span>
+        <input data-input="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" value="${esc(S.phone)}" placeholder="+7 900 000-00-00" enterkeyhint="next"></label>
+      <h3 class="sub">Когда удобно ${S.contact === "wa" ? "ответить" : "поговорить"}? <span>по Москве</span></h3>
+      <div class="chips">${CALL_TIMES.map(t => chip("calltime", t, t, S.callTime === t)).join("")}</div>`,
+    main: { text:"Дальше", ok: !!normPhone(S.phone) } }),
+  name: () => { const sugg = [...new Set([tgUser && tgUser.first_name, tgUser && [tgUser.first_name, tgUser.last_name].filter(Boolean).join(" ")].filter(Boolean))];
+    return {
+    h:"Как к вам обращаться?", hint:`Так ${CONFIG.OWNER_NAME} поздоровается в ответном сообщении.`,
+    body: `<label class="bigfield" id="f-name"><span>Имя</span>
+        <input data-input="name" autocomplete="given-name" maxlength="60" value="${esc(S.name)}" placeholder="Имя" enterkeyhint="next"></label>` +
+      (sugg.length ? `<div class="chips">${sugg.map(n => chip("name", n, esc(n), S.name === n)).join("")}</div>` : ""),
+    main: { text:"Дальше", ok: S.name.trim().length > 1 } }; },
+  notes: () => ({
+    h:"Что ещё важно учесть?", hint:"Отметьте, если есть, — или сразу смотрите смету.",
+    body: `<div class="chips">${NOTES.map((n, i) => chip("notes", i, n, S.notes.has(n), true)).join("")}</div>
+      <label class="bigfield area"><span>Своими словами (необязательно)</span>
+        <textarea data-input="comment" rows="3" maxlength="600" placeholder="Например: есть сайт на Тильде, нужен бот для записи">${esc(S.comment)}</textarea></label>`,
+    main: { text:"Посмотреть смету", ok:true } }),
+};
+
+function Quiz(step){
+  if (!QS[step] || (step !== "service" && !svc()) ){ S.screen = "service"; return Quiz("service"); }
+  const q = QS[step]();
+  setMainFor(q);
+  return `${topbar()}<div class="q q-${step}">
+    <h1>${q.h}</h1>
+    <p class="hint">${q.hint}</p>
+    ${q.body}
   </div>`;
 }
-function QScale(){
-  hideButton();
-  const s = svc();
-  return `${topbar()}<div class="q">
-    <h1>${s.id === "ads" ? "Какой запуск нужен?" : s.id === "pack" ? "Какой комплект?" : "Какой масштаб?"}</h1>
-    <p class="hint">Цены — в тысячах рублей.</p>
-    <div class="opts" role="radiogroup">${s.scales.map(x => optRow({ id:x.id, title:x.title, desc:x.desc, right:fmtRange(x.price), checked:S.scale===x.id, group:"scale" })).join("")}</div>
-  </div>`;
+function setMainFor(q){
+  if (!q.main) return hideButton();
+  setButton(q.main.text, () => { if (q.main.ok !== false) proceed(S.screen, 0); else haptic.err(); }, q.main.ok !== false);
 }
-function QExtras(){
-  const s = svc();
-  const label = () => S.extras.size ? "Дальше" : "Ничего не нужно, дальше";
-  setButton(label(), () => go("niche"));
-  return `${topbar()}<div class="q">
-    <h1>Что добавить?</h1>
-    <p class="hint">Можно выбрать несколько или пропустить.</p>
-    <div class="opts">${s.extras.map(e => optRow({ id:e.id, title:e.title, desc:e.desc,
-      right: e.monthly ? `${fmtRange(e.monthly)}/мес` : `+${fmtRange(e.price)}`, checked:S.extras.has(e.id), multi:true, group:"extra" })).join("")}</div>
-  </div>`;
-}
-function QNiche(){
-  hideButton();
-  return `${topbar()}<div class="q">
-    <h1>Чем занимается бизнес?</h1>
-    <p class="hint">Так подготовим примеры именно из вашей сферы.</p>
-    <div class="chips" role="radiogroup">${NICHES.map(n => `<button type="button" class="chip" role="radio" aria-checked="${S.niche===n}" data-niche="${n}">${n}</button>`).join("")}</div>
-  </div>`;
-}
-function QUrgency(){
-  hideButton();
-  return `${topbar()}<div class="q">
-    <h1>Когда нужно запустить?</h1>
-    <p class="hint">От этого зависят сроки и стоимость.</p>
-    <div class="opts" role="radiogroup">${URGENCY.map(u => optRow({ id:u.id, title:u.title, desc:u.desc, checked:S.urgency===u.id, group:"urgency" })).join("")}</div>
-  </div>`;
+function syncStep(){                                       // обновить кнопку и раскрывающиеся поля без перерисовки
+  if (!QS[S.screen]) return;
+  const q = QS[S.screen]();
+  setMainFor(q);
+  for (const [k, on] of Object.entries(q.reveal || {})){
+    const el = app.querySelector(`[data-reveal="${k}"]`); if (el) el.classList.toggle("on", on);
+  }
+  updatePeek();
 }
 
+/* ---------- бюджет ---------- */
+function bIndex(v){ let k = 0; BUDGET_STEPS.forEach((x, i) => { if (Math.abs(x - v) < Math.abs(BUDGET_STEPS[k] - v)) k = i; }); return k; }
+function bPos(v){                                          // доля шкалы для суммы v (шкала неравномерная)
+  const B = BUDGET_STEPS, n = B.length - 1;
+  if (v <= B[0]) return 0; if (v >= B[n]) return 1;
+  const i = B.findIndex(x => x >= v);
+  return (i - 1 + (v - B[i-1]) / (B[i] - B[i-1])) / n;
+}
+function budgetVerdict(){
+  const e = estimate();
+  if (S.budgetUnknown || !e) return { cls:"", text:`Хорошо — ${CONFIG.OWNER_NAME} предложит варианты под разные бюджеты.` };
+  const b = S.budget;
+  if (b >= 300 && e.max > 300) return { cls:"ok", text:"👌 Обсудим состав работ на разборе — подберём оптимальный вариант." };
+  if (b >= e.max) return { cls:"ok", text:"✅ Укладываемся с запасом — можно добавить что-то полезное." };
+  if (b >= e.min) return { cls:"ok", text:"👌 Укладываемся в смету." };
+  const cheaper = svc().scales.filter(x => x.price[0] <= b && x.id !== S.scale).pop();
+  if (cheaper) return { cls:"warn", text:`🪜 Немного не хватает. Можно начать с варианта «${cheaper.title}» (${fmtRange(cheaper.price)} тыс) или запустить по этапам.` };
+  return { cls:"warn", text:"🪜 Бюджет меньше сметы — предложим запуск по этапам, чтобы уложиться." };
+}
+function budgetHtml(){
+  const e = estimate();
+  if (S.budget === null) S.budget = BUDGET_STEPS[bIndex(e ? (e.min + e.max) / 2 : 50)];
+  const idx = bIndex(S.budget), n = BUDGET_STEPS.length - 1, v = budgetVerdict();
+  const zone = e ? `<span class="b-zone" style="left:${(bPos(e.min) * 100).toFixed(1)}%;width:${Math.max(2, (bPos(e.max) - bPos(e.min)) * 100).toFixed(1)}%"></span>` : "";
+  const marks = [10, 50, 100, 200, 300].map(x => `<span style="left:${(bPos(x) * 100).toFixed(1)}%">${x === 300 ? "300+" : x}</span>`).join("");
+  return `<div class="budget${S.budgetUnknown ? " off" : ""}">
+    <div class="b-val"><b id="bval">${budgetLabel()}</b><span> тыс ₽</span></div>
+    ${e ? `<div class="b-est">Смета по вашим ответам: <b>${fmtRange([e.min, e.max])} тыс ₽</b></div>` : ""}
+    <div class="b-track">${zone}<input type="range" id="brange" min="0" max="${n}" step="1" value="${idx}" style="--p:${(idx / n * 100).toFixed(1)}%" aria-label="Бюджет"></div>
+    <div class="b-marks">${marks}</div>
+    <p class="b-verdict ${v.cls}" id="bverdict">${v.text}</p>
+    <button type="button" class="toggle" role="switch" data-act="budget-unknown" aria-checked="${S.budgetUnknown}">
+      <span>Пока не знаю — сориентируйте</span><span class="sw"></span></button>
+  </div>`;
+}
+const budgetLabel = () => S.budget >= 300 ? "от 300" : `до ${S.budget}`;
+const budgetText = () => S.budgetUnknown ? "пока не знаю" : `${budgetLabel()} тыс ₽`;
+
+/* ---------- смета и итог ---------- */
 function receiptHtml(e, landed){
   const today = new Date().toLocaleDateString("ru-RU");
-  const no = String(1000 + Math.floor(Math.random()*9000));
+  const no = S.receiptNo || (S.receiptNo = String(1000 + Math.floor(Math.random()*9000)));
   const rows = e.items.map(it => `<div class="r-row"><span class="l">${it.label}</span><span class="dots"></span><span class="v">${fmtRange(it.price)}</span></div>`).join("");
   return `<div class="receipt" role="group" aria-label="Предварительная смета">
     <div class="r-head"><div class="wm">${CONFIG.BRAND}</div><div>Предварительная смета № ${no}</div><div>от ${today}</div></div>
@@ -708,26 +917,42 @@ function receiptHtml(e, landed){
     ${stampSvg(landed ? "land" : "")}
   </div>`;
 }
-
+/* Все ответы квиза: [шаг, подпись, значение] */
+function summaryRows(){
+  const s = svc(), x = scl();
+  const extras = s ? s.extras.filter(e => S.extras.has(e.id)).map(e => e.title).join(", ") : "";
+  const assets = ASSETS.filter(a => S.assets.has(a[0])).map(a => a[2]).join(", ") + (S.link.trim() && needsLink() ? ` (${S.link.trim()})` : "");
+  const contact = { tg:"Telegram", call:"Звонок", wa:"WhatsApp" }[S.contact] || "";
+  const notes = [...S.notes].concat(S.comment.trim() ? [S.comment.trim()] : []).join("; ");
+  return [
+    ["service", "Задача", s && x ? `${s.title} — ${x.title}` : ""],
+    ["extras", "Дополнительно", extras || "без дополнений"],
+    ["goal", "Цель", goalTitle()],
+    ["niche", "Сфера", nicheTitle()],
+    ["assets", "Что уже есть", assets],
+    ["budget", "Бюджет", budgetText()],
+    ["urgency", "Сроки", urg() && S.urgency ? urg().title : ""],
+    ["contact", "Связь", [contact, stepNeeded("phone") ? normPhone(S.phone) : "", stepNeeded("phone") ? S.callTime.toLowerCase() : ""].filter(Boolean).join(", ")],
+    ["name", "Имя", S.name.trim()],
+    ["notes", "Пожелания", notes],
+  ].filter(r => r[2]);
+}
 function Result(){
   const e = estimate();
-  setButton(`Отправить ${CONFIG.OWNER_DAT}`, submit, S.name.trim().length > 1);
+  if (!e){ S.screen = "service"; return Quiz("service"); }
+  setButton(`Отправить ${CONFIG.OWNER_DAT}`, submit);
+  const rows = summaryRows().map(([step, k, v]) => `<button type="button" class="srow" data-edit="${step}">
+      <span class="k">${k}</span><span class="v">${esc(v)}</span><span class="pen">${I.pen}</span></button>`).join("");
   return `${topbar()}<div class="result">
     <h1>Ваша смета готова</h1>
     <p class="hint">Предварительный расчёт по вашим ответам.</p>
     ${receiptHtml(e, true)}
-    <div class="form">
-      <h2>Куда прислать точный расчёт?</h2>
-      <p class="hint">${CONFIG.OWNER_NAME} посмотрит задачу и ответит в течение рабочего дня.</p>
-      <label class="field" id="f-name"><span>Как к вам обращаться</span>
-        <input id="name" autocomplete="given-name" maxlength="60" value="${esc(S.name)}" placeholder="Имя">
-        <span class="msg">Напишите имя, чтобы мы знали, как обращаться</span></label>
-      <label class="field"><span>Телефон, если удобнее созвониться</span>
-        <input id="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" value="${esc(S.phone)}" placeholder="+7"></label>
-      <label class="field"><span>Пара слов о задаче</span>
-        <textarea id="comment" rows="3" maxlength="600" placeholder="Например: есть сайт на Тильде, нужен бот для записи">${esc(S.comment)}</textarea></label>
-      <p class="privacy">Нажмите «Отправить ${CONFIG.OWNER_DAT}» — откроется чат с ним в Telegram с готовым текстом заявки.</p>
+    <div class="summary">
+      <h2>Ваша заявка</h2>
+      <p class="hint">Нажмите на строку, чтобы изменить ответ.</p>
+      ${rows}
     </div>
+    <p class="privacy">Нажмите «Отправить ${CONFIG.OWNER_DAT}» — откроется чат с ним в Telegram с готовым текстом заявки. Останется нажать «Отправить».</p>
   </div>`;
 }
 
@@ -736,9 +961,10 @@ function Done(){
   return `<div class="done">
     ${stampSvg()}
     <h1>Осталось нажать «Отправить»</h1>
-    <p>Мы открыли чат с ${CONFIG.OWNER_INS} в Telegram — там уже готов текст со сметой. Отправьте его, и ${CONFIG.OWNER_NAME} ответит в течение рабочего дня.</p>
+    <p>Мы открыли чат с ${CONFIG.OWNER_INS} в Telegram — там уже готов текст со сметой и всеми ответами. Отправьте его, и ${CONFIG.OWNER_NAME} ${S.contact === "call" ? "позвонит" : S.contact === "wa" ? "напишет в WhatsApp" : "ответит"} в течение рабочего дня.</p>
     <p>Чат не открылся? Нажмите кнопку ниже.</p>
     <button type="button" class="textlink" data-act="resend-calc">Открыть чат с ${CONFIG.OWNER_INS}</button><br>
+    <button type="button" class="textlink" data-act="copy-calc">Скопировать текст заявки</button><br>
     <button type="button" class="textlink" data-act="open-chat">Обсудить детали с помощником</button><br>
     <button type="button" class="textlink" data-act="restart">Посчитать другой проект</button>
   </div>`;
@@ -748,26 +974,74 @@ function Done(){
    Обработчики
    ========================================================== */
 function esc(s){ return String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
-const advance = (next) => setTimeout(() => go(next), 220);
+
+function onPick(group, val, el){
+  haptic.tap();
+  if (el) app.querySelectorAll(`[data-pick^="${group}:"]`).forEach(x => x.setAttribute("aria-checked", x === el));
+  switch (group){
+    case "service":
+      if (S.service !== val){ S.scale = null; S.extras.clear(); S.budget = null; ["scale","extras"].forEach(k => S.answered.delete(k)); }
+      S.service = val; break;
+    case "scale": if (S.scale !== val) S.budget = null; S.scale = val; break;
+    case "goal": S.goal = val; break;
+    case "niche":
+      S.niche = val;
+      if (val === "other"){ syncStep(); const inp = app.querySelector('[data-input="nicheText"]'); if (inp) setTimeout(() => { inp.scrollIntoView({ block:"center", behavior:"smooth" }); inp.focus({ preventScroll:true }); }, 80); return; }
+      break;
+    case "urgency": S.urgency = val; break;
+    case "contact": S.contact = val; break;
+    case "calltime": S.callTime = val; return syncStep();
+    case "name": S.name = val; { const i = app.querySelector('[data-input="name"]'); if (i) i.value = val; } return syncStep();
+  }
+  updatePeek();
+  proceed(group);
+}
+function onToggle(group, val, el){
+  haptic.tap();
+  if (group === "extras"){ S.extras.has(val) ? S.extras.delete(val) : S.extras.add(val); S.budget = null; }
+  if (group === "assets"){
+    if (val === "none"){ const on = !S.assets.has("none"); S.assets.clear(); if (on) S.assets.add("none"); }
+    else { S.assets.delete("none"); S.assets.has(val) ? S.assets.delete(val) : S.assets.add(val); }
+  }
+  if (group === "notes"){ const t = NOTES[+val]; S.notes.has(t) ? S.notes.delete(t) : S.notes.add(t); }
+  app.querySelectorAll(`[data-toggle^="${group}:"]`).forEach(x => {
+    const v = x.dataset.toggle.split(":")[1];
+    x.setAttribute("aria-checked", group === "notes" ? S.notes.has(NOTES[+v]) : S[group].has(v));
+  });
+  syncStep();
+}
 
 function bind(){
-  app.querySelectorAll("[data-service]").forEach(b => b.onclick = () => {
-    if (S.service !== b.dataset.service){ S.scale = null; S.extras.clear(); }
-    S.service = b.dataset.service; haptic.tap(); mark(b, "service"); advance("scale");
+  app.querySelectorAll("[data-pick]").forEach(b => b.onclick = () => { const [g, ...v] = b.dataset.pick.split(":"); onPick(g, v.join(":"), b); });
+  app.querySelectorAll("[data-toggle]").forEach(b => b.onclick = () => { const [g, v] = b.dataset.toggle.split(":"); onToggle(g, v, b); });
+  app.querySelectorAll("[data-input]").forEach(inp => {
+    inp.oninput = () => { S[inp.dataset.input] = inp.value; inp.closest(".bigfield")?.classList.remove("err"); syncStep(); };
+    inp.onkeydown = ev => { if (ev.key === "Enter" && inp.tagName === "INPUT"){ ev.preventDefault(); inp.blur(); onMain(); } };
   });
-  app.querySelectorAll("[data-scale]").forEach(b => b.onclick = () => {
-    S.scale = b.dataset.scale; haptic.tap(); mark(b, "scale"); updatePeek(); advance("extras");
+  app.querySelectorAll("[data-edit]").forEach(b => b.onclick = () => { haptic.tap(); go(b.dataset.edit); });
+  const range = app.querySelector("#brange");
+  if (range) range.oninput = () => {
+    const i = +range.value, prev = S.budget;
+    S.budget = BUDGET_STEPS[i]; S.budgetUnknown = false;
+    if (prev !== S.budget) haptic.tap();
+    range.style.setProperty("--p", (i / (BUDGET_STEPS.length - 1) * 100).toFixed(1) + "%");
+    app.querySelector("#bval").textContent = budgetLabel();
+    const v = budgetVerdict(), out = app.querySelector("#bverdict"); out.className = "b-verdict " + v.cls; out.textContent = v.text;
+    app.querySelector(".budget").classList.remove("off");
+    const t = app.querySelector("[data-act=budget-unknown]"); if (t) t.setAttribute("aria-checked", "false");
+  };
+  app.querySelectorAll("[data-act=budget-unknown]").forEach(b => b.onclick = () => {
+    S.budgetUnknown = !S.budgetUnknown; haptic.tap();
+    b.setAttribute("aria-checked", S.budgetUnknown);
+    app.querySelector(".budget").classList.toggle("off", S.budgetUnknown);
+    const v = budgetVerdict(), out = app.querySelector("#bverdict"); out.className = "b-verdict " + v.cls; out.textContent = v.text;
   });
-  app.querySelectorAll("[data-extra]").forEach(b => b.onclick = () => {
-    const id = b.dataset.extra; S.extras.has(id) ? S.extras.delete(id) : S.extras.add(id);
-    b.setAttribute("aria-checked", S.extras.has(id)); haptic.tap(); updatePeek();
-    setButton(S.extras.size ? "Дальше" : "Ничего не нужно, дальше", () => go("niche"));
-  });
-  app.querySelectorAll("[data-niche]").forEach(b => b.onclick = () => {
-    S.niche = b.dataset.niche; haptic.tap(); mark(b, "niche"); advance("urgency");
-  });
-  app.querySelectorAll("[data-urgency]").forEach(b => b.onclick = () => {
-    S.urgency = b.dataset.urgency; haptic.tap(); mark(b, "urgency"); advance("result");
+  app.querySelectorAll("[data-act=share-phone]").forEach(b => b.onclick = () => {
+    haptic.tap();
+    tg.requestContact((ok, res) => {
+      const p = ok && res && res.responseUnsafe && res.responseUnsafe.contact && res.responseUnsafe.contact.phone_number;
+      if (p){ S.phone = normPhone(p) || p; const i = app.querySelector('[data-input="phone"]'); if (i) i.value = S.phone; haptic.ok(); syncStep(); }
+    });
   });
   app.querySelectorAll("[data-act=back]").forEach(b => b.onclick = goBack);
   app.querySelectorAll("[data-act=open-chat]").forEach(b => b.onclick = () => { haptic.tap(); openChat(); });
@@ -776,58 +1050,62 @@ function bind(){
     b.onclick = open; b.onkeydown = ev => { if (ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); open(); } };
   });
   app.querySelectorAll("[data-act=resend-calc]").forEach(b => b.onclick = () => openOwnerChat(calcLeadText(), false));
+  app.querySelectorAll("[data-act=copy-calc]").forEach(b => b.onclick = () => copyText(calcLeadText()).then(ok => { b.textContent = ok ? "Скопировано ✓" : "Не получилось скопировать"; }));
   app.querySelectorAll("[data-act=restart]").forEach(b => b.onclick = () => {
-    Object.assign(S, { service:null, scale:null, niche:null, urgency:null, sent:false }); S.extras.clear();
-    trail.length = 0; trail.push("home"); go("service");
+    Object.assign(S, { service:null, scale:null, goal:null, niche:null, nicheText:"", link:"", budget:null, budgetUnknown:false,
+      urgency:null, contact:null, comment:"", sent:false, receiptNo:null });
+    S.extras.clear(); S.assets.clear(); S.notes.clear(); S.answered.clear();
+    startCalc();
   });
-  const name = app.querySelector("#name");
-  if (name){
-    name.oninput = () => { S.name = name.value; app.querySelector("#f-name").classList.remove("err"); setButton(`Отправить ${CONFIG.OWNER_DAT}`, submit, S.name.trim().length > 1); };
-    app.querySelector("#phone").oninput = e => S.phone = e.target.value;
-    app.querySelector("#comment").oninput = e => S.comment = e.target.value;
-  }
-}
-function mark(btnEl, group){
-  app.querySelectorAll(`[data-${group}]`).forEach(x => x.setAttribute("aria-checked", x === btnEl));
 }
 
 function updatePeek(){
-  const show = ["extras","niche","urgency"].includes(S.screen) && estimate();
+  const show = ["extras","goal","niche","assets","urgency","contact","phone","name","notes"].includes(S.screen) && estimate();
   peek.hidden = !show;
   if (show){ const e = estimate(); peek.innerHTML = `<span>Предварительно</span><b>${fmtRange([e.min,e.max])} тыс ₽</b>`; }
 }
-
 
 /* ==========================================================
    Покадровая анимация на скролле
    ========================================================== */
 const FILM = {
-  count: 139,                                              // кадров в папке frames/
+  count: 551,                                              // кадров в папке frames/ (48 к/с, промежуточные дорисованы)
   src: i => `frames/f${String(i).padStart(3, "0")}.webp`,
   w: 840, h: 1315,                                         // размер кадра
   bg: "#DFE2F8",                                           // фон видео
   ring: { x: .5, y: .5, d: .226 },                         // кольцо в финале: центр и диаметр (доля ширины кадра)
   fill: .78,                                               // какую часть высоты экрана занимает кадр
 };
-const filmImgs = new Array(FILM.count);
-let filmLoading = false, film = null;
+const filmImgs = new Array(FILM.count), filmAsked = new Uint8Array(FILM.count);
+let filmLoading = false, film = null, filmFocus = 0, filmPump = null;
 
 function preloadFilm(){
   if (filmLoading) return; filmLoading = true;
-  // сначала первый и последний кадр, потом каждый 16-й, 8-й… — анимация работает ещё до полной загрузки
+  // сначала первый и последний кадр, потом каждый 32-й, 16-й… — анимация работает ещё до полной загрузки.
+  // Кадры рядом с текущим местом прокрутки грузятся вне очереди.
   const order = [0, FILM.count - 1], seen = new Set(order);
-  for (const step of [16, 8, 4, 2, 1])
+  for (const step of [32, 16, 8, 4, 2, 1])
     for (let i = 0; i < FILM.count; i += step) if (!seen.has(i)) { seen.add(i); order.push(i); }
   let k = 0, active = 0;
+  const next = () => {
+    for (let d = 0; d <= 36; d++)                          // ближайшие к экрану кадры
+      for (const i of [filmFocus + d, filmFocus - d])
+        if (i >= 0 && i < FILM.count && !filmAsked[i]) return i;
+    while (k < order.length){ const i = order[k++]; if (!filmAsked[i]) return i; }
+    return -1;
+  };
   const pump = () => {
-    while (active < 6 && k < order.length){
-      const i = order[k++], im = new Image(); active++;
-      im.decoding = "async";
-      im.onload = () => { filmImgs[i] = im; active--; if (film) film.loaded(i); pump(); };
-      im.onerror = () => { active--; pump(); };
+    while (active < 8){
+      const i = next(); if (i < 0) return;
+      filmAsked[i] = 1; active++;
+      const im = new Image(); im.decoding = "async";
+      const done = ok => { if (ok) { filmImgs[i] = im; if (film) film.loaded(i); } active--; pump(); };
+      im.onload = () => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()).then(() => done(true));
+      im.onerror = () => done(false);
       im.src = FILM.src(i);
     }
   };
+  filmPump = pump;
   pump();
 }
 function nearestFrame(i){
@@ -849,10 +1127,11 @@ function mountFilm(){
   const stage = root.querySelector(".film-stage"), canvas = root.querySelector("canvas"), ctx = canvas.getContext("2d");
   const chs = [...root.querySelectorAll(".ch")].map(el => ({ el, from:+el.dataset.from, to:+el.dataset.to }));
   const stamp = root.querySelector(".film-stamp");
-  const smooth = matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : .18;
+  const instant = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const TAU = 110;                                          // мс: инерция — кадры догоняют прокрутку плавно
   const clamp = v => Math.min(1, Math.max(0, v));
   const ease = t => 1 - Math.pow(1 - t, 3);
-  let W = 0, H = 0, dpr = 1, box = null, target = 0, cur = 0, raf = 0, shown = null, landed = false;
+  let W = 0, H = 0, dpr = 1, box = null, target = 0, cur = 0, raf = 0, shown = null, landed = false, last = 0;
 
   function layout(){
     W = stage.clientWidth; H = stage.clientHeight; dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -872,6 +1151,7 @@ function mountFilm(){
   }
   function paint(){
     const f = Math.round(cur * (FILM.count - 1)), im = nearestFrame(f);
+    if (f !== filmFocus){ filmFocus = f; if (!filmImgs[f] && filmPump) filmPump(); }
     if (im && im !== shown){
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.fillStyle = FILM.bg; ctx.fillRect(0, 0, W, H);
@@ -892,16 +1172,17 @@ function mountFilm(){
     if (t >= 1 && !landed){ landed = true; haptic.thud(); }
     if (t < .5) landed = false;
   }
-  function tick(){
-    cur += (target - cur) * smooth;
-    if (Math.abs(target - cur) < .0004) cur = target;
+  function tick(now){
+    const dt = last ? Math.min(64, now - last) : 16; last = now;
+    cur = instant ? target : cur + (target - cur) * (1 - Math.exp(-dt / TAU));
+    if (Math.abs(target - cur) < .5 / FILM.count) cur = target;
     paint();
-    raf = cur !== target ? requestAnimationFrame(tick) : 0;
+    if (cur !== target) raf = requestAnimationFrame(tick); else { raf = 0; last = 0; }
   }
   const api = {
     scroll(){ target = progress(); if (!raf) raf = requestAnimationFrame(tick); },
     layout,
-    loaded(i){ if (Math.abs(i - cur * (FILM.count - 1)) <= 16){ shown = null; paint(); } },
+    loaded(i){ if (Math.abs(i - cur * (FILM.count - 1)) <= 40){ shown = null; paint(); } },
   };
   film = api;
   layout(); api.scroll();
@@ -913,28 +1194,17 @@ window.addEventListener("resize", () => { stageHeight(); if (film) film.layout()
 /* ==========================================================
    Отправка заявки
    ========================================================== */
-function leadPayload(){
-  const s = svc(), sc = scl(), e = estimate();
-  return {
-    service: s.title, scale: sc.title,
-    extras: s.extras.filter(x => S.extras.has(x.id)).map(x => x.title),
-    niche: S.niche, urgency: (urg() || URGENCY[0]).title,
-    estimate: { min:e.min, max:e.max, weeks:weeksText(e.weeks), monthly: e.monthly ? fmtRange(e.monthly) : null },
-    name: S.name.trim(), phone: S.phone.trim(), comment: S.comment.trim(),
-  };
-}
 function calcLeadText(){
-  const l = leadPayload(), e = l.estimate;
-  return [`Здравствуйте, ${CONFIG.OWNER_NAME}! Посчитал проект в приложении ${CONFIG.BRAND}:`, "",
-    `Услуга: ${l.service} — ${l.scale}`,
-    l.extras.length ? `Дополнительно: ${l.extras.join(", ")}` : "",
-    `Сфера: ${l.niche}`, `Сроки: ${l.urgency}`,
-    `Смета: ${e.min}–${e.max} тыс ₽, ${e.weeks}` + (e.monthly ? `; ведение ${e.monthly} тыс ₽/мес` : ""), "",
-    `Имя: ${l.name}`, l.phone ? `Телефон: ${l.phone}` : "", l.comment ? `Комментарий: ${l.comment}` : "",
-  ].filter((x, i, arr) => x !== "" || (arr[i-1] && arr[i-1] !== "")).join("\n").trim().slice(0, 3900);
+  const e = estimate();
+  const lines = [`Здравствуйте, ${CONFIG.OWNER_NAME}! Посчитал проект в приложении ${CONFIG.BRAND}:`, ""]
+    .concat(summaryRows().map(([, k, v]) => `${k}: ${v}`));
+  if (e){
+    lines.push("", `Смета: ${e.min}–${e.max} тыс ₽, ${weeksText(e.weeks)}` + (e.monthly ? `; ведение ${fmtRange(e.monthly)} тыс ₽/мес` : "") + (e.rush ? " (срочно, +25%)" : ""));
+  }
+  return lines.join("\n").trim().slice(0, 3900);
 }
 function submit(){
-  if (S.name.trim().length < 2){ app.querySelector("#f-name").classList.add("err"); haptic.err(); return; }
+  if (S.name.trim().length < 2){ haptic.err(); return go("name"); }
   openOwnerChat(calcLeadText(), false);
   S.sent = true; haptic.ok(); go("done");
 }
@@ -976,53 +1246,198 @@ const CHAT = {
   deadlines: [["rush","🔥 Срочно, на этой неделе"],["month","В течение месяца"],["quarter","В ближайшие 1–3 месяца"],["look","Пока присматриваюсь"]],
   ways: [["tg","💬 Напишите мне в Telegram"],["call","📞 Позвоните мне"],["wa","🟢 Напишите в WhatsApp"]],
   times: [["now","Сейчас"],["today","Сегодня до 19:00"],["tomorrow","Завтра"],["other","✏️ Укажу время"]],
-  faq: [
-    ["prepay","Почему без предоплаты?","Так мы снимаем ваш риск: сначала делаем и показываем рабочий результат, а оплата — когда всё работает так, как договорились. Подвоха нет: нам выгодно, чтобы вы остались довольны и рекомендовали нас."],
-    ["price","Из чего складывается цена?","Цена зависит от объёма и функций: сколько страниц или экранов, нужны ли тексты, онлайн-оплата, интеграции с CRM или 1С. Точную сумму называем после бесплатного разбора задачи и фиксируем в смете."],
-    ["time","Какие сроки?","Бот-визитка — от недели, лендинг — 1–2 недели, магазин или каталог — 3–6 недель. Срок фиксируем в смете, промежуточный результат показываем каждую неделю."],
-    ["process","Как проходит работа?","1) Бесплатный разбор задачи — созвон или переписка.<br>2) Смета: что делаем, сколько стоит, к какому сроку.<br>3) Делаем и каждую неделю показываем прогресс.<br>4) Запускаем, вы проверяете, что всё работает.<br>5) Оплата — после результата."],
-    ["examples","Есть примеры работ?","Это приложение — тоже наша работа: анимация, расчёт стоимости и этот чат. Примеры под вашу нишу Дмитрий покажет на разборе."],
-    ["geo","Что такое GEO?","GEO — оптимизация под ответы нейросетей: Алисы, Яндекс Нейро, ChatGPT. Всё больше людей спрашивают у них «где заказать…», и важно, чтобы советовали вас. Для этого сайт и материалы оформляют так, чтобы нейросетям было что процитировать: факты, цены, ответы на вопросы, отзывы, разметка."],
-    ["why_bot","Зачем бот, если есть сайт?","Сайт приводит людей, а бот не даёт им потеряться: отвечает ночью и в выходные, записывает, напоминает и собирает заявки в одно место."],
-    ["tilda","Работаете с Тильдой?","Да: можем доработать сайт на Тильде или конструкторе либо сделать новый. Что выгоднее в вашем случае — подскажем на разборе."],
-    ["remote","Работаете удалённо?","Да, с клиентами из любого города: всё обсуждаем в Telegram и по видеосвязи. Базируемся в Санкт-Петербурге."],
-    ["contract","Как оформляем работу?","Задачу, смету и сроки фиксируем письменно до старта. Детали оформления Дмитрий обсудит на созвоне."],
-    ["guarantee","Какие гарантии?","Гарантируем, что сделаем то, что записано в смете, — иначе вы не платите. Места в поиске и ответы нейросетей честно не обещает никто, но рост заявок и позиций показываем в отчётах."],
-    ["support","Что после запуска?","Остаёмся на связи: помогаем с правками и развитием. Ведение рекламы и SEO-продвижение — помесячно."],
-    ["bot","Вы живой человек?","Я помощник с готовыми ответами — подбираю решение и собираю заявку. Проект ведёт Дмитрий лично, на сложные вопросы ответит он."],
-  ],
-  // распознавание текста: [намерение, выражение]; порядок = приоритет
-  intents: [
-    ["menu", /^(меню|главное меню|начать|в начало|назад|старт)$/],
-    ["faq:bot", /ты бот|вы бот|робот|живой человек|ты человек|вы человек|нейросеть ли/],
-    ["faq:prepay", /предоплат|подвох|аванс/],
-    ["faq:geo", /\bgeo\b|(^|\s)гео(\s|$)|нейросет|алис|chatgpt|чат ?gpt|чатгпт/],
-    ["faq:contract", /договор|оформля|самозан|(^|\s)ип(\s|$)|счет на оплату/],
-    ["faq:guarantee", /гарант/],
-    ["faq:examples", /пример|портфолио|кейс|ваши работы/],
-    ["faq:tilda", /тильд|tilda|конструктор/],
-    ["faq:remote", /удален|из другого города|где вы|ваш офис|где находит/],
-    ["faq:support", /поддержк|после запуска|сопровожд/],
-    ["faq:why_bot", /зачем (мне )?бот/],
-    ["human", /человек|менеджер|позвон|звонок|созвон|связать|свяжит|набери|дмитри|живой/],
-    ["svc:seo", /\bseo\b|(^|\s)сео|продвиж|поисков|в поиске|яндекс карт|2гис/],
-    ["svc:ads", /директ|реклам|таргет|рся/],
-    ["svc:app", /мини.?прил|приложени|mini ?app|магазин в телеграм/],
-    ["svc:bot", /(^|\s)бот/],
-    ["svc:site", /сайт|лендинг|визитк/],
-    ["faq:time", /(^|\s)срок|как быстро|сколько времени|когда будет готов/],
-    ["price", /цен[аыу]|стоим|сколько|прайс|почем|бюджет/],
-    ["greet", /^(привет|здравств|добр(ый|ое|ого)|хай|hello|hi)/],
-    ["thanks", /спасибо|благодар|спс/],
-  ],
 };
+
+/* ==========================================================
+   БАЗА ОТВЕТОВ ПОМОЩНИКА
+   Каждая тема: id, t — заголовок (для меню «Частые вопросы»), k — ключевые слова, a — ответ.
+   Ключевые слова — начала слов в нижнем регистре, «ё» пишите как «е»:
+     "договор"   — сработает на «договор», «договора», «договоримся»;
+     "=ип"       — только отдельное слово «ип»;
+     "на чем"    — фраза из нескольких слов;
+     /бюджет.*директ/ — правило-выражение (когда слова могут стоять в любом месте).
+   Помощник выбирает тему, где совпало больше слов. faq:true — тема видна в меню «Частые вопросы».
+   ========================================================== */
+const pr = (sid, id) => { const s = SERVICES.find(x => x.id === sid), it = s && (s.scales.find(x => x.id === id) || s.extras.find(x => x.id === id));
+  return !it ? "" : it.monthly ? `${fmtRange(it.monthly)} тыс ₽/мес` : `${fmtRange(it.price)} тыс ₽`; };
+const O = CONFIG.OWNER_NAME, O_DAT = CONFIG.OWNER_DAT, O_INS = CONFIG.OWNER_INS, BRAND = CONFIG.BRAND;
+const KB = [
+  /* ---------- служебное ---------- */
+  { id:"menu",   act:"menu",   k:["=меню","главное меню","=начать","в начало","=старт","=назад","что еще умеешь"] },
+  { id:"human",  act:"human",  k:["менеджер","позвон","звонок","созвон","связаться","связать с","свяжит","=набери","живым человеком","поговорить с человеком","связь с человеком","оператор","дмитри","лично"] },
+  { id:"svc:seo",  act:"svc",  k:["=seo","=сео","продвиж","поисков","в поиске","в топ"], w:.9 },
+  { id:"svc:ads",  act:"svc",  k:["директ","реклам","рся","контекст","таргет"], w:.9 },
+  { id:"svc:app",  act:"svc",  k:["мини-прил","мини прил","миниприл","mini app","miniapp","приложени","магазин в телеграм"], w:.9 },
+  { id:"svc:bot",  act:"svc",  k:["=бот","=бота","=боты","=ботов","=боте","=ботом","чат-бот","чатбот","телеграм бот","telegram бот"], w:.9 },
+  { id:"svc:site", act:"svc",  k:["сайт","лендинг","визитк","landing","одностраничн","многостраничн","интернет-магазин","интернет магазин"], w:.9 },
+  { id:"svc:pack", act:"svc",  k:["комплекс","под ключ","все сразу","все вместе"], w:.9 },
+  { id:"price",  act:"price",  k:["цен","стоим","стоит","сколько","прайс","=почем","расценк","тариф"], w:.9 },
+  { id:"greet",  act:"greet",  k:["доброй ночи","=вечер добрый","здрас","здаров","=ку","=прив","привет","здравств","=добрый","=доброе","=доброй","=хай","hello","=hi","=салют","=здарова","приветству"], w:.6 },
+  { id:"thanks", act:"thanks", k:["спасибо","благодар","=спс","=пасиб","=сенкс","thank"], w:.7 },
+  { id:"bye",    act:"bye",    k:["спокойной ночи","хорошего дня","хорошего вечера","до свидан","=пока","всего доброго","всего хорошего","до встречи","=бай","досвидос"], w:.7 },
+
+  /* ---------- о студии и условиях ---------- */
+  { id:"about", t:"Кто вы и чем занимаетесь?", faq:true, k:["студи","чем занимает","ваша компания","о компании","кто такие","кто вы","что за студ","о студии","о вас","чем занимаетесь","чем вы занимаетесь","расскажите о себе","что вы делаете","что делаете","=факт"],
+    a:`${BRAND} — digital-студия. Делаем сайты и лендинги, Telegram-ботов и мини-приложения, настраиваем рекламу в Яндекс Директе, продвигаем в поиске, на картах и в ответах нейросетей (SEO и GEO).<br><br>Главное правило — <b>оплата по факту</b>: сначала показываем работающий результат, потом вы платите.` },
+  { id:"prepay", t:"Почему без предоплаты?", faq:true, k:["предоплат","аванс","подвох","предоплаты нет","сначала плат","заплатить вперед","деньги вперед","оплата вперед","без оплаты","100%"],
+    a:"Так мы снимаем ваш риск: сначала делаем и показываем рабочий результат, а оплата — когда всё работает так, как договорились. Подвоха нет: нам выгодно, чтобы вы остались довольны и рекомендовали нас." },
+  { id:"trust", t:"А если вы не сделаете или пропадёте?", k:["развод","мошен","обман","кинете","кинуть","доверя","надежн","пропадете","не сделаете","риск","гарантии что"],
+    a:"Ваш риск — ноль рублей: предоплаты нет, вы ничего не платите, пока не увидите работающий результат. Прогресс показываем каждую неделю, так что вы всегда видите, что проект движется." },
+  { id:"payment", t:"Как и когда платить?", faq:true, k:["оплатить","оплата потом","=деньги","когда плат","отдавать","оплачива","=платить","оплата после","как платить","как оплатить","способ оплат","оплата как","оплату как","оплата карт","картой","наличн","безнал","перевод","по счету","когда платить","когда оплата","в какой момент"],
+    a:`Платите после результата: когда проект запущен и работает так, как записано в смете. Удобный способ оплаты — переводом или по счёту — согласуете с ${O_INS} до старта.` },
+  { id:"stages", t:"Можно платить частями?", faq:true, k:["платить частями","оплата частями","частями","рассрочк","по частям","поэтапн","этапами","по этапам","кредит","долями"],
+    a:"Да. Большой проект делим на этапы: каждый этап вы принимаете и оплачиваете отдельно. Так и бюджет распределяется, и результат вы видите раньше." },
+  { id:"contract", t:"Как оформляем работу?", faq:true, k:["договор","оформля","оформить","=ип","самозан","юрлиц","юр лиц","=ооо","ндс","закрывающ","=акт","=акты","счет на оплату","официальн","чек"],
+    a:`Задачу, смету и сроки фиксируем письменно до старта. Форму оформления — договор, счёт, закрывающие документы — ${O} согласует с вами на созвоне под ваш формат: ИП, ООО или физлицо.` },
+  { id:"guarantee", t:"Какие гарантии?", faq:true, k:["гарант"],
+    a:"Гарантируем, что сделаем то, что записано в смете, — иначе вы не платите. Места в поиске и ответы нейросетей честно не обещает никто, но рост заявок и позиций показываем в отчётах." },
+  { id:"not_like", t:"А если результат не понравится?", k:["пойдет не так","что-то не так","не так","не понрав","не устро","вернуть деньги","возврат","верните","не подойдет","не получится","передела"],
+    a:"Предоплаты нет — возвращать нечего. Прогресс показываем каждую неделю, поэтому правим по ходу, а не в конце. Если готовый результат не соответствует смете — вы просто не платите." },
+  { id:"edits", t:"Сколько правок можно?", faq:true, k:["правк","правок","поправ","исправлени","доработк","изменения","поменять потом","внести изменения"],
+    a:"Правки в рамках сметы входят в стоимость: показываем промежуточный результат каждую неделю и правим по ходу. Если появится новая задача сверх сметы — сначала оценим её и согласуем с вами." },
+  { id:"price_why", t:"Из чего складывается цена?", faq:true, k:["что входит","входит в",/из чего.*(цен|стоим)/,"из чего склад","почему такая цен","от чего зависит","как считаете","как формиру","смета"],
+    a:"Цена зависит от объёма и функций: сколько страниц или экранов, нужны ли тексты, онлайн-оплата, интеграции с CRM или 1С. Точную сумму называем после бесплатного разбора задачи и фиксируем в смете — дальше она не растёт без вашего согласия." },
+  { id:"expensive", t:"Дорого. Можно дешевле?", k:["дорого","дешевл","скидк","подешевл","бюджет маленьк","мало денег","нет денег","нет бюджета","эконом","акци","промокод","торг"],
+    a:"Подберём вариант под бюджет: можно начать с облегчённой версии и добавить остальное позже или запустить проект по этапам. Персональные условия обсудите с " + O_INS + " — он предложит, с чего начать, чтобы вложения быстрее окупились." },
+  { id:"cheap", t:"Почему у вас дешевле агентств?", k:["почему дешев","почему так дешев","дешевле чем","агентств","подозрительно дешев"],
+    a:`Вы общаетесь напрямую с тем, кто делает проект, — без отдела продаж, аккаунт-менеджеров и наценок за офис. Экономия — на посредниках, а не на качестве: результат вы принимаете до оплаты.` },
+  { id:"why_us", t:"Чем вы лучше других?", k:["чем вы лучше","почему вы","почему именно вы","преимуществ","отличаетесь","конкурент","чем лучше"],
+    a:"Четыре вещи «по факту»:<br>• <b>оплата</b> — после результата, 0 ₽ предоплаты;<br>• <b>сроки</b> — фиксируем в смете, прогресс показываем каждую неделю;<br>• <b>отчёт</b> — считаем заявки и продажи, а не клики;<br>• <b>поиск</b> — работаем и с Яндексом, и с ответами нейросетей." },
+  { id:"time", t:"Какие сроки?", faq:true, k:["успе","=неделю","=неделя","за месяц","сколько дел","срок","как быстро","сколько времени","когда будет готов","за сколько","сколько делать","сколько дней","сколько недел","долго"],
+    a:"Бот-визитка — от недели, лендинг — 1–2 недели, сайт на несколько страниц — 2–3 недели, магазин или каталог — 3–6 недель, настройка Директа — 1–2 недели. Срок фиксируем в смете, промежуточный результат показываем каждую неделю." },
+  { id:"rush", t:"Можно очень срочно?", k:["срочно","срочн","быстрее","за пару дней","за 3 дня","за три дня","завтра нужно","горит","вчера","к понедельник"],
+    a:"Можно: ставим проект в приоритет, это +25% к стоимости и сроки примерно на треть короче. Самое быстрое — бот-визитка или лендинг. Напишите срок — " + O + " скажет, реально ли успеть." },
+  { id:"process", t:"Как проходит работа?", faq:true, k:["как проходит","как работаете","как вы работаете","как с вами работать","этапы работ","порядок работ","как все устроено","процесс","с чего начинается","как будет"],
+    a:"1) Бесплатный разбор задачи — созвон или переписка.<br>2) Смета: что делаем, сколько стоит, к какому сроку.<br>3) Делаем и каждую неделю показываем прогресс.<br>4) Запускаем, вы проверяете, что всё работает.<br>5) Оплата — после результата." },
+  { id:"start", t:"Что нужно от меня?", k:["для начала","начала работ","для старта","начать работ","что нужно от меня","что от меня","что подготовить","с чего начать","что прислать","какие материалы","что нужно для старта","что требуется"],
+    a:"Для старта достаточно рассказать о бизнесе и задаче — остальное соберём на разборе. Пригодятся логотип, фото и примеры, которые нравятся. Если чего-то нет — не страшно: тексты и картинки можем подготовить сами." },
+  { id:"brief", t:"Нужно ли техзадание?", k:["техзадан","=тз","бриф","задание"],
+    a:"Нет, ТЗ писать не нужно. По итогам разбора мы сами составим описание: что делаем, как это работает и что входит в смету, — вы только проверите." },
+  { id:"free_audit", t:"Разбор задачи платный?", k:["разбор","консультац","бесплатн","аудит бесплат","посмотреть мой","оцените мой"],
+    a:`Разбор задачи и точный расчёт — бесплатно. ${O} посмотрит ваш сайт или соцсети, конкурентов и предложит, что даст результат быстрее всего.` },
+  { id:"nda", t:"Вы сохраните конфиденциальность?", k:["nda","конфиденц","неразглаш","секрет","утечк","чужим","третьим лиц"],
+    a:`Информацию о вашем бизнесе не разглашаем и не используем в чужих проектах. Если нужно подписать NDA — скажите ${O_DAT}, оформим до начала работы.` },
+  { id:"ownership", t:"Кому принадлежит результат?", faq:true, k:["принадлеж","исходник","исходный код","передадите","доступ","права на","собственност","владел","мой сайт будет","админ доступ"],
+    a:"Всё, что сделано и оплачено, — ваше: передаём доступы к сайту, боту, рекламному кабинету, домену и аналитике. Аккаунты оформляем на вас, чтобы вы не зависели от подрядчика." },
+  { id:"support", t:"Что после запуска?", faq:true, k:["перестан",/(сайт|бот).*(слома|не работ|перестан)/,"поддержк","после запуска","сопровожд","обслужив","дальше что","потом кто","если сломается","сломает","техподдерж"],
+    a:`Остаёмся на связи: если что-то из сделанного нами перестанет работать — разберёмся. Небольшие доработки оцениваем по факту. Ведение рекламы — ${pr("ads","lead")}, SEO и GEO-продвижение — ${pr("seo","monthly")}, по желанию.` },
+  { id:"monthly", t:"Есть ли обязательная абонплата?", faq:true, k:["абонплат","абонентск","ежемесячн","каждый месяц","в месяц плат","подписк","скрытые","доп расход","дополнительные расход","расходы"],
+    a:"Обязательной абонплаты нам нет. Отдельно оплачиваются только сторонние сервисы — домен и хостинг провайдеру, рекламный бюджет Яндексу. Ведение рекламы и SEO — по желанию, помесячно." },
+  { id:"hosting", t:"Домен и хостинг — чьи?", faq:true, k:["хостинг","домен","сервер","размест","где будет работать","где лежит"],
+    a:"Поможем выбрать и купить домен и хостинг — на ваше имя. Их оплачиваете напрямую провайдеру, обычно это несколько сотен рублей в месяц. Ботов и мини-приложения тоже размещаем так, чтобы вы им владели." },
+  { id:"team", t:"Кто будет делать проект?", faq:true, k:["вести мой","будет вести","вести проект","людей","человек в команд","сколько вас","кто будет","кто делает","кто будет делать","команда","сколько человек","фрилансер","кто работает","штат","программист","дизайнер у вас"],
+    a:`Проект ведёт ${O} лично — от разбора до запуска. Вы общаетесь напрямую с тем, кто отвечает за результат, без цепочки менеджеров.` },
+  { id:"owner", t:`Кто такой ${O}?`, k:["кто такой","кто это дмитри","о дмитри","основател","руководител","владелец"],
+    a:`${O} Бергхман — основатель ${BRAND}. Лично ведёт проекты: разбирает задачу, считает смету, делает и запускает. Ему и уходят заявки из этого приложения.` },
+  { id:"experience", t:"Какой у вас опыт?", k:["опыт","сколько лет","давно работаете","стаж","квалификац"],
+    a:`Лучше один раз увидеть: ${O} на разборе покажет проекты, близкие к вашей задаче. А это приложение — анимация, расчёт и этот чат — тоже наша работа.` },
+  { id:"examples", t:"Есть примеры работ?", faq:true, k:["ваши клиенты","с кем работали","для кого делали",/клиент(ы|ов) у вас/,"пример","портфолио","кейс","ваши работы","что сделали","показать работ","посмотреть работ","реализованн"],
+    a:`Это приложение — тоже наша работа: анимация, расчёт стоимости и этот чат. Примеры под вашу нишу ${O} покажет на разборе.` },
+  { id:"reviews", t:"Есть отзывы?", k:["отзыв","рекомендац","кто уже работал"],
+    a:`Попросите ${O_DAT} показать проекты и отзывы — он пришлёт примеры, близкие к вашей задаче. А главная гарантия — оплата после результата.` },
+  { id:"remote", t:"Где вы находитесь?", faq:true, k:["город","находитесь",/(^| )я из /,"удален","другого город","где вы","ваш офис","офис","где находит","адрес","санкт","петербург","спб","питер","москв","регион","лично встрет","встретиться"],
+    a:"Базируемся в Санкт-Петербурге, работаем удалённо с клиентами из любого города: всё обсуждаем в Telegram и по видеосвязи. Личную встречу в Петербурге можно обсудить с " + O_INS + "." },
+  { id:"abroad", t:"Работаете с другими странами?", k:["другие стран","казахстан","беларус","узбекист","армени","грузи","за границ","зарубеж","в евро","в долларах","валют"],
+    a:`Работаем удалённо, расчёты — в рублях. Если вы из другой страны — напишите ${O_DAT}, он подскажет, как удобнее оформить работу.` },
+  { id:"hours", t:"Когда вы отвечаете?", k:["вы отвечаете","быстро отвечаете","быстро вы отвечаете","ответите","часы работ","до скольки","график","когда отвечаете","во сколько","выходн","ночью","круглосуточ","рабочее время","как быстро ответ"],
+    a:`Я, помощник, отвечаю круглосуточно. ${O} отвечает на заявки в течение рабочего дня — обычно гораздо быстрее.` },
+  { id:"contacts", t:"Как с вами связаться?", k:["=телефон","=номер","скиньте","скинь","как с вами связ","связаться с вами","ваш контакт","контакт","телефон ваш","ваш телефон","номер телефона ваш","почта","email","e-mail","телеграм ваш","написать вам","куда писать"],
+    a:`Самый быстрый способ — Telegram: @${CONFIG.OWNER_USERNAME}. Нажмите кнопку ниже — откроется чат с ${O_INS}, текст уже будет готов.` , next:[["✈️ Написать " + O_DAT, "go:dm", "primary"]] },
+  { id:"small", t:"Подойдёт ли небольшому бизнесу?", k:["маленьк","небольш","малый бизнес","начинающ","только начинаю","стартап","частник","частный мастер","один работаю","самозанятый мастер"],
+    a:`Да, это как раз наш формат. Начнём с того, что быстрее всего приведёт клиентов: часто это лендинг с рекламой или бот для записи. Бот-визитка — от ${pr("bot","lead")}, лендинг — от ${pr("site","landing")}, без предоплаты.` },
+  { id:"privacy", t:"Куда уходят мои данные?", k:["персональн","152","мои данные","данные хран","куда уход","политик конфиденц","согласие на обработк","cookie","куки"],
+    a:"Ответы в этом чате хранятся только на вашем телефоне — пока вы сами не отправите заявку " + O_DAT + " в Telegram. Для ваших сайтов и ботов поможем оформить согласие на обработку данных и политику конфиденциальности." },
+
+  /* ---------- услуги и технологии ---------- */
+  { id:"geo", t:"Что такое GEO?", faq:true, k:["=geo","=гео","нейросет","алис","chatgpt","чат gpt","чатgpt","чатгпт","яндекс нейро","=нейро","ии поиск","perplexity","deepseek","gigachat","гигачат"],
+    a:"GEO — оптимизация под ответы нейросетей: Алисы, Яндекс Нейро, ChatGPT. Всё больше людей спрашивают у них «где заказать…», и важно, чтобы советовали вас. Для этого сайт и материалы оформляют так, чтобы нейросетям было что процитировать: факты, цены, ответы на вопросы, отзывы, разметка." },
+  { id:"seo_what", t:"Что такое SEO и когда будет результат?", faq:true, k:["что такое seo","что такое сео","когда будет результат seo","когда результат","как быстро в топ","выйти в топ","первое место","первую страниц","позици"],
+    a:"SEO — работа над сайтом, чтобы его показывал Яндекс по запросам клиентов. Первые изменения обычно видны через 1–2 месяца, устойчивый рост — через 3–6. Место в топе честно не гарантирует никто, а рост позиций и заявок показываем в отчётах." },
+  { id:"ads_when", t:"Когда пойдут заявки с рекламы?", faq:true, k:["будут клиенты","через сколько","клиенты пойдут","когда пойдут","когда будут заявки","первые заявки","сколько заявок","окупит","окупаем","конверси","стоимость заявки","цена заявки","стоить заявк","будет стоить заявк","заявка будет стоить","цена клиента"],
+    a:"С Директа первые заявки обычно приходят в первые дни после запуска. Ещё 2–4 недели уходят на оптимизацию: убираем лишние показы и снижаем цену заявки. Сколько будет стоить заявка в вашей нише, " + O + " оценит на разборе по конкурентам." },
+  { id:"ad_budget", t:"Сколько вкладывать в рекламу?", k:[/бюджет.*(директ|реклам)/,/(директ|реклам).*бюджет/,"рекламный бюджет","бюджет на реклам","сколько вкладывать","сколько тратить","минимальный бюджет","бюджет директ","открутк","пополн"],
+    a:"Рекламный бюджет вы платите Яндексу напрямую в своём кабинете — отдельно от нашей работы. Сколько нужно в вашей нише, посчитаем по конкурентам и стоимости клика на разборе, чтобы тест дал понятный результат." },
+  { id:"maps", t:"Делаете Яндекс Карты и 2ГИС?", faq:true, k:["карт","2гис","2gis","дубльгис","гугл карт","google maps","карточк организац","отзывы на карт"],
+    a:`Да: оформляем карточки в Яндекс Картах и 2ГИС — фото, услуги, цены, ответы на отзывы, чтобы вас находили рядом. В смете это ${pr("seo","maps")}.` },
+  { id:"why_bot", t:"Зачем бот, если есть сайт?", faq:true, k:["зачем бот","зачем мне бот","зачем нужен бот","что умеет бот","что может бот","бот или сайт"],
+    a:"Сайт приводит людей, а бот не даёт им потеряться: отвечает ночью и в выходные, записывает, напоминает и собирает заявки в одно место." },
+  { id:"app_what", t:"Что такое мини-приложение?", faq:true, k:["что такое мини","мини-приложение это","мини приложение это","чем отличается бот","бот или мини","бот или прил","разница между бот","отличается","отличие","разница"],
+    a:"Мини-приложение — полноценный сайт внутри Telegram: каталог, корзина, запись, оплата, без скачивания из App Store. Как это приложение. Бот — переписка с кнопками; мини-приложение — экраны, как в обычном приложении. Часто их делают вместе." },
+  { id:"native", t:"Делаете приложения для App Store и Google Play?", k:["app store","appstore","google play","гугл плей","плей маркет","айфон","iphone","андроид","android","ios","скачать приложение","мобильное приложение"],
+    a:"Основной формат — мини-приложения в Telegram: их не нужно скачивать, они работают и на iPhone, и на Android и запускаются в разы быстрее и дешевле. Если нужно именно приложение в магазинах — опишите задачу, " + O + " скажет, возьмёмся ли." },
+  { id:"landing_vs", t:"Лендинг или многостраничный сайт?", k:["что такое лендинг","лендинг это","лендинг или","многостраничный сайт","или многостранич","какой сайт выбрать","какой сайт нужен","многостраничный или","одностраничный или","что лучше сайт"],
+    a:"Лендинг — одна страница под одну услугу или рекламу: быстро и недорого, хорошо собирает заявки. Сайт на 3–7 страниц нужен, когда услуг несколько и важно SEO. Каталог — если много товаров. Не уверены — пройдите подбор, подскажу.", next:[["🎯 Подобрать решение","go:quiz","primary"]] },
+  { id:"mobile", t:"Сайт будет удобен на телефоне?", faq:true, k:["на телефоне","с телефона","мобильн","адаптив","смартфон","на айфоне","на андроиде"],
+    a:"Да. Большинство клиентов приходят с телефона, поэтому сначала проектируем мобильную версию, а потом компьютерную. Проверяем на iPhone и Android до сдачи." },
+  { id:"tilda", t:"Работаете с Тильдой?", faq:true, k:["тильд","tilda","конструктор","wix","викс","craftum","крафтум"],
+    a:"Да: можем доработать сайт на Тильде или конструкторе либо сделать новый. Что выгоднее в вашем случае — подскажем на разборе." },
+  { id:"cms", t:"На чём делаете сайты?", k:["битрикс","на чем","движок","=cms","wordpress","вордпресс","битрикс сайт","1с-битрикс","react","next","html","технолог","стек","язык программ","python","питон"],
+    a:"Подбираем под задачу: для быстрых лендингов — конструктор, для сложного — собственный код. Главное, чтобы сайт быстро грузился, хорошо индексировался и вы могли сами менять тексты и цены." },
+  { id:"self_edit", t:"Смогу сам менять тексты и цены?", faq:true, k:["редактир","самому","самой","управлять","сам менять","сама менять","сам редактир","сама редакт","админк","панель управлен","сам добавлять","сама добавлять","без программиста"],
+    a:`Да, сделаем так, чтобы тексты, цены и фото вы меняли сами без программиста. Для магазинов и каталогов — удобная админка (в смете ${pr("app","admin")}). Покажем, как пользоваться.` },
+  { id:"redo", t:"Можете доработать мой сайт?", faq:true, k:[/(сайт|бот).*(не работает|сломал)/,"доработать","переделать","мой сайт","наш сайт","старый сайт","текущий сайт","не работает сайт","сайт не работает","сайт сломал","исправить сайт","обновить сайт","редизайн"],
+    a:"Да. Сначала бесплатно посмотрим, что есть: иногда хватает доработки, а иногда новый сайт выходит дешевле и быстрее. Пришлите ссылку " + O_DAT + " — он оценит." },
+  { id:"design", t:"Делаете дизайн и логотип?", faq:true, k:["дизайн","логотип","лого","фирменный стиль","брендбук","айдентик","визуал","макет","фигм","figma"],
+    a:"Дизайн сайта, бота или приложения делаем сами в рамках проекта — вы видите его заранее и согласуете. Логотип и фирменный стиль — отдельная задача: опишите, что нужно, " + O + " скажет сроки и цену." },
+  { id:"content", t:"Кто пишет тексты и делает фото?", k:["текст","копирайт","контент","фото","фотограф","картинк","изображ","видео","наполнен"],
+    a:`Можем взять на себя: напишем тексты под ключ (в смете ${pr("site","texts")}), подготовим изображения. Если есть свои фото и тексты — используем их и аккуратно доработаем.` },
+  { id:"integr", t:"Подключаете CRM и 1С?", faq:true, k:[/битрикс ?24/,"crm","црм","срм","amocrm","амо","битрикс24","битрикс 24","bitrix","=1с","=1c","мойсклад","мой склад","интеграц","google таблиц","гугл таблиц","таблиц","yclients","иклаентс","dikidi","дикиди","altegio","api"],
+    a:"Да: заявки — в Telegram, Google-таблицу, amoCRM или Битрикс24; остатки и заказы — синхронизация с 1С или МойСклад; запись — связь с вашей системой (YCLIENTS, DIKIDI и др.), если её API это позволяет. Что именно подключить, разберём на созвоне." },
+  { id:"payments", t:"Можно принимать оплату онлайн?", faq:true, k:["платеж","принимать оплат","оплату в бот","оплату на сайт","оплата на сайте","оплата в боте","принимать оплат","онлайн оплат","онлайн-оплат","эквайринг","юкасс","yookassa","робокасс","тинькофф касс","=сбп","telegram stars","звезды","stars"],
+    a:`Да: подключаем ЮKassa, СБП и карты на сайте, в боте и в мини-приложении. Клиент платит, не уходя со страницы или из чата. На сайте — ${pr("site","pay")}, в боте — ${pr("bot","pay")}, в мини-приложении — ${pr("app","pay")}. Договор с платёжным сервисом оформляется на вас.` },
+  { id:"ai_bot", t:"Можно бота с нейросетью?", k:["chatgpt","с chatgpt","с gpt","с нейросет","на нейросет","с ии","нейросетью","ai","=ии","искусственн","gpt","нейробот","умный бот","ai-консульт","нейросеть в бот","бот с нейросет","нейро-консульт","ии-консульт"],
+    a:`Да, есть опция «AI-консультант»: бот отвечает на вопросы клиентов своими словами по вашей базе знаний — как живой менеджер, круглосуточно. В смете — ${pr("bot","ai")}. А я — помощник с готовыми ответами, без нейросети.` },
+  { id:"analytics", t:"Как я пойму, что всё работает?", k:["аналитик","метрик","отчет","статистик","как пойму","пойму","понять что работает","как понять","как узнаю","откуда заявк","цели в метрике","utm","колтрекинг","calltracking"],
+    a:"Настраиваем Яндекс Метрику и цели, чтобы было видно, откуда пришла каждая заявка. Если ведём рекламу или SEO — присылаем понятный отчёт: сколько заявок, сколько стоила каждая, что улучшили." },
+  { id:"mailing", t:"Можно делать рассылки клиентам?", k:["рассылк","рассылать","уведомлени","напоминани","пуш","push","написать всем","всем клиентам"],
+    a:`Да: бот может рассылать акции и новости всем подписчикам и напоминать клиентам о записи. Рассылки по базе — в смете ${pr("bot","mail")}.` },
+  { id:"booking", t:"Можно сделать онлайн-запись?", k:["запис","онлайн-запис","онлайн запис","запись клиент","записыват","расписани","бронир","свободное время","слоты"],
+    a:`Да: клиент сам выбирает услугу, мастера и время, получает подтверждение и напоминание, а вам приходит уведомление. Можно в боте (${pr("bot","book")}) или в мини-приложении (${pr("app","booking")}).` },
+  { id:"shop", t:"Можно продавать товары в Telegram?", k:["продавать товар","магазин","корзин","каталог товар","интернет-витрин","витрин","товары"],
+    a:`Да: витрина или магазин с корзиной прямо в Telegram — ${pr("app","showcase")}, с корзиной — ${pr("app","shop")}, классический сайт-магазин — ${pr("site","catalog")}. Можно подключить оплату, бонусы и связь с 1С или МойСклад.` },
+  { id:"quiz_site", t:"Сделаете такой же квиз для меня?", k:["такой же","как у вас","как этот","как это приложени","квиз","калькулятор","анимаци","как вы сделали","хочу так же","хочу такое"],
+    a:`Конечно — это приложение и есть пример. Квиз или калькулятор на сайт — ${pr("site","quiz")}, бот-квиз с расчётом — ${pr("bot","quiz")}, мини-приложение с анимацией и расчётом — ${pr("app","showcase")}.`, next:[["🎯 Подобрать решение","go:quiz","primary"],["💰 Все цены","go:prices"]] },
+  { id:"other_platforms", t:"Работаете с VK, WhatsApp, Авито?", k:["=вк","вконтакт","=vk","ватсап","whatsapp","вотсап","вацап","viber","вайбер","инстаграм","instagram","авито","avito","озон","ozon","wildberries","вайлдберриз","маркетплейс","=smm","=смм","соцсет"],
+    a:`Наш фокус — сайты, Telegram-боты и мини-приложения, Яндекс Директ, SEO и GEO. Соцсети и маркетплейсы можно связать с этим: например, вести людей из VK или Авито на сайт или в бота. Про ведение соцсетей и другие площадки спросите ${O_DAT}.` },
+
+  /* ---------- смолток ---------- */
+  { id:"how_are_you", k:["как дела","^как ты","как поживаешь","как настроени","как жизнь","что нового","^как сам","^как вы","как ваши дела","как твои дела"],
+    a:"Отлично, спасибо! Целый день помогаю подбирать сайты и ботов — работа мечты 😊 А у вас как? Чем могу помочь?" },
+  { id:"who", t:"Кто ты?", k:["любой вопрос","ответить на","кто ты","ты кто","как тебя зовут","как вас зовут","твое имя","что ты такое","представься","что ты умеешь","что умеешь","что можешь","чем поможешь","чем можешь помочь","=помощь","=help"],
+    a:`Я помощник ${BRAND}. Умею:<br>• подобрать решение под ваш бизнес и назвать ориентир по цене;<br>• ответить на вопросы об услугах, сроках, оплате и гарантиях;<br>• собрать заявку и передать её ${O_DAT} — проекты он ведёт лично.` },
+  { id:"bot", t:"Вы живой человек?", k:["=живой","ты живой","вы живой","ты бот","вы бот","=робот","живой человек","ты человек","вы человек","ты нейросеть","ты ии","ты ai","ты chatgpt","ты настоящ","с кем я говорю","с кем я общаюсь","я говорю с","я общаюсь с","это человек","это бот"],
+    a:`Я помощник с готовыми ответами, без нейросети: подбираю решение и собираю заявку. Проект ведёт ${O} лично — на сложные вопросы ответит он.` },
+  { id:"made_by", k:["придумал","тебя придум","кто тебя созда","кто тебя сдела","кто тебя написал","кто тебя разработ","тебя сделали"],
+    a:`Меня сделали в ${BRAND} — вместе с этим приложением. Такого же помощника можем сделать и для вашего бизнеса: в боте, на сайте или в мини-приложении.`, next:[["🎯 Хочу такого же","quizneed:bot","primary"]] },
+  { id:"age", k:["сколько тебе лет","тебе лет","твой возраст","где ты живешь","ты где","ты устал","что делаешь","чем занят","скучаешь"],
+    a:"Я появился вместе с этим приложением: совсем молодой, не устаю и всегда на месте 🙂 Чем помочь?" },
+  { id:"love", k:["люблю тебя","ты милый","ты милая","ты лучший","ты лучшая","обожаю","ты умница"],
+    a:"Спасибо, мне очень приятно! 😊 Передам команде — им тоже будет приятно." },
+  { id:"compliment", k:["круто","классн","красиво","супер","здорово","отлично сдел","нравится","молодц","огонь","впечатля","шикарн","кайф","прикольн","клево","вау","=wow"],
+    a:"Спасибо, очень приятно! 🙌 Это приложение — тоже наша работа. Такое же можно сделать для вашего бизнеса." },
+  { id:"rude", k:["бесит","раздража","достал","надоел","дурак","тупой","тупая","глуп","идиот","бесполез","ерунд","фигн","отстой","бред","=хрень","не работаешь","ты не понимаешь","не понимаешь"],
+    a:`Похоже, я не очень помог — извините. Я отвечаю по готовым сценариям и не всё понимаю. Можно написать ${O_DAT} напрямую — он разберётся.`, next:[["✈️ Написать " + O_DAT, "go:dm", "primary"],["☰ Меню","go:menu"]] },
+  { id:"joke", k:["анекдот","шутк","пошути","рассмеши","смешн","развесели","скучно"],
+    a:"Клиент спрашивает: «А где подвох, если без предоплаты?» Студия: «Подвох в том, что вам понравится, и вы придёте снова» 😄<br>Чем могу помочь всерьёз?" },
+  { id:"offtopic", k:["=дата","какое число","который час","сколько времени сейчас","день недели","погод","курс доллар","курс евро","новост","политик","футбол","хоккей","рецепт","фильм","сериал","музык","гороскоп","биткоин","крипт","акции компан","выборы","войн","=бог","смысл жизни","знакомств"],
+    a:"С этим, увы, не помогу — я разбираюсь только в сайтах, ботах, рекламе и продвижении 🙂 Зато здесь могу многое: подобрать решение, посчитать стоимость, ответить на вопросы." },
+  { id:"ack", k:["=ок","=окей","=ok","=хорошо","=понятно","=ясно","=ладно","=угу","=ага","=принято","=отлично","=супер","=да","=нет","=неа","понял","поняла"], w:.5,
+    a:"Хорошо! Если появятся вопросы — пишите, я на связи." },
+  { id:"confused", k:["помогите выбрать","выбрать","помогите","не знаю","посоветуй","посоветуешь","что выбрать","не знаю что","что лучше","не понял","не поняла","непонятно","не понятно","что делать","как пользоват","как тут","запутал","объясни"],
+    a:"Давайте по-простому: нажмите «Подобрать решение» — задам несколько вопросов кнопками и назову ориентир по цене. Или просто напишите вопрос своими словами." },
+  { id:"stop", k:["не пиши","отстань","не надо писать","хватит","отпиши","спам","не беспокой"],
+    a:"Хорошо. Я пишу только в ответ на ваши сообщения, и ничего не отправляю без вашего нажатия. Если понадоблюсь — я здесь." },
+  { id:"later", k:["подумаю","позже","потом напишу","не сейчас","пока не надо","пока не нужно","посоветуюсь","обсужу"],
+    a:`Конечно, думайте спокойно. Переписка сохранится — вернётесь и продолжите с того же места. Если удобнее, можно сразу задать вопрос ${O_DAT}.` },
+];
+
 const FLOW = ["niche","need","goal","recommend","assets","link","scale","budget","budget_fit","deadline",
   "contact_way","phone","call_time","name","comment","confirm"];
 const STEP_NAMES = {niche:"Сфера",need:"Задача",assets:"Что уже есть",scale:"Вариант",budget:"Бюджет",
   deadline:"Сроки",contact_way:"Связь",name:"Имя",comment:"Комментарий"};
 const TEXT_STEPS = new Set(["link","phone","name","comment"]);
 const FREE_TEXT_OK = new Set(["niche","assets","budget","deadline","call_time"]);
-const INTERCEPT = new Set(["menu","human","greet","thanks"]);
+const INTERCEPT = new Set(["menu","human","greet","thanks","bye"]);
 const lbl = (list, id) => { const o = list.find(x => x[0] === id); return o ? o[1].replace(/^[^\p{L}\p{N}]+/u, "") : (id || ""); };
 const svcBy = id => SERVICES.find(s => s.id === id);
 const scaleOf = a => { const s = svcBy(a.need); return s && s.scales.find(x => x.id === a.scale); };
@@ -1148,15 +1563,16 @@ function onQuick(m, b){
   const [kind, ...rest] = String(b.val).split(":");
   const arg = rest.join(":");
   if (kind === "s") return answerChoice(arg.split("=")[0], arg.split("=")[1]);
-  if (kind === "faq") return faqAnswer(arg);
+  if (kind === "faq") return faqAnswer(arg, false, true);
   if (kind === "svc") return serviceInfo(arg);
   if (kind === "go") return actions[arg] && actions[arg]();
   if (kind === "quizneed") return beginQuiz({ need: arg });
+  if (kind === "faqpage") return faqMenu(+arg);
 }
 const actions = {
   quiz: () => beginQuiz(),
   prices: () => showPrices(),
-  faq: () => say("Частые вопросы — выберите или напишите свой:", CHAT.faq.map(f => Q(f[1], "faq:" + f[0], "wide"))),
+  faq: () => faqMenu(0),
   dm: () => openOwnerChat(chatDmText(), true),
   ask_now: () => openOwnerChat(chatQuestionText(), true),
   menu: () => chatMenu(),
@@ -1164,7 +1580,7 @@ const actions = {
   resend: () => openOwnerChat(chatLeadText(), false),
   copy: () => copyText(chatLeadText()).then(ok => say(ok ? "Скопировал текст заявки — можно вставить в любой мессенджер." : "Не получилось скопировать — откройте чат кнопкой выше.")),
   home: () => { trail.length = 0; go("home", { back:true }); },
-  calc: () => { trail.length = 0; trail.push("home"); go("service"); },
+  calc: () => startCalc(),
 };
 
 /* ---------- начало и меню ---------- */
@@ -1193,9 +1609,20 @@ function serviceInfo(id, inStep){
   if (inStep) return say(html);
   say(html, [Q(`🎯 Подобрать ${needShort[id]}`, "quizneed:" + id, "primary"), Q("💰 Все цены", "go:prices")]);
 }
-function faqAnswer(id, inStep){
-  const f = CHAT.faq.find(x => x[0] === id); if (!f) return;
-  say(`<b>${f[1]}</b><br>${f[2]}`, inStep ? [] : [Q("🎯 Подобрать решение", "go:quiz"), Q("❓ Другие вопросы", "go:faq")]);
+const FAQ_PAGE = 8;
+function faqMenu(page){
+  const list = KB.filter(e => e.faq), pages = Math.ceil(list.length / FAQ_PAGE);
+  page = Math.min(Math.max(0, page || 0), pages - 1);
+  const part = list.slice(page * FAQ_PAGE, (page + 1) * FAQ_PAGE);
+  say(page ? `Ещё вопросы (${page + 1} из ${pages}):` : "Частые вопросы — выберите или напишите вопрос своими словами:",
+    part.map(e => Q(e.t, "faq:" + e.id, "wide"))
+      .concat(page < pages - 1 ? [Q("Ещё вопросы →", "faqpage:" + (page + 1))] : [Q("↺ К началу списка", "faqpage:0")])
+      .concat([Q("🎯 Подобрать решение", "go:quiz")]));
+}
+function faqAnswer(id, inStep, viaButton){
+  const e = KB.find(x => x.id === id); if (!e || !e.a) return;
+  const next = (e.next || [["🎯 Подобрать решение", "go:quiz"], ["❓ Другие вопросы", "go:faq"]]).map(n => Q(n[0], n[1], n[2]));
+  say((viaButton && e.t ? `<b>${e.t}</b><br>` : "") + e.a, inStep ? [] : next);
 }
 
 /* ---------- анкета ---------- */
@@ -1340,10 +1767,37 @@ function normPhone(t){
 }
 
 /* ---------- текст от клиента ---------- */
+/* Распознавание: ищем тему из KB, где совпало больше ключевых слов */
+const normText = t => " " + String(t).toLowerCase().replace(/ё/g, "е").replace(/[^\p{L}\p{N}%+\-]+/gu, " ").replace(/\s+/g, " ").trim() + " ";
+function kwHit(t, k){
+  if (k instanceof RegExp) return k.test(t);                // сложное правило
+  if (k[0] === "^") return t.trim() === k.slice(1);        // всё сообщение целиком
+  if (k[0] === "=") return t.includes(` ${k.slice(1)} `);  // отдельное слово
+  return t.includes(" " + k);                               // начало слова или фраза
+}
+let detectScore = 0;
 function detect(text){
-  const t = text.toLowerCase().replace(/ё/g, "е");
-  const hit = CHAT.intents.find(([, rx]) => rx.test(t));
-  return hit ? hit[0] : null;
+  const t = normText(text), scores = {};
+  let best = null, bs = 0;
+  for (const e of KB){
+    let sc = 0;
+    for (const k of e.k) if (kwHit(t, k)) sc += k instanceof RegExp || /\s/.test(k.replace(/^[=^]/, "")) ? 1.6 : 1;
+    sc *= e.w || 1;
+    if (sc) scores[e.id] = sc;
+    if (sc > bs){ bs = sc; best = e; }
+  }
+  detectScore = bs;
+  if (!best) return null;
+  // конкретная тема важнее общей категории («бот для записи» → про запись, «сколько стоит хостинг» → про хостинг)
+  if (best.act && best.act !== "menu"){
+    const topic = KB.filter(e => !e.act && scores[e.id] >= 1).sort((a, b) => scores[b.id] - scores[a.id])[0];
+    if (topic && scores[topic.id] >= bs - 1.5){ detectScore = scores[topic.id]; return "faq:" + topic.id; }
+  }
+  if (best.act === "price"){                               // «сколько стоит бот» — сразу цены на бота
+    const sv = KB.filter(e => e.act === "svc" && scores[e.id]).sort((a, b) => scores[b.id] - scores[a.id])[0];
+    if (sv) return sv.id;
+  }
+  return best.act ? best.id : "faq:" + best.id;
 }
 function userText(text){
   me(text);
@@ -1364,7 +1818,7 @@ function userText(text){
       .find(([, rx]) => rx.test(text.toLowerCase()));
     if (way) return answerChoice("contact_way", way[0]);
   }
-  const intercept = INTERCEPT.has(intent) || (intent || "").startsWith("faq:");
+  const intercept = INTERCEPT.has(intent) || ((intent || "").startsWith("faq:") && (detectScore >= 1.6 || /^(как|что|где|когда|почему|зачем|сколько|можно|а |вы |есть )/i.test(text)));
   if (FREE_TEXT_OK.has(step) && !question && !intercept){
     if (step === "assets"){ a.assets = "other"; a.assets_text = text.slice(0, 200); }
     else a[step] = text.slice(0, 120);
@@ -1373,8 +1827,8 @@ function userText(text){
   if (freeText(text, intent, !!step)){ if (step) reask(); return; }
   // не понял — сохраняем вопрос для Дмитрия
   (a.questions = a.questions || []).push(text.slice(0, 300)); chatSave();
-  say(`Хороший вопрос — точно ответит ${CONFIG.OWNER_NAME}. Добавлю его в заявку 📝`,
-    [Q(`Спросить ${CONFIG.OWNER_DAT} сейчас`, "go:ask_now")].concat(step ? [] : [Q("🎯 Подобрать решение", "go:quiz")]));
+  say(`Хороший вопрос — на него точно ответит ${CONFIG.OWNER_NAME}. Добавлю его в заявку 📝` + (step ? "" : "<br>А ещё могу рассказать про цены, сроки, оплату и гарантии — загляните в частые вопросы."),
+    [Q(`Спросить ${CONFIG.OWNER_DAT} сейчас`, "go:ask_now")].concat(step ? [] : [Q("❓ Частые вопросы", "go:faq"), Q("🎯 Подобрать решение", "go:quiz")]));
   if (step) reask();
 }
 function reask(){ if (CH.await){ say("Вернёмся к подбору 👇"); ask(CH.await); } }
@@ -1390,6 +1844,7 @@ function freeText(text, intent, inStep){
   if (intent === "price"){ inStep ? say("Цены зависят от задачи — точную вилку покажу в конце подбора.") : showPrices(); return true; }
   if (intent === "greet"){ inStep ? say("Здравствуйте! 👋") : chatMenu("Здравствуйте! Чем помочь?"); return true; }
   if (intent === "thanks"){ inStep ? say("Пожалуйста! 🙌") : chatMenu("Пожалуйста! 🙌 Чем ещё помочь?"); return true; }
+  if (intent === "bye"){ say(`Всего доброго! Переписка сохранится — вернётесь и продолжите с того же места. ${inStep ? "" : "Если что — я здесь 👋"}`); return true; }
   return false;
 }
 function budgetFromText(text){
