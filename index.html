@@ -223,6 +223,66 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
 .done p{color:var(--muted);max-width:34ch;margin-bottom:10px}
 .textlink{color:var(--ink);font-weight:600;margin-top:22px;display:inline-block;text-decoration:underline;text-underline-offset:4px}
 
+/* ============ Карточка чата на главной ============ */
+.chatcard{display:grid;grid-template-columns:52px 1fr;gap:4px 14px;align-items:center;width:100%;text-align:left;
+  background:var(--surface);border-radius:18px;padding:14px 14px 14px;margin:0 0 36px}
+.chatcard img{width:52px;height:52px;border-radius:50%;grid-row:span 2}
+.chatcard b{font-size:16.5px;font-weight:700;line-height:1.25}
+.chatcard small{font-size:14px;color:var(--muted);line-height:1.35}
+.chatcard .bubble{grid-column:1/-1;margin-top:10px;background:var(--desk);border-radius:14px 14px 14px 6px;padding:10px 12px;font-size:14.5px;line-height:1.4}
+.chatcard .go{grid-column:1/-1;margin-top:10px;height:46px;border-radius:12px;background:var(--ink-soft);color:var(--ink);
+  font-weight:650;font-size:15.5px;display:flex;align-items:center;justify-content:center;gap:8px}
+.chatcard .go svg{width:18px;height:18px}
+.services li[data-chatneed]{cursor:pointer}
+.services li[data-chatneed]:active{opacity:.6}
+.svc-hint{font-size:14px;color:var(--muted);margin:-6px 0 12px}
+
+/* ============ Чат с помощником ============ */
+html.chat-open, html.chat-open body{overflow:hidden}
+.chat{position:fixed;left:0;right:0;top:0;height:var(--tg-viewport-height,100dvh);max-width:520px;margin:0 auto;
+  display:flex;flex-direction:column;background:var(--desk);z-index:4}
+.chat-head{display:flex;align-items:center;gap:12px;padding:10px var(--gutter);border-bottom:1px solid var(--line)}
+.chat-head img{width:42px;height:42px;border-radius:50%;flex:none}
+.chat-head .who{flex:1;min-width:0}
+.chat-head b{display:block;font-size:16px;font-weight:700;line-height:1.2}
+.chat-head small{display:block;font-size:12.5px;color:var(--muted);line-height:1.3}
+.chat-head .icon{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--muted);flex:none}
+.chat-head .icon svg{width:20px;height:20px}
+.chat-head .back{display:none}
+.no-tg .chat-head .back{display:grid}
+.chat-log{flex:1;overflow-y:auto;padding:14px var(--gutter) 10px;display:flex;flex-direction:column;gap:6px;
+  overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.msg{max-width:86%;padding:9px 13px 10px;border-radius:18px;font-size:15.5px;line-height:1.42;overflow-wrap:anywhere}
+.msg.bot{align-self:flex-start;background:var(--surface);border-bottom-left-radius:6px}
+.msg.me{align-self:flex-end;background:var(--ink);color:var(--on-ink);border-bottom-right-radius:6px;white-space:pre-wrap}
+.msg.bot + .msg.me, .msg.me + .msg.bot, .quick + .msg{margin-top:8px}
+.msg b{font-weight:650}
+.msg .rows{margin-top:6px;display:grid;gap:3px;font-size:14.5px}
+.msg .rows span{color:var(--muted)}
+.msg .est{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);font-size:14.5px}
+.msg .est b{background:linear-gradient(transparent 55%, var(--marker) 55% 92%, transparent 92%);padding:0 2px}
+:root[data-theme="dark"] .msg .est b{background:var(--marker);color:#1A1B2E;border-radius:4px;padding:0 4px}
+.sys{align-self:center;font-size:12.5px;color:var(--muted);margin:6px 0 2px;text-align:center}
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 4px;max-width:100%}
+.quick button{border:1.5px solid var(--ink);color:var(--ink);background:transparent;border-radius:999px;
+  padding:8px 13px;font-size:14.5px;font-weight:560;line-height:1.25;text-align:left}
+.quick button.primary{background:var(--ink);color:var(--on-ink)}
+.quick button.wide{width:100%;border-radius:14px}
+.quick button:active{transform:scale(.97)}
+.typing{align-self:flex-start;background:var(--surface);border-radius:18px;border-bottom-left-radius:6px;padding:13px 14px;display:flex;gap:4px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);opacity:.35;animation:blink 1.1s infinite}
+.typing i:nth-child(2){animation-delay:.18s}.typing i:nth-child(3){animation-delay:.36s}
+@keyframes blink{40%{opacity:1}}
+.msg.new,.quick.new{animation:pop .22s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.chat-input{display:flex;gap:8px;align-items:flex-end;padding:8px var(--gutter) calc(10px + var(--safe-b));border-top:1px solid var(--line);background:var(--desk)}
+.chat-input textarea{flex:1;resize:none;height:44px;max-height:120px;border:1.5px solid var(--line);border-radius:22px;
+  padding:10px 15px;background:var(--surface);font-size:16px;line-height:1.35;outline:none}
+.chat-input textarea:focus{border-color:var(--ink)}
+.chat-input .send{width:44px;height:44px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;flex:none}
+.chat-input .send svg{width:20px;height:20px}
+.chat-input .send[disabled]{opacity:.35}
+
 /* ============ Кнопка вне Telegram ============ */
 .cta{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + var(--safe-b));
   width:calc(100% - 2*var(--gutter));max-width:480px;height:56px;border-radius:14px;
@@ -235,6 +295,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
   .film-hint svg{animation:none}
   .screen,.receipt .stamp.land{animation:none}
   .progress .bar i,.opt,.toggle .sw,.toggle .sw::after{transition:none}
+  .msg.new,.quick.new,.typing i{animation:none}
 }
 </style>
 </head>
@@ -287,8 +348,9 @@ const CONFIG = {
   BRAND: "ФАКТ",                 // название студии (меняется везде)
   BRAND_NOTE: "digital-студия",  // подпись рядом с логотипом
   OWNER_NAME: "Дмитрий",         // кто отвечает на заявки
-  OWNER_USERNAME: "",            // ваш @username без @ — для запасной кнопки «Написать»
-  API_URL: "https://functions.yandexcloud.net/d4esj0b2o9lork76mk0r", // адрес функции Yandex Cloud
+  OWNER_DAT: "Дмитрию",          // «передать кому?»
+  OWNER_INS: "Дмитрием",         // «связаться с кем?»
+  OWNER_USERNAME: "brghmn",      // ваш username в Telegram без @ — сюда клиенты отправляют заявки
 };
 
 /* Цены — в тысячах рублей [от, до]. Сроки — в неделях [от, до].
@@ -398,6 +460,9 @@ const I = {
   pack:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3.5 7.5 12 12l8.5-4.5z"/><path d="M3.5 12 12 16.5 20.5 12M3.5 16.5 12 21l8.5-4.5"/></svg>',
   check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
   down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.4 20.4 21 12 3.4 3.6 3.3 10l12.4 2-12.4 2z"/></svg>',
+  reset:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
+  chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/></svg>',
   back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>',
 };
 const stampSvg = (cls="") => `<svg class="stamp ${cls}" style="color:var(--stamp)" aria-hidden="true"><use href="#stamp"/></svg>`;
@@ -425,6 +490,7 @@ function applyTheme(){
     if (can("7.10")) tg.setBottomBarColor(desk);
   }
   syncButton();
+  if (typeof syncSecondary === "function" && CH) syncSecondary();
 }
 
 /* Главная кнопка: в Telegram — нативная MainButton, в браузере — своя */
@@ -505,10 +571,12 @@ function goBack(){
 }
 
 function render(back){
-  const fn = { home:Home, service:QService, scale:QScale, extras:QExtras, niche:QNiche, urgency:QUrgency, result:Result, done:Done }[S.screen];
+  const fn = { home:Home, service:QService, scale:QScale, extras:QExtras, niche:QNiche, urgency:QUrgency, result:Result, done:Done, chat:Chat }[S.screen];
   app.innerHTML = `<section class="screen${back ? " back" : ""}">${fn()}</section>`;
   bind();
   mountFilm();
+  mountChat();
+  syncSecondary();
   setBack(S.screen !== "home" && S.screen !== "done");
   updatePeek();
   const tgFocus = app.querySelector("h1"); if (tgFocus) tgFocus.setAttribute("tabindex","-1");
@@ -523,7 +591,7 @@ function topbar(){
 function Home(){
   const rows = SERVICES.filter(s => s.home).map(s => {
     const from = Math.min(...s.scales.map(x => x.price[0]));
-    return `<li><span class="ico">${I[s.icon]}</span><div><h3>${s.home}</h3><p>${s.desc}</p></div><span class="from">от <b>${from}</b> тыс</span></li>`;
+    return `<li data-chatneed="${s.id}" role="button" tabindex="0"><span class="ico">${I[s.icon]}</span><div><h3>${s.home}</h3><p>${s.desc}</p></div><span class="from">от <b>${from}</b> тыс</span></li>`;
   }).join("");
   setButton("Рассчитать стоимость", () => go("service"));
   const ch = (from, to, inner) => `<div class="ch" data-from="${from}" data-to="${to}">${inner}</div>`;
@@ -544,6 +612,13 @@ function Home(){
       <div><b>0 ₽</b><span>предоплаты</span></div>
       <div><b>1 минута</b><span>на расчёт стоимости</span></div>
     </div>
+    <button type="button" class="chatcard" data-act="open-chat">
+      <img src="assistant.webp" alt="">
+      <b>Обсудить задачу в чате</b>
+      <small>Помощник ${CONFIG.BRAND} подберёт решение и передаст заявку ${CONFIG.OWNER_DAT}</small>
+      <span class="bubble">Здравствуйте! Расскажите, чем занимается ваш бизнес, — подскажу, что поможет получать больше заявок 👋</span>
+      <span class="go">${I.chat}Открыть чат</span>
+    </button>
     <h2>Почему ${CONFIG.BRAND}</h2>
     <ul class="facts">
       <li><div class="row"><b>Оплата</b><span class="seal">по факту</span></div><p>Платите, когда проект запущен и&nbsp;работает так, как договорились.</p></li>
@@ -552,6 +627,7 @@ function Home(){
       <li><div class="row"><b>Поиск</b><span class="seal">по факту</span></div><p>Смотрим, где вас находят: Яндекс, карты и&nbsp;ответы нейросетей&nbsp;— Алисы, Нейро и&nbsp;ChatGPT.</p></li>
     </ul>
     <h2>Что делаем</h2>
+    <p class="svc-hint">Нажмите на услугу — помощник подскажет вариант и цену</p>
     <ul class="services">${rows}</ul>
     <p class="selfnote">Эта анимация и&nbsp;расчёт стоимости — тоже наша работа. Такое&nbsp;же можно сделать для вашего бизнеса.</p>
 `;
@@ -635,7 +711,7 @@ function receiptHtml(e, landed){
 
 function Result(){
   const e = estimate();
-  setButton("Отправить заявку", submit, S.name.trim().length > 1);
+  setButton(`Отправить ${CONFIG.OWNER_DAT}`, submit, S.name.trim().length > 1);
   return `${topbar()}<div class="result">
     <h1>Ваша смета готова</h1>
     <p class="hint">Предварительный расчёт по вашим ответам.</p>
@@ -650,23 +726,20 @@ function Result(){
         <input id="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" value="${esc(S.phone)}" placeholder="+7"></label>
       <label class="field"><span>Пара слов о задаче</span>
         <textarea id="comment" rows="3" maxlength="600" placeholder="Например: есть сайт на Тильде, нужен бот для записи">${esc(S.comment)}</textarea></label>
-      ${IN_TG ? `<button type="button" class="toggle" role="switch" aria-checked="${S.inTg}" data-act="intg"><span>Ответить здесь, в Telegram</span><span class="sw"></span></button>` : ""}
-      <p class="privacy">Данные получит только ${CONFIG.OWNER_NAME} — для ответа на заявку.</p>
-      <div class="error-box" id="err"></div>
+      <p class="privacy">Нажмите «Отправить ${CONFIG.OWNER_DAT}» — откроется чат с ним в Telegram с готовым текстом заявки.</p>
     </div>
   </div>`;
 }
 
 function Done(){
   setButton(IN_TG ? "Закрыть" : "На главную", () => IN_TG ? tg.close() : (trail.length = 0, go("home", { back:true })));
-  const how = S.phone && !S.inTg ? "позвонит" : IN_TG && S.inTg ? "напишет вам здесь, в Telegram," : "свяжется с вами";
   return `<div class="done">
     ${stampSvg()}
-    <h1>${S.sent ? "Заявка отправлена" : "Так будет выглядеть заявка"}</h1>
-    ${S.sent
-      ? `<p>${CONFIG.OWNER_NAME} ${how} в течение рабочего дня. Смета с вашими ответами уже у него.</p>`
-      : `<p>Это демо-режим в браузере. Откройте приложение в Telegram, и заявка сразу придёт владельцу.</p>`}
-    <p>Пока ждёте — подумайте, какие сайты или боты конкурентов вам нравятся. Пригодится на разборе.</p>
+    <h1>Осталось нажать «Отправить»</h1>
+    <p>Мы открыли чат с ${CONFIG.OWNER_INS} в Telegram — там уже готов текст со сметой. Отправьте его, и ${CONFIG.OWNER_NAME} ответит в течение рабочего дня.</p>
+    <p>Чат не открылся? Нажмите кнопку ниже.</p>
+    <button type="button" class="textlink" data-act="resend-calc">Открыть чат с ${CONFIG.OWNER_INS}</button><br>
+    <button type="button" class="textlink" data-act="open-chat">Обсудить детали с помощником</button><br>
     <button type="button" class="textlink" data-act="restart">Посчитать другой проект</button>
   </div>`;
 }
@@ -697,16 +770,19 @@ function bind(){
     S.urgency = b.dataset.urgency; haptic.tap(); mark(b, "urgency"); advance("result");
   });
   app.querySelectorAll("[data-act=back]").forEach(b => b.onclick = goBack);
+  app.querySelectorAll("[data-act=open-chat]").forEach(b => b.onclick = () => { haptic.tap(); openChat(); });
+  app.querySelectorAll("[data-chatneed]").forEach(b => {
+    const open = () => { haptic.tap(); openChat({ need: b.dataset.chatneed }); };
+    b.onclick = open; b.onkeydown = ev => { if (ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); open(); } };
+  });
+  app.querySelectorAll("[data-act=resend-calc]").forEach(b => b.onclick = () => openOwnerChat(calcLeadText(), false));
   app.querySelectorAll("[data-act=restart]").forEach(b => b.onclick = () => {
     Object.assign(S, { service:null, scale:null, niche:null, urgency:null, sent:false }); S.extras.clear();
     trail.length = 0; trail.push("home"); go("service");
   });
-  app.querySelectorAll("[data-act=intg]").forEach(b => b.onclick = () => {
-    S.inTg = !S.inTg; b.setAttribute("aria-checked", S.inTg); haptic.tap();
-  });
   const name = app.querySelector("#name");
   if (name){
-    name.oninput = () => { S.name = name.value; app.querySelector("#f-name").classList.remove("err"); setButton("Отправить заявку", submit, S.name.trim().length > 1); };
+    name.oninput = () => { S.name = name.value; app.querySelector("#f-name").classList.remove("err"); setButton(`Отправить ${CONFIG.OWNER_DAT}`, submit, S.name.trim().length > 1); };
     app.querySelector("#phone").oninput = e => S.phone = e.target.value;
     app.querySelector("#comment").oninput = e => S.comment = e.target.value;
   }
@@ -845,46 +921,587 @@ function leadPayload(){
     niche: S.niche, urgency: (urg() || URGENCY[0]).title,
     estimate: { min:e.min, max:e.max, weeks:weeksText(e.weeks), monthly: e.monthly ? fmtRange(e.monthly) : null },
     name: S.name.trim(), phone: S.phone.trim(), comment: S.comment.trim(),
-    answerInTelegram: IN_TG ? S.inTg : false,
   };
 }
-function summaryText(){
-  const l = leadPayload();
-  return `Здравствуйте! Посчитал проект в приложении ${CONFIG.BRAND}: ${l.service} — ${l.scale}` +
-    (l.extras.length ? ` (+ ${l.extras.join(", ")})` : "") + `. Вышло ${l.estimate.min}–${l.estimate.max} тыс ₽. Меня зовут ${l.name}.`;
+function calcLeadText(){
+  const l = leadPayload(), e = l.estimate;
+  return [`Здравствуйте, ${CONFIG.OWNER_NAME}! Посчитал проект в приложении ${CONFIG.BRAND}:`, "",
+    `Услуга: ${l.service} — ${l.scale}`,
+    l.extras.length ? `Дополнительно: ${l.extras.join(", ")}` : "",
+    `Сфера: ${l.niche}`, `Сроки: ${l.urgency}`,
+    `Смета: ${e.min}–${e.max} тыс ₽, ${e.weeks}` + (e.monthly ? `; ведение ${e.monthly} тыс ₽/мес` : ""), "",
+    `Имя: ${l.name}`, l.phone ? `Телефон: ${l.phone}` : "", l.comment ? `Комментарий: ${l.comment}` : "",
+  ].filter((x, i, arr) => x !== "" || (arr[i-1] && arr[i-1] !== "")).join("\n").trim().slice(0, 3900);
+}
+function submit(){
+  if (S.name.trim().length < 2){ app.querySelector("#f-name").classList.add("err"); haptic.err(); return; }
+  openOwnerChat(calcLeadText(), false);
+  S.sent = true; haptic.ok(); go("done");
 }
 
-let sending = false;
-async function submit(){
-  if (sending) return;
-  if (S.name.trim().length < 2){ app.querySelector("#f-name").classList.add("err"); haptic.err(); return; }
-  if (!IN_TG){ S.sent = false; haptic.ok(); go("done"); return; }           // демо в браузере
-  if (!CONFIG.API_URL){ showError("Адрес сервера не указан в настройках приложения."); return; }
-  sending = true;
-  if (IN_TG) tg.MainButton.showProgress(false);
-  try {
-    const r = await fetch(CONFIG.API_URL, { method:"POST", headers:{ "Content-Type":"text/plain;charset=utf-8" },
-      body: JSON.stringify({ initData: tg.initData, lead: leadPayload() }) });
-    const j = await r.json().catch(() => ({}));
-    if (!r.ok || !j.ok) throw new Error(j.error || "http " + r.status);
-    S.sent = true; haptic.ok(); go("done");
-  } catch (err) {
-    console.error(err); showError("Не получилось отправить заявку — похоже, пропал интернет или сервер недоступен.");
-  } finally {
-    sending = false; if (IN_TG) tg.MainButton.hideProgress();
+/* Вторая нативная кнопка Telegram на главной — «Чат с помощником» */
+let secondaryBound = false;
+function syncSecondary(){
+  if (!can("7.10") || !tg.SecondaryButton) return;
+  const sb = tg.SecondaryButton;
+  if (!secondaryBound){ sb.onClick(() => openChat()); secondaryBound = true; }
+  if (S.screen === "home") sb.setParams({ text:"💬 Чат с помощником", is_visible:true, position:"top",
+    color: css("--ink-soft"), text_color: css("--ink") });
+  else sb.hide();
+}
+
+/* ==========================================================
+   ЧАТ С ПОМОЩНИКОМ — сценарий без нейросетей.
+   Тексты и варианты ответов — в объекте CHAT ниже.
+   ========================================================== */
+const CHAT = {
+  niches: [["build","🏗 Строительство и ремонт"],["beauty","💅 Салон, барбершоп, SPA"],["shop","🛍 Магазин или шоурум"],
+    ["med","🩺 Медицина и здоровье"],["edu","📚 Обучение и репетиторы"],["auto","🚗 Авто и сервис"],
+    ["realty","🏢 Недвижимость"],["food","🍕 Кафе и доставка"],["other","✏️ Другое — напишу"]],
+  needs: [["site","🌐 Сайт"],["bot","🤖 Telegram-бот"],["app","📱 Мини-приложение"],["ads","📣 Реклама в Директе"],
+    ["seo","🔎 SEO и GEO"],["pack","🧩 Комплекс под ключ"],["unknown","🤔 Не знаю — посоветуйте"]],
+  goals: [["leads","📈 Больше заявок"],["booking","🗓 Онлайн-запись клиентов"],["sell","🛒 Продавать онлайн"],
+    ["search","🔎 Чтобы находили в поиске и нейросетях"],["redo","♻️ Обновить старый сайт"],["auto","⚡️ Автоматизировать ответы клиентам"]],
+  // цель → [услуга, вариант, почему]
+  recommend: {
+    leads: ["pack","site_ads","Лендинг под вашу услугу и реклама в Яндекс Директе, которая ведёт на него клиентов. Заявки сразу приходят вам в Telegram."],
+    booking: ["app","booking","Онлайн-запись прямо в Telegram: клиент сам выбирает услугу, мастера и время, вам приходит уведомление."],
+    sell: ["app","shop","Магазин в Telegram: каталог, корзина и оформление заказа без скачивания приложений. Классический сайт-магазин тоже сделаем — обсудим на разборе."],
+    search: ["seo","geo","SEO и GEO вместе: наводим порядок на сайте для Яндекса, оформляем карты и готовим материалы, которые нейросети используют в ответах."],
+    redo: ["site","multi","Новый сайт на 3–7 страниц: услуги, цены, работы и контакты, с формой заявки и аналитикой. Старые материалы перенесём."],
+    auto: ["bot","lead","Бот-визитка: отвечает на частые вопросы, собирает заявки круглосуточно и пересылает их вам."],
+  },
+  assets: [["nothing","Пока ничего"],["site","Есть сайт"],["tilda","Сайт на Тильде или конструкторе"],["social","Только соцсети"],["other","✏️ Другое — напишу"]],
+  budgets: [["b20","до 20 тыс ₽",20],["b50","20–50 тыс ₽",50],["b100","50–100 тыс ₽",100],["b100p","больше 100 тыс ₽",1e6],["unknown","Пока не знаю",null]],
+  deadlines: [["rush","🔥 Срочно, на этой неделе"],["month","В течение месяца"],["quarter","В ближайшие 1–3 месяца"],["look","Пока присматриваюсь"]],
+  ways: [["tg","💬 Напишите мне в Telegram"],["call","📞 Позвоните мне"],["wa","🟢 Напишите в WhatsApp"]],
+  times: [["now","Сейчас"],["today","Сегодня до 19:00"],["tomorrow","Завтра"],["other","✏️ Укажу время"]],
+  faq: [
+    ["prepay","Почему без предоплаты?","Так мы снимаем ваш риск: сначала делаем и показываем рабочий результат, а оплата — когда всё работает так, как договорились. Подвоха нет: нам выгодно, чтобы вы остались довольны и рекомендовали нас."],
+    ["price","Из чего складывается цена?","Цена зависит от объёма и функций: сколько страниц или экранов, нужны ли тексты, онлайн-оплата, интеграции с CRM или 1С. Точную сумму называем после бесплатного разбора задачи и фиксируем в смете."],
+    ["time","Какие сроки?","Бот-визитка — от недели, лендинг — 1–2 недели, магазин или каталог — 3–6 недель. Срок фиксируем в смете, промежуточный результат показываем каждую неделю."],
+    ["process","Как проходит работа?","1) Бесплатный разбор задачи — созвон или переписка.<br>2) Смета: что делаем, сколько стоит, к какому сроку.<br>3) Делаем и каждую неделю показываем прогресс.<br>4) Запускаем, вы проверяете, что всё работает.<br>5) Оплата — после результата."],
+    ["examples","Есть примеры работ?","Это приложение — тоже наша работа: анимация, расчёт стоимости и этот чат. Примеры под вашу нишу Дмитрий покажет на разборе."],
+    ["geo","Что такое GEO?","GEO — оптимизация под ответы нейросетей: Алисы, Яндекс Нейро, ChatGPT. Всё больше людей спрашивают у них «где заказать…», и важно, чтобы советовали вас. Для этого сайт и материалы оформляют так, чтобы нейросетям было что процитировать: факты, цены, ответы на вопросы, отзывы, разметка."],
+    ["why_bot","Зачем бот, если есть сайт?","Сайт приводит людей, а бот не даёт им потеряться: отвечает ночью и в выходные, записывает, напоминает и собирает заявки в одно место."],
+    ["tilda","Работаете с Тильдой?","Да: можем доработать сайт на Тильде или конструкторе либо сделать новый. Что выгоднее в вашем случае — подскажем на разборе."],
+    ["remote","Работаете удалённо?","Да, с клиентами из любого города: всё обсуждаем в Telegram и по видеосвязи. Базируемся в Санкт-Петербурге."],
+    ["contract","Как оформляем работу?","Задачу, смету и сроки фиксируем письменно до старта. Детали оформления Дмитрий обсудит на созвоне."],
+    ["guarantee","Какие гарантии?","Гарантируем, что сделаем то, что записано в смете, — иначе вы не платите. Места в поиске и ответы нейросетей честно не обещает никто, но рост заявок и позиций показываем в отчётах."],
+    ["support","Что после запуска?","Остаёмся на связи: помогаем с правками и развитием. Ведение рекламы и SEO-продвижение — помесячно."],
+    ["bot","Вы живой человек?","Я помощник с готовыми ответами — подбираю решение и собираю заявку. Проект ведёт Дмитрий лично, на сложные вопросы ответит он."],
+  ],
+  // распознавание текста: [намерение, выражение]; порядок = приоритет
+  intents: [
+    ["menu", /^(меню|главное меню|начать|в начало|назад|старт)$/],
+    ["faq:bot", /ты бот|вы бот|робот|живой человек|ты человек|вы человек|нейросеть ли/],
+    ["faq:prepay", /предоплат|подвох|аванс/],
+    ["faq:geo", /\bgeo\b|(^|\s)гео(\s|$)|нейросет|алис|chatgpt|чат ?gpt|чатгпт/],
+    ["faq:contract", /договор|оформля|самозан|(^|\s)ип(\s|$)|счет на оплату/],
+    ["faq:guarantee", /гарант/],
+    ["faq:examples", /пример|портфолио|кейс|ваши работы/],
+    ["faq:tilda", /тильд|tilda|конструктор/],
+    ["faq:remote", /удален|из другого города|где вы|ваш офис|где находит/],
+    ["faq:support", /поддержк|после запуска|сопровожд/],
+    ["faq:why_bot", /зачем (мне )?бот/],
+    ["human", /человек|менеджер|позвон|звонок|созвон|связать|свяжит|набери|дмитри|живой/],
+    ["svc:seo", /\bseo\b|(^|\s)сео|продвиж|поисков|в поиске|яндекс карт|2гис/],
+    ["svc:ads", /директ|реклам|таргет|рся/],
+    ["svc:app", /мини.?прил|приложени|mini ?app|магазин в телеграм/],
+    ["svc:bot", /(^|\s)бот/],
+    ["svc:site", /сайт|лендинг|визитк/],
+    ["faq:time", /(^|\s)срок|как быстро|сколько времени|когда будет готов/],
+    ["price", /цен[аыу]|стоим|сколько|прайс|почем|бюджет/],
+    ["greet", /^(привет|здравств|добр(ый|ое|ого)|хай|hello|hi)/],
+    ["thanks", /спасибо|благодар|спс/],
+  ],
+};
+const FLOW = ["niche","need","goal","recommend","assets","link","scale","budget","budget_fit","deadline",
+  "contact_way","phone","call_time","name","comment","confirm"];
+const STEP_NAMES = {niche:"Сфера",need:"Задача",assets:"Что уже есть",scale:"Вариант",budget:"Бюджет",
+  deadline:"Сроки",contact_way:"Связь",name:"Имя",comment:"Комментарий"};
+const TEXT_STEPS = new Set(["link","phone","name","comment"]);
+const FREE_TEXT_OK = new Set(["niche","assets","budget","deadline","call_time"]);
+const INTERCEPT = new Set(["menu","human","greet","thanks"]);
+const lbl = (list, id) => { const o = list.find(x => x[0] === id); return o ? o[1].replace(/^[^\p{L}\p{N}]+/u, "") : (id || ""); };
+const svcBy = id => SERVICES.find(s => s.id === id);
+const scaleOf = a => { const s = svcBy(a.need); return s && s.scales.find(x => x.id === a.scale); };
+const needShort = { site:"сайт", bot:"бота", app:"мини-приложение", ads:"рекламу", seo:"продвижение", pack:"комплекс" };
+const FAST = matchMedia("(prefers-reduced-motion: reduce)").matches || window.__chatFast;
+const CHAT_KEY = "fakt-chat-v1";
+
+let CH = null;
+function chatNew(){ return { log:[], a:{}, await:"", flow:"", confirming:false, sent:false, started:false }; }
+function chatLoad(){
+  try { CH = JSON.parse(localStorage.getItem(CHAT_KEY)) || null; } catch(e) { CH = null; }
+  if (!CH || !Array.isArray(CH.log)) CH = chatNew();
+}
+function chatSave(){
+  try { CH.log = CH.log.slice(-80); localStorage.setItem(CHAT_KEY, JSON.stringify(CH)); } catch(e) {}
+}
+
+/* ---------- экран ---------- */
+function Chat(){
+  hideButton();
+  return `<div class="chat" role="region" aria-label="Чат с помощником ${CONFIG.BRAND}">
+    <div class="chat-head">
+      <button type="button" class="icon back" data-act="back" aria-label="Назад">${I.back}</button>
+      <img src="assistant.webp" alt="">
+      <div class="who"><b>Помощник ${CONFIG.BRAND}</b><small>отвечает сразу, заявку передаёт ${CONFIG.OWNER_DAT}</small></div>
+      <button type="button" class="icon" data-act="chat-reset" aria-label="Начать заново" title="Начать заново">${I.reset}</button>
+    </div>
+    <div class="chat-log" id="chatlog" aria-live="polite"></div>
+    <form class="chat-input" id="chatform">
+      <textarea id="chatinput" rows="1" placeholder="Напишите сообщение…" aria-label="Сообщение" enterkeyhint="send"></textarea>
+      <button type="submit" class="send" aria-label="Отправить" disabled>${I.send}</button>
+    </form>
+  </div>`;
+}
+
+function mountChat(){
+  const log = app.querySelector("#chatlog");
+  document.documentElement.classList.toggle("chat-open", !!log);
+  if (!log) return;
+  log.innerHTML = "";
+  CH.log.forEach((m, i) => log.appendChild(msgEl(m, i === CH.log.length - 1)));
+  scrollChat(true);
+  const form = app.querySelector("#chatform"), input = app.querySelector("#chatinput"), sendBtn = form.querySelector(".send");
+  const grow = () => { input.style.height = "44px"; input.style.height = Math.min(120, input.scrollHeight) + "px";
+    sendBtn.disabled = !input.value.trim(); };
+  input.addEventListener("input", grow);
+  input.addEventListener("keydown", ev => { if (ev.key === "Enter" && !ev.shiftKey){ ev.preventDefault(); form.requestSubmit(); } });
+  form.onsubmit = ev => { ev.preventDefault(); const t = input.value.trim(); if (!t) return;
+    input.value = ""; grow(); userText(t); };
+  app.querySelector("[data-act=chat-reset]").onclick = () => {
+    CH = chatNew(); chatSave(); log.innerHTML = ""; chatStart();
+  };
+  if (!CH.started) chatStart(CH.preset);
+}
+
+function msgEl(m, isLast){
+  const frag = document.createDocumentFragment();
+  if (m.html){
+    const d = document.createElement("div");
+    d.className = m.who === "sys" ? "sys" : `msg ${m.who}`;
+    d.innerHTML = m.html;
+    frag.appendChild(d);
+  }
+  if (m.quick && m.quick.length && !m.done){
+    const q = document.createElement("div");
+    q.className = "quick";
+    m.quick.forEach((b, i) => {
+      const el = document.createElement("button");
+      el.type = "button";
+      el.textContent = b.label;
+      if (b.cls) el.className = b.cls;
+      el.onclick = () => onQuick(m, b);
+      q.appendChild(el);
+    });
+    frag.appendChild(q);
+  }
+  return frag;
+}
+
+function scrollChat(instant){
+  const log = app.querySelector("#chatlog"); if (!log) return;
+  log.scrollTo({ top: log.scrollHeight, behavior: instant || FAST ? "auto" : "smooth" });
+}
+
+function pushMsg(m){
+  CH.log.push(m); chatSave();
+  const log = app.querySelector("#chatlog");
+  if (log){
+    const el = msgEl(m, true);
+    [...el.children].forEach(c => c.classList.add("new"));
+    log.appendChild(el); scrollChat();
   }
 }
-function showError(text){
-  haptic.err();
-  const box = app.querySelector("#err"); if (!box) return;
-  const u = CONFIG.OWNER_USERNAME;
-  box.innerHTML = `${text}${u ? `<br><button type="button" id="dm">Написать ${CONFIG.OWNER_NAME} напрямую</button>` : " Попробуйте ещё раз через минуту."}`;
-  box.classList.add("on");
-  const dm = box.querySelector("#dm");
-  if (dm) dm.onclick = () => {
-    const link = `https://t.me/${u}?text=${encodeURIComponent(summaryText())}`;
-    IN_TG ? tg.openTelegramLink(link) : window.open(link, "_blank");
-  };
+
+let sayQueue = Promise.resolve();
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+function say(html, quick){
+  sayQueue = sayQueue.then(async () => {
+    const log = app.querySelector("#chatlog");
+    if (!FAST && log){
+      const t = document.createElement("div"); t.className = "typing"; t.innerHTML = "<i></i><i></i><i></i>";
+      log.appendChild(t); scrollChat();
+      await sleep(Math.min(1100, 380 + html.replace(/<[^>]+>/g, "").length * 6));
+      t.remove();
+    }
+    pushMsg({ who:"bot", html, quick: quick || [] });
+  });
+  return sayQueue;
+}
+function me(text){ closeQuick(); pushMsg({ who:"me", html: esc(text) }); haptic.tap(); }
+function sys(text){ pushMsg({ who:"sys", html: esc(text) }); }
+function closeQuick(){
+  let changed = false;
+  CH.log.forEach(m => { if (m.quick && m.quick.length && !m.done){ m.done = true; changed = true; } });
+  if (changed){ chatSave(); app.querySelectorAll("#chatlog .quick").forEach(q => q.remove()); }
+}
+
+/* ---------- кнопки ---------- */
+const Q = (label, val, cls) => ({ label, val, cls });
+function onQuick(m, b){
+  if (m.done) return;
+  me(b.label);
+  const [kind, ...rest] = String(b.val).split(":");
+  const arg = rest.join(":");
+  if (kind === "s") return answerChoice(arg.split("=")[0], arg.split("=")[1]);
+  if (kind === "faq") return faqAnswer(arg);
+  if (kind === "svc") return serviceInfo(arg);
+  if (kind === "go") return actions[arg] && actions[arg]();
+  if (kind === "quizneed") return beginQuiz({ need: arg });
+}
+const actions = {
+  quiz: () => beginQuiz(),
+  prices: () => showPrices(),
+  faq: () => say("Частые вопросы — выберите или напишите свой:", CHAT.faq.map(f => Q(f[1], "faq:" + f[0], "wide"))),
+  dm: () => openOwnerChat(chatDmText(), true),
+  ask_now: () => openOwnerChat(chatQuestionText(), true),
+  menu: () => chatMenu(),
+  resume: () => CH.await ? ask(CH.await) : chatMenu(),
+  resend: () => openOwnerChat(chatLeadText(), false),
+  copy: () => copyText(chatLeadText()).then(ok => say(ok ? "Скопировал текст заявки — можно вставить в любой мессенджер." : "Не получилось скопировать — откройте чат кнопкой выше.")),
+  home: () => { trail.length = 0; go("home", { back:true }); },
+  calc: () => { trail.length = 0; trail.push("home"); go("service"); },
+};
+
+/* ---------- начало и меню ---------- */
+function chatStart(preset){
+  CH.started = true; delete CH.preset; chatSave();
+  const name = tgUser && tgUser.first_name ? `, ${esc(tgUser.first_name)}` : "";
+  say(`Здравствуйте${name}! Я помощник ${CONFIG.BRAND} 👋<br>Подберу решение для вашего бизнеса, назову ориентир по цене и передам заявку ${CONFIG.OWNER_DAT} — проекты он ведёт лично.`);
+  if (preset && preset.need) return beginQuiz(preset);
+  chatMenu("С чего начнём?");
+}
+function chatMenu(text){
+  CH.await = ""; CH.flow = ""; chatSave();
+  say(text || "Чем ещё помочь?", [Q("🎯 Подобрать решение", "go:quiz"), Q("💰 Цены", "go:prices"),
+    Q("❓ Частые вопросы", "go:faq"), Q(`✈️ Написать ${CONFIG.OWNER_DAT}`, "go:dm")]);
+}
+function showPrices(){
+  const rows = SERVICES.map(s => `<b>${s.title}</b> — от ${Math.min(...s.scales.map(x => x.price[0]))} тыс ₽`).join("<br>");
+  say(`Цены — ориентиры, точную сумму ${CONFIG.OWNER_NAME} назовёт после бесплатного разбора. Предоплаты нет.<br><br>${rows}`,
+    SERVICES.map(s => Q(s.title, "svc:" + s.id)).concat([Q("🎯 Подобрать решение", "go:quiz", "primary")]));
+}
+function serviceInfo(id, inStep){
+  const s = svcBy(id); if (!s) return;
+  const rows = s.scales.map(x => `• ${x.title} — ${fmtRange(x.price)} тыс ₽, ${weeksText(x.weeks)}`).join("<br>");
+  const monthly = s.extras.find(x => x.monthly);
+  const html = `<b>${s.title}</b><br>${s.desc}.<br><br>${rows}${monthly ? `<br>• ${monthly.title} — ${fmtRange(monthly.monthly)} тыс ₽/мес` : ""}`;
+  if (inStep) return say(html);
+  say(html, [Q(`🎯 Подобрать ${needShort[id]}`, "quizneed:" + id, "primary"), Q("💰 Все цены", "go:prices")]);
+}
+function faqAnswer(id, inStep){
+  const f = CHAT.faq.find(x => x[0] === id); if (!f) return;
+  say(`<b>${f[1]}</b><br>${f[2]}`, inStep ? [] : [Q("🎯 Подобрать решение", "go:quiz"), Q("❓ Другие вопросы", "go:faq")]);
+}
+
+/* ---------- анкета ---------- */
+function beginQuiz(preset){
+  const keep = {}; ["name","phone"].forEach(k => { if (CH.a[k]) keep[k] = CH.a[k]; });
+  CH.a = Object.assign(keep, preset || {}); CH.flow = "quiz"; CH.confirming = false; CH.sent = false;
+  say("Подберём решение — это 1–2 минуты, в основном кнопками. В любой момент можно задать вопрос текстом.");
+  askNext();
+}
+function budgetMax(a){ const b = CHAT.budgets.find(x => x[0] === a.budget); return b ? b[2] : null; }
+function needed(step){
+  const a = CH.a;
+  if (step in a) return false;
+  switch (step){
+    case "goal": return a.need === "unknown";
+    case "recommend": return a.need === "unknown" && "goal" in a;
+    case "link": return ["site","tilda","social"].includes(a.assets);
+    case "scale": return !!a.need && a.need !== "unknown";
+    case "budget_fit": { const s = scaleOf(a), mx = budgetMax(a); return !!(s && mx !== null && s.price[0] > mx); }
+    case "phone": return ["call","wa"].includes(a.contact_way) && !a.phone;
+    case "call_time": return ["call","wa"].includes(a.contact_way);
+    case "name": return !a.name;
+  }
+  return true;
+}
+const nextStep = () => FLOW.find(needed);
+const remaining = () => FLOW.filter(s => s !== "confirm" && needed(s)).length;
+function askNext(){
+  const step = nextStep();
+  if (!step) return chatMenu();
+  if (step === "confirm") CH.confirming = true;
+  ask(step);
+}
+function ask(step){
+  if (step.endsWith("_text")) step = step.slice(0, -5);
+  if (step === "edit_pick") step = "confirm";
+  CH.await = step; chatSave();
+  const a = CH.a, opts = list => list.map(([v, t]) => Q(t, `s:${step}=${v}`));
+  let q = "", quick = [];
+  switch (step){
+    case "niche": q = "Чем занимается ваш бизнес?"; quick = opts(CHAT.niches); break;
+    case "need": q = a.self_pick ? "Выберите, что вам ближе:" : "Что нужно сделать?";
+      quick = opts(CHAT.needs.filter(n => !(a.self_pick && n[0] === "unknown"))); break;
+    case "goal": q = "Подскажу! Какая главная задача сейчас?"; quick = opts(CHAT.goals).map(b => (b.cls = "wide", b)); break;
+    case "recommend": {
+      const [need, sc, why] = CHAT.recommend[a.goal], s = svcBy(need), x = s.scales.find(v => v.id === sc);
+      q = `Под вашу задачу подойдёт: <b>${s.title} — ${x.title}</b><br>${why}<br><br>Ориентир: ${fmtRange(x.price)} тыс ₽, ${weeksText(x.weeks)}. Подходит?`;
+      quick = [Q("👍 Подходит", "s:recommend=ok", "primary"), Q("Выберу сам", "s:recommend=self")]; break; }
+    case "assets": q = "Что у вас уже есть?"; quick = opts(CHAT.assets); break;
+    case "link": q = "Пришлите ссылку на сайт или соцсети — Дмитрий посмотрит перед разговором."; quick = [Q("Пропустить", "s:link=skip")]; break;
+    case "scale": { const s = svcBy(a.need);
+      q = `<b>${s.title}</b> — какой вариант ближе? Цены в тыс ₽.`;
+      quick = s.scales.map(x => Q(`${x.title} · ${fmtRange(x.price)}`, `s:scale=${x.id}`, "wide"))
+        .concat([Q("🤷 Не знаю, нужен совет", "s:scale=advice", "wide")]); break; }
+    case "budget": q = "На какой бюджет ориентируетесь? Можно написать сумму."; quick = opts(CHAT.budgets); break;
+    case "budget_fit": { const s = svcBy(a.need), x = scaleOf(a), mx = budgetMax(a);
+      q = `«${x.title}» обычно стоит ${fmtRange(x.price)} тыс ₽ — это выше бюджета. Есть варианты:`;
+      quick = s.scales.filter(v => v.price[0] <= mx && v.id !== x.id).slice(0, 3)
+        .map(v => Q(`Взять «${v.title}» · ${fmtRange(v.price)}`, `s:budget_fit=sc_${v.id}`, "wide"))
+        .concat([Q("🪜 Сделать поэтапно", "s:budget_fit=stage", "wide"), Q("Оставить выбранный вариант", "s:budget_fit=keep", "wide"),
+          Q(`Обсудить с ${CONFIG.OWNER_INS}`, "s:budget_fit=talk", "wide")]); break; }
+    case "deadline": q = "Когда нужно запустить?"; quick = opts(CHAT.deadlines); break;
+    case "contact_way": q = `Как ${CONFIG.OWNER_DAT} лучше связаться с вами?`; quick = opts(CHAT.ways); break;
+    case "phone": q = "Ваш номер телефона?";
+      quick = (can("6.9") ? [Q("📱 Поделиться номером", "s:phone=share", "primary")] : []).concat([Q("Пропустить", "s:phone=skip")]);
+      if (!can("6.9")) q += " Напишите его сообщением.";
+      break;
+    case "call_time": q = "Когда удобно поговорить? (по Москве)"; quick = opts(CHAT.times); break;
+    case "name": { const n = tgUser && tgUser.first_name;
+      q = "Как к вам обращаться?" + (n ? "" : " Напишите имя.");
+      quick = n ? [Q(n.slice(0, 30), "s:name=tg"), Q("✏️ Другое имя", "s:name=other")] : []; break; }
+    case "comment": q = "Хотите что-то добавить? Например, пожелания или пример сайта, который нравится."; quick = [Q("Пропустить", "s:comment=skip")]; break;
+    case "confirm": q = leadSummaryHtml() + "<br>Всё верно?";
+      quick = [Q(`✈️ Отправить ${CONFIG.OWNER_DAT}`, "s:confirm=send", "primary wide"), Q("✏️ Изменить ответ", "s:confirm=edit"), Q("✖️ Отменить", "s:confirm=cancel")]; break;
+  }
+  const left = remaining();
+  if (!["confirm","recommend","budget_fit"].includes(step) && !CH.confirming && left > 1) q += `<br><small style="color:var(--muted)">Осталось вопросов: ${left}</small>`;
+  say(q, quick);
+}
+
+function answerChoice(step, val){
+  const a = CH.a;
+  if (step !== CH.await && !(step === "edit_pick" && CH.await === "edit_pick")) return;
+  switch (step){
+    case "niche": if (val === "other"){ CH.await = "niche_text"; chatSave(); return say("Напишите в двух словах, чем занимаетесь."); }
+      a.niche = lbl(CHAT.niches, val); break;
+    case "need": a.need = val; ["scale","budget_fit","goal"].forEach(k => delete a[k]); break;
+    case "goal": a.goal = val; break;
+    case "recommend": { const [need, sc] = CHAT.recommend[a.goal];
+      if (val === "ok"){ a.need = need; a.scale = sc; a.recommend = "принял рекомендацию"; }
+      else { delete a.need; a.self_pick = true; a.recommend = "выбрал сам"; } break; }
+    case "assets": if (val === "other"){ CH.await = "assets_text"; chatSave(); return say("Что именно есть? Напишите коротко."); }
+      a.assets = val; break;
+    case "link": a.link = "—"; break;
+    case "scale": a.scale = val; delete a.budget_fit; break;
+    case "budget": a.budget = val; delete a.budget_fit; delete a.budget_text; break;
+    case "budget_fit": a.budget_fit = val.startsWith("sc_") ? (a.scale = val.slice(3), "выбрал вариант под бюджет")
+      : { stage:"хочет поэтапно", keep:"оставил вариант дороже бюджета", talk:`хочет обсудить с ${CONFIG.OWNER_INS}` }[val]; break;
+    case "deadline": a.deadline = val; break;
+    case "contact_way": a.contact_way = val; if (val === "tg") delete a.call_time; break;
+    case "phone":
+      if (val === "share") return requestPhone();
+      a.contact_way = "tg"; delete a.call_time; say(`Хорошо, ${CONFIG.OWNER_NAME} напишет вам в Telegram.`); break;
+    case "call_time": if (val === "other"){ CH.await = "call_time_text"; chatSave(); return say("Напишите удобное время, например: «завтра после 14»."); }
+      a.call_time = lbl(CHAT.times, val); break;
+    case "name": if (val === "other"){ CH.await = "name"; chatSave(); return say("Напишите, как к вам обращаться."); }
+      a.name = tgUser.first_name.slice(0, 40); break;
+    case "comment": a.comment = "—"; break;
+    case "confirm":
+      if (val === "send") return sendLead();
+      if (val === "cancel"){ Object.assign(CH, { await:"", flow:"", confirming:false }); chatSave();
+        return chatMenu("Отменил — ответы не отправлены. Если передумаете, я здесь."); }
+      if (val === "edit"){ CH.await = "edit_pick"; chatSave();
+        const fields = ["niche","need","assets","scale","budget","deadline","contact_way","name","comment"];
+        return say("Что исправить?", fields.map(f => Q(STEP_NAMES[f], `s:edit_pick=${f}`)).concat([Q("← Назад к проверке", "s:edit_pick=back")])); }
+      break;
+    case "edit_pick":
+      if (val !== "back"){
+        const drop = { need:["need","goal","recommend","self_pick","scale","budget_fit"], scale:["scale","budget_fit"],
+          budget:["budget","budget_fit","budget_text"], assets:["assets","link","assets_text"], contact_way:["contact_way","phone","call_time"] };
+        (drop[val] || [val]).forEach(k => delete a[k]);
+      }
+      CH.confirming = true; break;
+  }
+  chatSave(); askNext();
+}
+
+function requestPhone(){
+  if (!can("6.9")) return say("Напишите номер сообщением, например +7 921 123-45-67.");
+  tg.requestContact((ok, res) => {
+    const phone = ok && res && res.responseUnsafe && res.responseUnsafe.contact && res.responseUnsafe.contact.phone_number;
+    if (phone){ CH.a.phone = normPhone(phone) || phone; sys(`Номер: ${CH.a.phone}`); chatSave(); askNext(); }
+    else say("Номер не пришёл — напишите его сообщением или нажмите «Пропустить».", [Q("Пропустить", "s:phone=skip")]);
+  });
+}
+function normPhone(t){
+  const d = String(t).replace(/\D/g, "");
+  if (d.length === 11 && /[78]/.test(d[0])) return `+7 ${d.slice(1,4)} ${d.slice(4,7)}-${d.slice(7,9)}-${d.slice(9)}`;
+  if (d.length === 10 && d[0] === "9") return `+7 ${d.slice(0,3)} ${d.slice(3,6)}-${d.slice(6,8)}-${d.slice(8)}`;
+  if (d.length >= 10 && d.length <= 15 && String(t).trim().startsWith("+")) return "+" + d;
+  return null;
+}
+
+/* ---------- текст от клиента ---------- */
+function detect(text){
+  const t = text.toLowerCase().replace(/ё/g, "е");
+  const hit = CHAT.intents.find(([, rx]) => rx.test(t));
+  return hit ? hit[0] : null;
+}
+function userText(text){
+  me(text);
+  const step = CH.await, a = CH.a, intent = detect(text), question = /\?\s*$/.test(text);
+  if (intent === "menu") return chatMenu("Хорошо. Чем помочь?");
+  if (step.endsWith("_text")){
+    const base = step.slice(0, -5);
+    if (base === "assets"){ a.assets = "other"; a.assets_text = text.slice(0, 200); }
+    else a[base] = text.slice(0, 120);
+    chatSave(); return askNext();
+  }
+  if (step === "edit_pick") return say("Выберите кнопкой, что исправить 👆");
+  if (step === "budget" && /\d/.test(text) && !question) return budgetFromText(text);
+  if (TEXT_STEPS.has(step) && !question && intent !== "human") return answerText(step, text);
+  if (step === "need" && intent && intent.startsWith("svc:") && !question){ closeQuick(); return answerChoice("need", intent.slice(4)); }
+  if (step === "contact_way" && !question){
+    const way = [["wa", /whats|ватс|вотс|вацап/], ["call", /позвон|звон|набер|телефон/], ["tg", /телеграм|telegram|(^|\s)тг(\s|$)|пиши|переписк/]]
+      .find(([, rx]) => rx.test(text.toLowerCase()));
+    if (way) return answerChoice("contact_way", way[0]);
+  }
+  const intercept = INTERCEPT.has(intent) || (intent || "").startsWith("faq:");
+  if (FREE_TEXT_OK.has(step) && !question && !intercept){
+    if (step === "assets"){ a.assets = "other"; a.assets_text = text.slice(0, 200); }
+    else a[step] = text.slice(0, 120);
+    chatSave(); return askNext();
+  }
+  if (freeText(text, intent, !!step)){ if (step) reask(); return; }
+  // не понял — сохраняем вопрос для Дмитрия
+  (a.questions = a.questions || []).push(text.slice(0, 300)); chatSave();
+  say(`Хороший вопрос — точно ответит ${CONFIG.OWNER_NAME}. Добавлю его в заявку 📝`,
+    [Q(`Спросить ${CONFIG.OWNER_DAT} сейчас`, "go:ask_now")].concat(step ? [] : [Q("🎯 Подобрать решение", "go:quiz")]));
+  if (step) reask();
+}
+function reask(){ if (CH.await){ say("Вернёмся к подбору 👇"); ask(CH.await); } }
+function freeText(text, intent, inStep){
+  if (!intent) return false;
+  if (intent.startsWith("faq:")){ faqAnswer(intent.slice(4), inStep); return true; }
+  if (intent.startsWith("svc:")){ serviceInfo(intent.slice(4), inStep); return true; }
+  if (intent === "human"){
+    say(`Конечно! Можно написать ${CONFIG.OWNER_DAT} напрямую — откроется чат с ним в Telegram.`,
+      [Q(`✈️ Написать ${CONFIG.OWNER_DAT}`, "go:dm", "primary")].concat(inStep ? [] : [Q("Сначала подобрать решение", "go:quiz")]));
+    return true;
+  }
+  if (intent === "price"){ inStep ? say("Цены зависят от задачи — точную вилку покажу в конце подбора.") : showPrices(); return true; }
+  if (intent === "greet"){ inStep ? say("Здравствуйте! 👋") : chatMenu("Здравствуйте! Чем помочь?"); return true; }
+  if (intent === "thanks"){ inStep ? say("Пожалуйста! 🙌") : chatMenu("Пожалуйста! 🙌 Чем ещё помочь?"); return true; }
+  return false;
+}
+function budgetFromText(text){
+  const nums = (text.replace(/\s/g, "").match(/\d+(?:[.,]\d+)?/g) || []).map(x => parseFloat(x.replace(",", ".")));
+  let n = Math.max(...nums);
+  if (/млн|миллион/.test(text.toLowerCase())) n *= 1000; else if (n >= 1000) n /= 1000;
+  CH.a.budget = CHAT.budgets.find(b => b[2] !== null && n <= b[2])[0];
+  CH.a.budget_text = text.slice(0, 80); delete CH.a.budget_fit;
+  chatSave(); askNext();
+}
+function answerText(step, text){
+  const a = CH.a;
+  if (step === "phone"){
+    if (/^пропуст/i.test(text)) return answerChoice("phone", "skip");
+    const p = normPhone(text);
+    if (!p){
+      CH.tries = (CH.tries || 0) + 1;
+      if (CH.tries < 3) return say("Похоже, в номере опечатка. Пример: +7 921 123-45-67 — или нажмите «Пропустить».", [Q("Пропустить", "s:phone=skip")]);
+      a.phone = text.slice(0, 30) + " (не проверен)";
+    } else a.phone = p;
+    CH.tries = 0;
+  }
+  if (step === "link") a.link = text.slice(0, 300);
+  if (step === "name"){
+    if (text.length < 2 || text.length > 40) return say("Напишите, пожалуйста, просто имя — например, «Анна».");
+    a.name = text;
+  }
+  if (step === "comment") a.comment = text.slice(0, 1000);
+  chatSave(); askNext();
+}
+
+/* ---------- итог и отправка ---------- */
+function chatEstimate(a){
+  const x = scaleOf(a); if (!x) return null;
+  const k = a.deadline === "rush" ? 1.25 : 1;
+  return { min: r5(x.price[0] * k), max: r5(x.price[1] * k), weeks: weeksText(x.weeks) };
+}
+function contactLine(a){
+  const way = { tg:"Telegram", call:"Позвонить", wa:"WhatsApp" }[a.contact_way || "tg"];
+  return [way, a.phone, a.call_time].filter(Boolean).join(", ");
+}
+function leadRows(a){
+  const x = scaleOf(a), s = svcBy(a.need);
+  let task = s ? s.title : "";
+  if (x) task += ` — ${x.title}`; else if (a.scale === "advice") task += " — нужен совет по варианту";
+  let assets = a.assets_text || lbl(CHAT.assets, a.assets);
+  if (a.link && a.link !== "—") assets += ` (${a.link})`;
+  return [
+    ["Сфера", a.niche], ["Задача", task],
+    ["Цель", a.goal ? lbl(CHAT.goals, a.goal) : ""],
+    ["Что уже есть", a.assets ? assets : ""],
+    ["Бюджет", (a.budget_text || lbl(CHAT.budgets, a.budget)) + (a.budget_fit ? ` (${a.budget_fit})` : "")],
+    ["Сроки", CHAT.deadlines.some(d => d[0] === a.deadline) ? lbl(CHAT.deadlines, a.deadline) : a.deadline],
+    ["Связь", contactLine(a)], ["Имя", a.name],
+    ["Комментарий", a.comment && a.comment !== "—" ? a.comment : ""],
+  ].filter(([, v]) => v && String(v).trim());
+}
+function leadSummaryHtml(){
+  const a = CH.a, e = chatEstimate(a);
+  let h = `<b>Проверьте, всё ли верно:</b><div class="rows">` +
+    leadRows(a).map(([k, v]) => `<div><span>${k}:</span> ${esc(v)}</div>`).join("") + `</div>`;
+  if (e) h += `<div class="est">Предварительно: <b>${e.min}–${e.max} тыс ₽</b>, ${e.weeks}${a.deadline === "rush" ? " (срочно, +25%)" : ""}.<br>
+    Точную сумму ${CONFIG.OWNER_NAME} назовёт после бесплатного разбора. Предоплаты нет.</div>`;
+  return h;
+}
+function chatLeadText(){
+  const a = CH.a, e = chatEstimate(a);
+  const lines = [`Здравствуйте, ${CONFIG.OWNER_NAME}! Заявка из приложения ${CONFIG.BRAND}:`, ""]
+    .concat(leadRows(a).map(([k, v]) => `${k}: ${v}`));
+  if (e) lines.push(`Ориентир: ${e.min}–${e.max} тыс ₽, ${e.weeks}`);
+  if (a.questions && a.questions.length) lines.push("", "Мои вопросы:", ...a.questions.map(q => "— " + q));
+  return lines.join("\n").slice(0, 3900);
+}
+function chatDmText(){
+  const a = CH.a, rows = leadRows(a);
+  return `Здравствуйте, ${CONFIG.OWNER_NAME}! Пишу из приложения ${CONFIG.BRAND}.` +
+    (rows.length ? "\n\n" + rows.map(([k, v]) => `${k}: ${v}`).join("\n") : "") +
+    (a.questions && a.questions.length ? "\n\nВопрос: " + a.questions[a.questions.length - 1] : "");
+}
+function chatQuestionText(){
+  const q = (CH.a.questions || []).slice(-1)[0] || "";
+  return `Здравствуйте, ${CONFIG.OWNER_NAME}! Вопрос из приложения ${CONFIG.BRAND}: ${q}`;
+}
+function promise(a){
+  const t = (a.call_time || "").toLowerCase();
+  if (a.contact_way === "call") return t ? `позвонит: ${t}` : "позвонит в течение рабочего дня";
+  if (a.contact_way === "wa") return t ? `напишет в WhatsApp: ${t}` : "напишет в WhatsApp";
+  return "ответит вам в Telegram в течение рабочего дня";
+}
+function sendLead(){
+  CH.sent = true; CH.await = ""; CH.flow = ""; CH.confirming = false; chatSave();
+  openOwnerChat(chatLeadText(), false);
+  haptic.ok();
+  say(`Открываю чат с ${CONFIG.OWNER_INS} — там уже готов текст заявки. <b>Нажмите «Отправить»</b> ✈️<br><br>${CONFIG.OWNER_NAME} ${promise(CH.a)}.`,
+    [Q("Открыть чат ещё раз", "go:resend", "primary"), Q("📋 Скопировать текст", "go:copy"), Q("☰ Меню", "go:menu")]);
+}
+function openOwnerChat(text, withNote){
+  const u = CONFIG.OWNER_USERNAME.replace(/^@/, "");
+  const url = `https://t.me/${u}?text=${encodeURIComponent(text)}`;
+  if (withNote) say(`Открываю чат с ${CONFIG.OWNER_INS} — нажмите «Отправить» в Telegram.`);
+  if (IN_TG) tg.openTelegramLink(url);
+  else { const w = window.open(url, "_blank"); if (!w) location.href = url; }
+}
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); return true; } catch(e) {}
+  try { const t = document.createElement("textarea"); t.value = text; document.body.appendChild(t); t.select();
+    const ok = document.execCommand("copy"); t.remove(); return ok; } catch(e) { return false; }
+}
+function openChat(preset){
+  if (preset && CH.started){ if (S.screen !== "chat") go("chat"); return beginQuiz(preset); }
+  if (preset) CH.preset = preset;
+  if (S.screen !== "chat") go("chat");
 }
 
 /* ==========================================================
@@ -901,6 +1518,7 @@ if (IN_TG){
 }
 stageHeight();
 preloadFilm();
+chatLoad();
 applyTheme();
 render();
 </script>
