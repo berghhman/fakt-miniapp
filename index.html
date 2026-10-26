@@ -312,7 +312,6 @@ html.chat-open, html.chat-open body{overflow:hidden}
 .chat-head .icon{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--muted);flex:none}
 .chat-head .icon svg{width:20px;height:20px}
 .chat-head .back{display:none}
-.no-tg .chat-head .back{display:grid}
 .chat-log{flex:1;overflow-y:auto;padding:14px var(--gutter) 10px;display:flex;flex-direction:column;gap:6px;
   overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .msg{max-width:86%;padding:9px 13px 10px;border-radius:18px;font-size:15.5px;line-height:1.42;overflow-wrap:anywhere}
@@ -354,7 +353,137 @@ html.chat-open, html.chat-open body{overflow:hidden}
 .cta[disabled]{opacity:.45}
 .no-tg .cta.on{display:block}
 
+
+/* ============ Нижняя панель вкладок ============ */
+:root{--tab-h:64px}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:8;display:grid;grid-template-columns:repeat(5,1fr);
+  padding:6px 6px calc(6px + var(--safe-b));background:color-mix(in srgb,var(--surface) 86%,transparent);
+  -webkit-backdrop-filter:saturate(1.6) blur(18px);backdrop-filter:saturate(1.6) blur(18px);
+  border-top:1px solid color-mix(in srgb,var(--line) 70%,transparent);max-width:520px;margin:0 auto}
+.tabbar button{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0 4px;
+  font-size:11px;font-weight:600;color:var(--muted);border-radius:14px;transition:color .15s}
+.tabbar .ti{width:44px;height:30px;border-radius:15px;display:grid;place-items:center;transition:background .2s,transform .2s}
+.tabbar svg{width:22px;height:22px}
+.tabbar button.on{color:var(--ink)}
+.tabbar button.on .ti{background:var(--ink-soft);transform:translateY(-1px)}
+.tabbar button:active .ti{transform:scale(.9)}
+.tabbar .dot{position:absolute;top:6px;left:calc(50% + 8px);width:9px;height:9px;border-radius:50%;background:#E5484D;border:2px solid var(--surface)}
+body.has-tabs #app{padding-bottom:calc(var(--tab-h) + 40px + var(--safe-b))}
+body.has-tabs .chat{height:calc(var(--tg-viewport-height,100dvh) - var(--tab-h) - var(--safe-b))}
+body.has-tabs .chat-input{padding-bottom:10px}
+
+/* ============ Кнопки ============ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:50px;padding:0 18px;border-radius:14px;
+  background:var(--ink);color:var(--on-ink);font-weight:650;font-size:16px;transition:transform .12s}
+.btn svg{width:19px;height:19px}
+.btn.ghost{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink-soft)}
+.btn:active{transform:scale(.97)}
+.hero-cta{display:grid;grid-template-columns:1fr;gap:8px;margin:0 0 18px}
+.closelink{width:32px;height:32px;margin-left:12px;border-radius:50%;display:grid;place-items:center;color:var(--muted);background:var(--surface);flex:none}
+.closelink svg{width:16px;height:16px}
+
+/* ============ Работы на главной ============ */
+.sec-head{display:flex;align-items:baseline;justify-content:space-between}
+.sec-head .more{display:inline-flex;align-items:center;gap:2px;color:var(--ink);font-weight:600;font-size:14.5px}
+.sec-head .more svg{width:16px;height:16px}
+.strip{display:flex;gap:10px;overflow-x:auto;margin:0 calc(-1 * var(--gutter)) 34px;padding:2px var(--gutter) 6px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.strip-item{flex:none;width:132px;scroll-snap-align:start;text-align:left}
+.strip-item img{width:132px;height:214px;object-fit:cover;object-position:top;border-radius:16px;display:block;background:var(--surface);
+  box-shadow:0 10px 24px -14px rgba(15,19,51,.45)}
+.strip-item span{display:block;font-weight:650;font-size:14px;margin-top:8px;line-height:1.2}
+.strip-item small{display:block;font-size:12.5px;color:var(--muted)}
+
+/* ============ Страницы-вкладки ============ */
+.page-title{font-size:30px;font-weight:800;letter-spacing:-.025em;line-height:1.08;margin:6px 0 6px}
+.page .hint{color:var(--muted);font-size:15px;margin-bottom:16px}
+.wf{margin-bottom:22px}
+.work{background:var(--surface);border-radius:26px;padding:18px 16px 16px;margin-bottom:18px;animation:rise .4s cubic-bezier(.2,.8,.3,1) both;animation-delay:calc(min(var(--i),3) * 60ms)}
+.work-head .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--ink);background:var(--ink-soft);border-radius:999px;padding:4px 10px;margin-right:8px}
+.work-head .niche{font-size:13px;color:var(--muted)}
+.work-head h2{font-size:23px;font-weight:800;letter-spacing:-.02em;margin:10px 0 4px}
+.work-head p{font-size:14.5px;color:var(--muted);line-height:1.45}
+.feats{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 16px}
+.feats span{font-size:12.5px;font-weight:600;border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+.phone{position:relative;margin:0 auto;width:min(100%,300px);border-radius:38px;padding:10px;background:#0E1030;
+  box-shadow:0 26px 50px -24px rgba(15,19,51,.7),inset 0 0 0 1.5px rgba(255,255,255,.08)}
+.phone .notch{position:absolute;top:16px;left:50%;transform:translateX(-50%);width:76px;height:20px;border-radius:12px;background:#0E1030;z-index:2}
+.screen-scroll{height:min(560px,62vh);overflow-y:auto;overflow-x:hidden;border-radius:29px;background:#fff;-webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:auto;scrollbar-width:none}
+.screen-scroll::-webkit-scrollbar{display:none}
+.screen-scroll img{display:block;width:100%;height:auto;margin:0;background:#f3f3f6}
+.swipe-hint{position:absolute;right:-6px;top:46%;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;font-weight:700;
+  color:var(--on-ink);background:var(--ink);border-radius:999px;padding:8px 6px;writing-mode:vertical-rl;transition:opacity .3s;
+  animation:nudge 2.4s ease-in-out infinite}
+.swipe-hint svg{width:14px;height:14px}
+.phone.touched .swipe-hint{opacity:0}
+@keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.work-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.work-actions .btn:only-child{grid-column:1/-1}
+.works-end{text-align:center;padding:26px 10px 8px}
+.works-end b{display:block;font-size:20px;font-weight:800;margin-bottom:6px}
+.works-end p{color:var(--muted);font-size:14.5px;margin-bottom:14px}
+
+/* ============ Кабинет ============ */
+.profile{display:flex;align-items:center;gap:14px;margin:6px 0 16px}
+.profile .ava{width:58px;height:58px;border-radius:50%;overflow:hidden;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-size:24px;font-weight:800;flex:none}
+.profile .ava img{width:100%;height:100%;object-fit:cover}
+.profile b{display:block;font-size:20px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+.profile small{color:var(--muted);font-size:14px}
+.profile > div:nth-child(2){flex:1;min-width:0}
+.profile .icon{width:40px;height:40px;border-radius:50%;background:var(--surface);display:grid;place-items:center;color:var(--ink)}
+.profile .icon svg{width:19px;height:19px}
+.profile .icon.spin svg{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(-360deg)}}
+.cab-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.cab-stats div{background:var(--surface);border-radius:16px;padding:12px 12px 11px}
+.cab-stats b{display:block;font-size:22px;font-weight:800;letter-spacing:-.02em}
+.cab-stats span{font-size:12.5px;color:var(--muted)}
+.draft{display:grid;gap:2px;width:100%;text-align:left;background:var(--ink);color:var(--on-ink);border-radius:18px;padding:14px 16px;margin-bottom:22px}
+.draft span{font-size:12.5px;opacity:.8}.draft b{font-size:16px}.draft em{font-style:normal;font-weight:650;font-size:14px;margin-top:4px}
+.cabinet h2{margin-top:6px}
+.lead{background:var(--surface);border-radius:18px;margin-bottom:10px;overflow:hidden;border:1.5px solid transparent}
+.lead.fresh{border-color:var(--ink)}
+.lead summary{list-style:none;padding:14px 16px;display:grid;gap:4px;cursor:pointer}
+.lead summary::-webkit-details-marker{display:none}
+.l-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.l-no{font-size:12.5px;color:var(--muted)}
+.lead summary b{font-size:16px;font-weight:700;line-height:1.3}
+.l-est{font-size:14px;color:var(--muted)}
+.l-last{font-size:14px;background:var(--desk);border-radius:12px;padding:8px 10px;margin-top:4px}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:4px 10px}
+.st-new{background:var(--ink-soft);color:var(--ink)}
+.st-work{background:color-mix(in srgb,var(--marker) 55%,var(--surface));color:#5A4A00}
+.st-done{background:color-mix(in srgb,#2FA36B 22%,var(--surface));color:#17663F}
+.st-no{background:var(--desk);color:var(--muted)}
+:root[data-theme="dark"] .st-work{color:#FFE45C}:root[data-theme="dark"] .st-done{color:#7BE0A9}
+.l-body{padding:0 16px 14px;display:grid;gap:6px;font-size:14.5px}
+.l-body > div span{display:block;font-size:12.5px;color:var(--muted)}
+.l-msgs{display:grid;gap:6px;margin-top:6px}
+.l-msgs p{border-radius:14px;padding:8px 11px;max-width:90%}
+.l-msgs p i{display:block;font-style:normal;font-size:11.5px;font-weight:700;opacity:.7}
+.l-msgs .master{background:var(--ink-soft)}
+.l-msgs .client{background:var(--desk);justify-self:end}
+.l-hint{font-size:13px;color:var(--muted)}
+.empty{background:var(--surface);border-radius:20px;padding:20px 18px;text-align:center;margin-bottom:24px}
+.empty b{font-size:18px}.empty p{color:var(--muted);font-size:14.5px;margin:6px 0 14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cab-loading,.cab-error{color:var(--muted);font-size:14px;margin-bottom:10px}
+.howlist{list-style:none;display:grid;gap:8px;margin-bottom:24px}
+.howlist li{display:flex;align-items:center;gap:12px;background:var(--surface);border-radius:14px;padding:12px 14px;font-size:15px}
+.howlist b{width:28px;height:28px;border-radius:50%;background:var(--ink-soft);color:var(--ink);display:grid;place-items:center;font-size:14px;flex:none}
+.cab-actions{background:var(--surface);border-radius:18px;overflow:hidden;margin-bottom:14px}
+.rowbtn{display:flex;align-items:center;gap:12px;width:100%;padding:15px 16px;text-align:left;font-size:15.5px;font-weight:550}
+.rowbtn + .rowbtn{border-top:1px solid var(--line)}
+.rowbtn span{flex:1}
+.rowbtn svg{width:20px;height:20px;color:var(--ink);flex:none}
+.rowbtn svg:last-child{color:var(--muted);width:18px}
+.cab-note{font-size:13px;color:var(--muted);text-align:center;padding:0 10px}
+.done-actions{display:grid;gap:8px;margin-top:20px}
+.done .stamp.land{animation:land .5s cubic-bezier(.2,.9,.3,1.25) .2s both}
+
 @media (prefers-reduced-motion:reduce){
+  .work,.swipe-hint{animation:none}
   .film-hint svg{animation:none}
   .screen,.receipt .stamp.land{animation:none}
   .progress .bar i,.tile,.chip,.toggle .sw,.toggle .sw::after{transition:none}
@@ -367,6 +496,7 @@ html.chat-open, html.chat-open body{overflow:hidden}
 <main id="app" aria-live="polite"></main>
 <div id="peek" class="peek" hidden></div>
 <button id="cta" class="cta" type="button"></button>
+<nav id="tabbar" class="tabbar" hidden aria-label="Разделы"></nav>
 
 <!-- Печать-штамп (используется на главной, в смете и на финальном экране) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -411,10 +541,11 @@ html.chat-open, html.chat-open body{overflow:hidden}
 const CONFIG = {
   BRAND: "ФАКТ",                 // название студии (меняется везде)
   BRAND_NOTE: "digital-студия",  // подпись рядом с логотипом
-  OWNER_NAME: "Дмитрий",         // кто отвечает на заявки
-  OWNER_DAT: "Дмитрию",          // «передать кому?»
-  OWNER_INS: "Дмитрием",         // «связаться с кем?»
-  OWNER_USERNAME: "brghmn",      // ваш username в Telegram без @, сюда клиенты отправляют заявки
+  OWNER_NAME: "Мастер",          // кто отвечает на заявки
+  OWNER_DAT: "Мастеру",          // «передать кому?»
+  OWNER_INS: "Мастером",         // «связаться с кем?»
+  BOT_USERNAME: "thatsafact_bot",// бот, через который приходят заявки и ответы
+  API_URL: "https://functions.yandexcloud.net/d4esj0b2o9lork76mk0r",   // функция бота в Yandex Cloud
 };
 
 /* Цены в тысячах рублей [от, до]. Сроки в неделях [от, до].
@@ -528,7 +659,7 @@ const URGENCY = [
   { id:"later",   emoji:"👀", title:"Пока присматриваюсь",    desc:"Хочу понять бюджет",             k:1,    w:1 },
 ];
 const CONTACTS = [
-  ["tg",   "💬", "Напишите в Telegram", "Ответ в течение рабочего дня"],
+  ["tg",   "💬", "Ответьте в Telegram", "Сообщение придёт от бота, в течение рабочего дня"],
   ["call", "📞", "Позвоните мне",        "Попросим номер на следующем шаге"],
   ["wa",   "🟢", "Напишите в WhatsApp",  "Попросим номер на следующем шаге"],
 ];
@@ -537,6 +668,36 @@ const NOTES = ["Есть пример, который нравится", "Нуж
   "Нужно успеть к сезону", "Нужна связь с CRM или 1С", "Сначала хочу созвониться"];
 /* Шкала бюджета, тыс ₽ (ползунок идёт по этим значениям) */
 const BUDGET_STEPS = [10,15,20,25,30,35,40,45,50,60,70,80,90,100,120,150,200,250,300];
+
+/* Наши работы. Порядок = порядок на экране «Работы». Картинки лежат в папке works/.
+   kind: app = мини-приложение, site = сайт. url: живая версия (пусто: без кнопки «Открыть»).
+   Чтобы убрать работу, удалите её строку. */
+const WORKS = [
+  { id:"eva-beauty", title:"Е.в.А", kind:"app", niche:"Салон красоты", desc:"Мини-приложение салона: услуги, мастера, работы и отзывы. Запись в пару касаний.",
+    features:["Запись онлайн", "Мастера", "Отзывы"], url:"https://berghhman.github.io/eva-beauty/", tiles:[["eva-beauty-0.webp", 3200], ["eva-beauty-1.webp", 892]] },
+  { id:"srv-miniapp", title:"SRV Detailing", kind:"app", niche:"Детейлинг-центр", desc:"Мини-приложение детейлинга: защита плёнкой, цены, акция с таймером и запись в бокс.",
+    features:["Каталог услуг", "Акции", "Запись"], url:"https://berghhman.github.io/srv-miniapp/", tiles:[["srv-miniapp-0.webp", 3200], ["srv-miniapp-1.webp", 3200]] },
+  { id:"gtj-miniapp", title:"GTJ", kind:"app", niche:"Тюнинг автомобилей", desc:"Мини-приложение тюнинга китайских авто: подбор деталей под машину, каталог, корзина и кабинет.",
+    features:["Подбор деталей", "Магазин", "Кабинет"], url:"https://berghhman.github.io/gtj-miniapp/", tiles:[["gtj-miniapp-0.webp", 3200], ["gtj-miniapp-1.webp", 1815]] },
+  { id:"theboys-miniapp", title:"THE BOYS", kind:"app", niche:"Магазин одежды", desc:"Мини-приложение магазина итальянской мужской одежды: лукбук, капсулы, примерка у стилиста.",
+    features:["Лукбук", "Капсулы", "Примерка"], url:"https://berghhman.github.io/theboys-miniapp/", tiles:[["theboys-miniapp-0.webp", 3200], ["theboys-miniapp-1.webp", 3200], ["theboys-miniapp-2.webp", 961]] },
+  { id:"cornery-miniapp", title:"CORNERY", kind:"app", niche:"Магазин одежды", desc:"Магазин и лукбук в Telegram: образы сезона, новинки, корзина и доставка в день заказа.",
+    features:["Лукбук", "Корзина", "Доставка"], url:"", tiles:[["cornery-miniapp-0.webp", 3200], ["cornery-miniapp-1.webp", 2393]] },
+  { id:"tihonova-site", title:"Людмила Тихонова", kind:"site", niche:"Недвижимость", desc:"Сайт агента по новостройкам Петербурга: подбор квартиры за 2 минуты, ипотека, путь до ключей.",
+    features:["Подбор квартиры", "Ипотека", "Заявки"], url:"https://berghhman.github.io/tihonova-site/", tiles:[["tihonova-site-0.webp", 3200], ["tihonova-site-1.webp", 3200], ["tihonova-site-2.webp", 3200], ["tihonova-site-3.webp", 3200], ["tihonova-site-4.webp", 1600]] },
+  { id:"viktoria-interior", title:"Виктория Кривозубова", kind:"site", niche:"Дизайн интерьера", desc:"Сайт дизайнера интерьера: проекты, форматы работы и калькулятор стоимости проекта.",
+    features:["Портфолио", "Калькулятор", "Заявки"], url:"https://berghhman.github.io/viktoria-interior/", tiles:[["viktoria-interior-0.webp", 3200], ["viktoria-interior-1.webp", 3200], ["viktoria-interior-2.webp", 3200], ["viktoria-interior-3.webp", 3200], ["viktoria-interior-4.webp", 1600]] },
+  { id:"promassage-vydoh", title:"Про массаж «Выдох»", kind:"site", niche:"Салон массажа", desc:"Сайт салона массажа: подбор процедуры по карте тела, ритуалы, меню и цены.",
+    features:["Карта тела", "Подбор", "Меню цен"], url:"https://berghhman.github.io/promassage-vydoh/", tiles:[["promassage-vydoh-0.webp", 3200], ["promassage-vydoh-1.webp", 3200], ["promassage-vydoh-2.webp", 3200], ["promassage-vydoh-3.webp", 3200], ["promassage-vydoh-4.webp", 1600]] },
+  { id:"sugar-lab", title:"Sugar Lab", kind:"site", niche:"Студия эпиляции", desc:"Сайт студии эпиляции в Екатеринбурге: цены по зонам, калькулятор курса и онлайн-запись.",
+    features:["Цены по зонам", "Калькулятор", "Запись"], url:"https://berghhman.github.io/sugar-lab/", tiles:[["sugar-lab-0.webp", 3200], ["sugar-lab-1.webp", 3200], ["sugar-lab-2.webp", 3200], ["sugar-lab-3.webp", 3200], ["sugar-lab-4.webp", 1600]] },
+  { id:"build-house", title:"BuildHouse", kind:"site", niche:"Строительство домов", desc:"Сайт строительной компании: проекты домов с фото, технологии и расчёт стоимости дома.",
+    features:["Проекты", "Калькулятор", "Заявки"], url:"https://buildhousespb.ru/", tiles:[["build-house-0.webp", 3200], ["build-house-1.webp", 3200], ["build-house-2.webp", 3200], ["build-house-3.webp", 3096]] },
+  { id:"traektoriya", title:"Траектория", kind:"site", niche:"Строительство и отделка", desc:"Сайт компании, которая строит загородные дома и делает отделку квартир под ключ.",
+    features:["Услуги", "Проекты", "Заявки"], url:"https://berghhman.github.io/traektoriya/", tiles:[["traektoriya-0.webp", 3200], ["traektoriya-1.webp", 3200], ["traektoriya-2.webp", 670]] },
+  { id:"anatoliy", title:"АНАТОЛИЙ", kind:"site", niche:"Стяжка и ангары", desc:"Сайт двух направлений: стяжка полов и металлические здания, с двумя калькуляторами сметы.",
+    features:["Два направления", "Калькуляторы", "Заявки"], url:"https://berghhman.github.io/anatoliy/", tiles:[["anatoliy-0.webp", 3200], ["anatoliy-1.webp", 3200], ["anatoliy-2.webp", 3200], ["anatoliy-3.webp", 3200], ["anatoliy-4.webp", 1600]] },
+];
 
 /* ==========================================================
    Иконки
@@ -555,6 +716,15 @@ const I = {
   chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/></svg>',
   phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l1.8 4.6-2.3 1.5a11 11 0 0 0 5.9 5.9l1.5-2.3L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5A16.5 16.5 0 0 1 3.5 5.6 1.5 1.5 0 0 1 5 4z"/></svg>',
   pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg>',
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10.5 12 3.5l8.5 7"/><path d="M5.5 9v10.5h13V9"/><path d="M10 19.5v-5h4v5"/></svg>',
+  grid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="9" rx="2"/><rect x="13.5" y="3.5" width="7" height="5" rx="2"/><rect x="13.5" y="11.5" width="7" height="9" rx="2"/><rect x="3.5" y="15.5" width="7" height="5" rx="2"/></svg>',
+  calc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2.5" width="14" height="19" rx="3"/><path d="M8.5 7h7M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01M8.5 15h.01M12 15h.01M15.5 15v3M8.5 18.5h.01M12 18.5h.01"/></svg>',
+  user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c1.2-3.6 4-5.5 7.5-5.5s6.3 1.9 7.5 5.5"/></svg>',
+  updown:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 8 4-4 4 4M8 16l4 4 4-4"/></svg>',
+  ext:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9"/><path d="M19 14v4.5a1.5 1.5 0 0 1-1.5 1.5h-12A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5H10"/></svg>',
+  bell:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg>',
+  next:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>',
+  close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
   back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>',
 };
 const stampSvg = (cls="") => `<svg class="stamp ${cls}" style="color:var(--stamp)" aria-hidden="true"><use href="#stamp"/></svg>`;
@@ -582,7 +752,6 @@ function applyTheme(){
     if (can("7.10")) tg.setBottomBarColor(desk);
   }
   syncButton();
-  if (typeof syncSecondary === "function" && CH) syncSecondary();
 }
 
 /* Главная кнопка: в Telegram нативная MainButton, в браузере своя */
@@ -678,18 +847,22 @@ function proceed(step, delay = 260){
   proceedTimer = setTimeout(() => go(nextScreen()), delay);
 }
 function startCalc(){
-  trail.length = 0; S.screen = "home";
+  const from = ROOTS.includes(S.screen) && S.screen !== "done" ? S.screen : "home";
+  trail.length = 0; S.screen = from;
   go(S.answered.size && !S.sent ? nextScreen() : "service");
 }
 
 function render(back){
-  const fn = { home:Home, result:Result, done:Done, chat:Chat }[S.screen] || (() => Quiz(S.screen));
+  const fn = { home:Home, works:Works, cabinet:Cabinet, result:Result, done:Done, chat:Chat }[S.screen] || (() => Quiz(S.screen));
   app.innerHTML = `<section class="screen${back ? " back" : ""}">${fn()}</section>`;
   bind();
   mountFilm();
   mountChat();
+  mountWorks();
+  mountCabinet();
   syncSecondary();
-  setBack(S.screen !== "home" && S.screen !== "done");
+  renderTabbar();
+  setBack(trail.length > 0 && !ROOTS.includes(S.screen));
   updatePeek();
   const tgFocus = app.querySelector("h1"); if (tgFocus) tgFocus.setAttribute("tabindex","-1");
 }
@@ -699,7 +872,7 @@ function topbar(){
   const count = i >= 0
     ? `<span class="count">Вопрос ${i+1} из ${steps.length}</span><span class="bar"><i style="width:${(i+1)/steps.length*100}%"></i></span>`
     : S.screen === "result" ? `<span class="count">Готово</span><span class="bar"><i style="width:100%"></i></span>` : "";
-  return `<div class="topbar"><button class="backlink" data-act="back" type="button">${I.back}Назад</button><div class="progress">${count}</div></div>`;
+  return `<div class="topbar"><button class="backlink" data-act="back" type="button">${I.back}Назад</button><div class="progress">${count}</div><button class="closelink" data-act="exit-calc" type="button" aria-label="Закрыть расчёт">${I.close}</button></div>`;
 }
 
 function Home(){
@@ -707,7 +880,7 @@ function Home(){
     const from = Math.min(...s.scales.map(x => x.price[0]));
     return `<li data-chatneed="${s.id}" role="button" tabindex="0"><span class="ico">${I[s.icon]}</span><div><h3>${s.home}</h3><p>${s.desc}</p></div><span class="from">от <b>${from}</b> тыс</span></li>`;
   }).join("");
-  setButton("Рассчитать стоимость", startCalc);
+  hideButton();
   const ch = (from, to, inner) => `<div class="ch" data-from="${from}" data-to="${to}">${inner}</div>`;
   return `
     <div class="film" aria-label="Анимация о студии ${CONFIG.BRAND}">
@@ -722,6 +895,10 @@ function Home(){
         <div class="film-stamp"><svg aria-hidden="true"><use href="#stamp-ring"/></svg></div>
       </div>
     </div>
+    <div class="hero-cta">
+      <button type="button" class="btn" data-tabgo="calc">${I.calc}Рассчитать стоимость</button>
+      <button type="button" class="btn ghost" data-tabgo="chat">${I.chat}Обсудить в чате</button>
+    </div>
     <div class="terms">
       <div><b>0 ₽</b><span>предоплаты</span></div>
       <div><b>2 минуты</b><span>на расчёт стоимости</span></div>
@@ -733,6 +910,8 @@ function Home(){
       <span class="bubble">Здравствуйте! Расскажите, чем занимается ваш бизнес, и я подскажу, что поможет получать больше заявок 👋</span>
       <span class="go">${I.chat}Открыть чат</span>
     </button>
+    <div class="sec-head"><h2>Наши работы</h2><button type="button" class="more" data-tabgo="works">Все ${WORKS.length} ${I.next}</button></div>
+    <div class="strip">${WORKS.map(w => `<button type="button" class="strip-item" data-tabgo="works"><img src="works/${w.id}-cover.webp" alt="" loading="lazy" width="390" height="844"><span>${esc(w.title)}</span><small>${w.kind === "app" ? "Мини-приложение" : "Сайт"}</small></button>`).join("")}</div>
     <h2>Почему ${CONFIG.BRAND}</h2>
     <ul class="facts">
       <li><div class="row"><b>Оплата</b><span class="seal">по факту</span></div><p>Платите, когда проект запущен и&nbsp;работает так, как договорились.</p></li>
@@ -809,7 +988,7 @@ const QS = {
     main: pickedMain(S.urgency) }),
   contact: () => ({
     h:`Как ${CONFIG.OWNER_DAT} связаться с вами?`, hint:"Разбор задачи и точный расчёт бесплатно.",
-    body: tiles(CONTACTS.map(([id, emoji, title, desc], i) => tile({ group:"contact", id, emoji, title, desc, checked:S.contact === id, i })), "list"),
+    body: tiles(CONTACTS.filter(c => IN_TG || c[0] !== "tg").map(([id, emoji, title, desc], i) => tile({ group:"contact", id, emoji, title, desc, checked:S.contact === id, i })), "list"),
     main: pickedMain(S.contact) }),
   phone: () => ({
     h: S.contact === "wa" ? "Номер для WhatsApp" : "Куда позвонить?", hint:"Номер увидит только " + CONFIG.OWNER_NAME + ".",
@@ -954,21 +1133,23 @@ function Result(){
       <p class="hint">Нажмите на строку, чтобы изменить ответ.</p>
       ${rows}
     </div>
-    <p class="privacy">Нажмите «Отправить ${CONFIG.OWNER_DAT}», и откроется чат с ним в Telegram с готовым текстом заявки. Останется нажать «Отправить».</p>
+    <p class="privacy">Заявка уйдёт ${CONFIG.OWNER_DAT} через нашего бота. Ответ придёт вам в Telegram от бота, а статус будет виден во вкладке «Кабинет».</p>
+    <div class="error-box" id="send-error">Не получилось отправить заявку. Проверьте интернет и нажмите кнопку ещё раз.</div>
   </div>`;
 }
 
 function Done(){
-  setButton(IN_TG ? "Закрыть" : "На главную", () => IN_TG ? tg.close() : (trail.length = 0, go("home", { back:true })));
+  hideButton();
   return `<div class="done">
-    ${stampSvg()}
-    <h1>Осталось нажать «Отправить»</h1>
-    <p>Мы открыли чат с ${CONFIG.OWNER_INS} в Telegram, там уже готов текст со сметой и всеми ответами. Отправьте его, и ${CONFIG.OWNER_NAME} ${S.contact === "call" ? "позвонит" : S.contact === "wa" ? "напишет в WhatsApp" : "ответит"} в течение рабочего дня.</p>
-    <p>Чат не открылся? Нажмите кнопку ниже.</p>
-    <button type="button" class="textlink" data-act="resend-calc">Открыть чат с ${CONFIG.OWNER_INS}</button><br>
-    <button type="button" class="textlink" data-act="copy-calc">Скопировать текст заявки</button><br>
-    <button type="button" class="textlink" data-act="open-chat">Обсудить детали с помощником</button><br>
-    <button type="button" class="textlink" data-act="restart">Посчитать другой проект</button>
+    ${stampSvg("land")}
+    <h1>Заявка №${esc(S.leadId || "")} отправлена</h1>
+    <p>${CONFIG.OWNER_NAME} посмотрит расчёт и ${S.contact === "call" ? "позвонит вам" : S.contact === "wa" ? "напишет в WhatsApp" : "ответит в Telegram через бота"} в течение рабочего дня.</p>
+    <p>Статус заявки и ответы видны во вкладке «Кабинет».</p>
+    <div class="done-actions">
+      <button type="button" class="btn" data-tabgo="cabinet">${I.user}Открыть кабинет</button>
+      <button type="button" class="btn ghost" data-act="open-chat">${I.chat}Обсудить с помощником</button>
+      <button type="button" class="textlink" data-act="restart">Посчитать другой проект</button>
+    </div>
   </div>`;
 }
 
@@ -1051,11 +1232,11 @@ function bind(){
     const open = () => { haptic.tap(); openChat({ need: b.dataset.chatneed }); };
     b.onclick = open; b.onkeydown = ev => { if (ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); open(); } };
   });
-  app.querySelectorAll("[data-act=resend-calc]").forEach(b => b.onclick = () => openOwnerChat(calcLeadText(), false));
-  app.querySelectorAll("[data-act=copy-calc]").forEach(b => b.onclick = () => copyText(calcLeadText()).then(ok => { b.textContent = ok ? "Скопировано ✓" : "Не получилось скопировать"; }));
+  app.querySelectorAll("[data-tabgo]").forEach(b => b.onclick = () => switchTab(b.dataset.tabgo));
+  app.querySelectorAll("[data-act=exit-calc]").forEach(b => b.onclick = () => { haptic.tap(); exitCalc(); });
   app.querySelectorAll("[data-act=restart]").forEach(b => b.onclick = () => {
     Object.assign(S, { service:null, scale:null, goal:null, niche:null, nicheText:"", link:"", budget:null, budgetUnknown:false,
-      urgency:null, contact:null, comment:"", sent:false, receiptNo:null });
+      urgency:null, contact:null, comment:"", sent:false, receiptNo:null, leadId:null });
     S.extras.clear(); S.assets.clear(); S.notes.clear(); S.answered.clear();
     startCalc();
   });
@@ -1065,6 +1246,223 @@ function updatePeek(){
   const show = ["extras","goal","niche","assets","urgency","contact","phone","name","notes"].includes(S.screen) && estimate();
   peek.hidden = !show;
   if (show){ const e = estimate(); peek.innerHTML = `<span>Предварительно</span><b>${fmtRange([e.min,e.max])} тыс ₽</b>`; }
+}
+
+/* ==========================================================
+   Вкладки внизу экрана
+   ========================================================== */
+const TABS = [
+  { id:"home",    label:"Главная", icon:"home" },
+  { id:"works",   label:"Работы",  icon:"grid" },
+  { id:"calc",    label:"Расчёт",  icon:"calc" },
+  { id:"chat",    label:"Чат",     icon:"chat" },
+  { id:"cabinet", label:"Кабинет", icon:"user" },
+];
+const ROOTS = ["home","works","chat","cabinet","done"];             // экраны с нижней панелью
+const tabOf = scr => ["home","works","chat","cabinet"].includes(scr) ? scr : "calc";
+const tabbar = document.getElementById("tabbar");
+function renderTabbar(){
+  const show = ROOTS.includes(S.screen), cur = tabOf(S.screen);
+  document.body.classList.toggle("has-tabs", show);
+  tabbar.hidden = !show;
+  if (!tabbar.childElementCount){
+    tabbar.innerHTML = TABS.map(t => `<button type="button" data-tab="${t.id}"><span class="ti">${I[t.icon]}</span><span>${t.label}</span><i class="dot" hidden></i></button>`).join("");
+    tabbar.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => switchTab(b.dataset.tab));
+  }
+  tabbar.querySelectorAll("[data-tab]").forEach(b => b.classList.toggle("on", b.dataset.tab === cur));
+  const badge = tabbar.querySelector('[data-tab="cabinet"] .dot');
+  if (badge) badge.hidden = !hasUnseen();
+}
+function switchTab(id){
+  haptic.tap();
+  clearTimeout(proceedTimer);
+  if (id === "calc") return startCalc();
+  if (id === S.screen){ window.scrollTo({ top:0, behavior:"smooth" }); return; }
+  trail.length = 0;
+  S.screen = id;
+  render();
+  window.scrollTo({ top:0 });
+}
+function exitCalc(){
+  const back = trail.find(s => ROOTS.includes(s)) || "home";
+  trail.length = 0; S.screen = back; render(true); window.scrollTo({ top:0 });
+}
+
+/* ==========================================================
+   Связь с сервером: заявки уходят боту, он присылает их мастеру
+   ========================================================== */
+const WEB_ID = (() => {                                    // вне Telegram: ключ, по которому браузер видит свои заявки
+  try { let v = localStorage.getItem("fakt-web-id");
+    if (!v){ v = Math.random().toString(36).slice(2, 10) + Date.now().toString(36); localStorage.setItem("fakt-web-id", v); }
+    return v; } catch(e) { return ""; }
+})();
+async function api(action, extra = {}){
+  const body = JSON.stringify({ action, initData: IN_TG ? tg.initData : "", webId: IN_TG ? "" : WEB_ID, ...extra });
+  const ctrl = new AbortController(), t = setTimeout(() => ctrl.abort(), 15000);
+  try {
+    const r = await fetch(CONFIG.API_URL, { method:"POST", headers:{ "Content-Type":"text/plain;charset=UTF-8" }, body, signal:ctrl.signal });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.ok) throw new Error(j.error || ("HTTP " + r.status));
+    return j;
+  } finally { clearTimeout(t); }
+}
+function askWrite(){                                        // разрешение боту писать клиенту
+  return new Promise(res => {
+    if (!can("6.9") || !tg.requestWriteAccess) return res(true);
+    try { tg.requestWriteAccess(ok => res(ok)); } catch(e) { res(false); }
+  });
+}
+const LOCAL_LEADS = "fakt-leads-v1";
+function localLeads(){ try { return JSON.parse(localStorage.getItem(LOCAL_LEADS)) || []; } catch(e) { return []; } }
+function saveLocalLeads(list){ try { localStorage.setItem(LOCAL_LEADS, JSON.stringify(list.slice(0, 30))); } catch(e) {} }
+/* Отправить заявку. lead = { kind, title, rows:[[подпись, значение]], estimate } */
+async function submitLead(lead){
+  await askWrite();
+  const res = await api("lead", { lead });
+  saveLocalLeads([{ id:res.id, ts:Math.floor(Date.now() / 1000), title:lead.title, kind:lead.kind, status:"new",
+    estimate:lead.estimate || "", rows:lead.rows, msgs:[] }].concat(localLeads()));
+  CAB.leads = null;                                         // кабинет перезагрузит список
+  return res;
+}
+
+/* ==========================================================
+   Работы
+   ========================================================== */
+let worksFilter = "all";
+function Works(){
+  hideButton();
+  const list = WORKS.filter(w => worksFilter === "all" || w.kind === worksFilter);
+  const chip = (id, t) => `<button type="button" class="chip" role="radio" aria-checked="${worksFilter === id}" data-wfilter="${id}">${t}</button>`;
+  return `<div class="page works">
+    <h1 class="page-title">Наши работы</h1>
+    <p class="hint">Листайте экран внутри телефона: это настоящие страницы проектов.</p>
+    <div class="chips wf">${chip("all", `Все · ${WORKS.length}`)}${chip("app", "Мини-приложения")}${chip("site", "Сайты")}</div>
+    ${list.map((w, i) => `<article class="work" style="--i:${i}">
+      <div class="work-head">
+        <span class="tag">${w.kind === "app" ? "Мини-приложение" : "Сайт"}</span><span class="niche">${esc(w.niche)}</span>
+        <h2>${esc(w.title)}</h2>
+        <p>${esc(w.desc)}</p>
+        <div class="feats">${w.features.map(f => `<span>${esc(f)}</span>`).join("")}</div>
+      </div>
+      <div class="phone"><div class="notch"></div>
+        <div class="screen-scroll" tabindex="0" aria-label="Экран проекта ${esc(w.title)}, можно прокручивать">
+          ${w.tiles.map(([f, h], k) => `<img src="works/${f}" width="624" height="${h}" alt="${k ? "" : esc(w.title)}" loading="lazy" decoding="async">`).join("")}
+        </div>
+        <span class="swipe-hint">${I.updown}листайте</span>
+      </div>
+      <div class="work-actions">
+        ${w.url ? `<button type="button" class="btn ghost" data-open="${w.url}">${I.ext}Открыть вживую</button>` : ""}
+        <button type="button" class="btn" data-like="${w.kind}">Хочу так же</button>
+      </div>
+    </article>`).join("")}
+    <div class="works-end">
+      <b>Здесь может быть ваш проект</b>
+      <p>Посчитайте стоимость за 2 минуты. Предоплаты нет: платите, когда всё работает.</p>
+      <button type="button" class="btn" data-tabgo="calc">Рассчитать стоимость</button>
+    </div>
+  </div>`;
+}
+function mountWorks(){
+  app.querySelectorAll("[data-wfilter]").forEach(b => b.onclick = () => { worksFilter = b.dataset.wfilter; haptic.tap(); render(); });
+  app.querySelectorAll("[data-open]").forEach(b => b.onclick = () => { haptic.tap(); openLink(b.dataset.open); });
+  app.querySelectorAll("[data-like]").forEach(b => b.onclick = () => { haptic.tap(); openChat({ need: b.dataset.like === "app" ? "app" : "site" }); });
+  app.querySelectorAll(".screen-scroll").forEach(sc => sc.addEventListener("scroll", () => sc.parentElement.classList.add("touched"), { once:true, passive:true }));
+}
+function openLink(url){
+  if (IN_TG && tg.openLink) tg.openLink(url); else window.open(url, "_blank");
+}
+
+/* ==========================================================
+   Кабинет
+   ========================================================== */
+const CAB = { leads:null, loading:false, error:"", seen:{} };
+try { CAB.seen = JSON.parse(localStorage.getItem("fakt-seen")) || {}; } catch(e) {}
+const leadSig = l => `${l.status}:${(l.msgs || []).length}`;
+function hasUnseen(){ return (CAB.leads || []).some(l => CAB.seen[l.id] && CAB.seen[l.id] !== leadSig(l)); }
+const STAT = { new:["Новая","st-new"], work:["В работе","st-work"], done:["Готово","st-done"], no:["Закрыта","st-no"] };
+function fmtDate(ts){ return new Date(ts * 1000).toLocaleDateString("ru-RU", { day:"numeric", month:"long" }); }
+function Cabinet(){
+  hideButton();
+  const u = tgUser || {};
+  const name = [u.first_name, u.last_name].filter(Boolean).join(" ") || "Гость";
+  const ava = u.photo_url ? `<img src="${esc(u.photo_url)}" alt="">` : `<span>${esc((name[0] || "Г").toUpperCase())}</span>`;
+  const leads = CAB.leads || localLeads();
+  const last = estimate() && !S.sent ? estimate() : null;
+  return `<div class="page cabinet">
+    <div class="profile">
+      <div class="ava">${ava}</div>
+      <div><b>${esc(name)}</b><small>${u.username ? "@" + esc(u.username) : IN_TG ? "Telegram" : "Вход без Telegram"}</small></div>
+      <button type="button" class="icon" data-act="cab-refresh" aria-label="Обновить">${I.reset}</button>
+    </div>
+    <div class="cab-stats">
+      <div><b>${leads.length}</b><span>${plural(leads.length, ["заявка","заявки","заявок"])}</span></div>
+      <div><b>${leads.filter(l => l.status === "work").length}</b><span>в работе</span></div>
+      <div><b>0 ₽</b><span>предоплаты</span></div>
+    </div>
+    ${last ? `<button type="button" class="draft" data-tabgo="calc"><span>Незаконченный расчёт</span><b>${esc(svc().title)} · ${fmtRange([last.min, last.max])} тыс ₽</b><em>Продолжить →</em></button>` : ""}
+    <h2>Мои заявки</h2>
+    ${CAB.loading && !CAB.leads ? `<div class="cab-loading">Загружаю…</div>` : ""}
+    ${CAB.error ? `<p class="cab-error">${esc(CAB.error)}</p>` : ""}
+    ${leads.length ? leads.map(l => leadCard(l)).join("") : `<div class="empty">
+      <b>Заявок пока нет</b><p>Посчитайте проект или опишите задачу помощнику. Заявка придёт ${CONFIG.OWNER_DAT}, а статус появится здесь.</p>
+      <div class="row2"><button type="button" class="btn" data-tabgo="calc">Расчёт</button><button type="button" class="btn ghost" data-tabgo="chat">Чат</button></div></div>`}
+    <h2>Как мы работаем</h2>
+    <ul class="howlist">
+      <li><b>1</b><span>Бесплатный разбор задачи и смета</span></li>
+      <li><b>2</b><span>Работа с показом прогресса каждую неделю</span></li>
+      <li><b>3</b><span>Запуск и проверка, что всё работает</span></li>
+      <li><b>4</b><span>Оплата после результата, 0 ₽ вперёд</span></li>
+    </ul>
+    <div class="cab-actions">
+      <button type="button" class="rowbtn" data-act="ask-master">${I.chat}<span>Задать вопрос ${CONFIG.OWNER_DAT}</span>${I.next}</button>
+      ${IN_TG && can("6.9") ? `<button type="button" class="rowbtn" data-act="allow-write">${I.bell}<span>Получать ответы и статусы в Telegram</span>${I.next}</button>` : ""}
+      <button type="button" class="rowbtn" data-tabgo="works">${I.grid}<span>Наши работы</span>${I.next}</button>
+    </div>
+    <p class="cab-note">Ответы ${CONFIG.OWNER_INS} приходят в чат с ботом ${CONFIG.BOT_USERNAME ? "@" + CONFIG.BOT_USERNAME : ""}. Ваш Telegram-аккаунт ${CONFIG.OWNER_NAME} видит только по заявке.</p>
+  </div>`;
+}
+function leadCard(l){
+  const [st, cls] = STAT[l.status] || STAT.new;
+  const msgs = (l.msgs || []).slice(-3);
+  const fresh = CAB.seen[l.id] && CAB.seen[l.id] !== leadSig(l);
+  return `<details class="lead${fresh ? " fresh" : ""}" data-lead="${esc(l.id)}">
+    <summary>
+      <span class="l-top"><span class="pill ${cls}">${st}</span><span class="l-no">№${esc(l.id)} · ${fmtDate(l.ts)}</span></span>
+      <b>${esc(l.title)}</b>
+      ${l.estimate ? `<span class="l-est">${esc(l.estimate)}</span>` : ""}
+      ${msgs.length ? `<span class="l-last">${msgs[msgs.length - 1].from === "master" ? "💬 " + CONFIG.OWNER_NAME + ": " : "Вы: "}${esc(msgs[msgs.length - 1].text.slice(0, 90))}</span>` : ""}
+    </summary>
+    <div class="l-body">
+      ${(l.rows || []).map(([k, v]) => `<div><span>${esc(k)}</span>${esc(v)}</div>`).join("")}
+      ${msgs.length ? `<div class="l-msgs">${msgs.map(m => `<p class="${m.from}"><i>${m.from === "master" ? CONFIG.OWNER_NAME : "Вы"}</i>${esc(m.text)}</p>`).join("")}</div>` : ""}
+      <p class="l-hint">${l.status === "done" || l.status === "no" ? "Заявка закрыта." : "Ответить можно в чате с ботом: просто напишите туда сообщение."}</p>
+    </div>
+  </details>`;
+}
+async function loadCabinet(force){
+  if (CAB.loading || (CAB.leads && !force)) return;
+  CAB.loading = true; CAB.error = "";
+  try {
+    const r = await api("my");
+    const local = localLeads().filter(l => !r.leads.some(x => x.id === l.id) && Date.now() / 1000 - l.ts < 600);
+    CAB.leads = r.leads.concat(local);
+    if (!r.leads.length && local.length === 0) CAB.leads = [];
+  } catch(e) {
+    CAB.error = "Не удалось обновить статусы. Показаны сохранённые на телефоне заявки.";
+  }
+  CAB.loading = false;
+  if (S.screen === "cabinet") render();
+  else renderTabbar();
+}
+function mountCabinet(){
+  if (S.screen !== "cabinet") return;
+  if (!CAB.leads && !CAB.loading) loadCabinet();
+  (CAB.leads || []).forEach(l => { CAB.seen[l.id] = leadSig(l); });
+  try { localStorage.setItem("fakt-seen", JSON.stringify(CAB.seen)); } catch(e) {}
+  const r = app.querySelector("[data-act=cab-refresh]"); if (r) r.onclick = () => { haptic.tap(); r.classList.add("spin"); loadCabinet(true); };
+  const a = app.querySelector("[data-act=ask-master]"); if (a) a.onclick = () => { haptic.tap(); openChat(); actions.dm(); };
+  const w = app.querySelector("[data-act=allow-write]"); if (w) w.onclick = () => askWrite().then(ok => {
+    if (ok) haptic.ok(); w.querySelector("span").textContent = ok ? "Бот сможет присылать ответы ✓" : "Разрешение не выдано"; });
 }
 
 /* ==========================================================
@@ -1198,29 +1596,32 @@ window.addEventListener("resize", () => { stageHeight(); if (film) film.layout()
    ========================================================== */
 function calcLeadText(){
   const e = estimate();
-  const lines = [`Здравствуйте, ${CONFIG.OWNER_NAME}! Посчитал проект в приложении ${CONFIG.BRAND}:`, ""]
-    .concat(summaryRows().map(([, k, v]) => `${k}: ${v}`));
-  if (e){
-    lines.push("", `Смета: ${e.min}–${e.max} тыс ₽, ${weeksText(e.weeks)}` + (e.monthly ? `; ведение ${fmtRange(e.monthly)} тыс ₽/мес` : "") + (e.rush ? " (срочно, +25%)" : ""));
-  }
-  return lines.join("\n").trim().slice(0, 3900);
+  return summaryRows().map(([, k, v]) => `${k}: ${v}`).join("\n") + (e ? `\nСмета: ${e.min}–${e.max} тыс ₽` : "");
 }
-function submit(){
+function calcEstimateLine(){
+  const e = estimate(); if (!e) return "";
+  return `Смета: ${e.min}–${e.max} тыс ₽, ${weeksText(e.weeks)}` + (e.monthly ? `; ведение ${fmtRange(e.monthly)} тыс ₽/мес` : "") + (e.rush ? " (срочно, +25%)" : "");
+}
+let sending = false;
+async function submit(){
+  if (sending) return;
   if (S.name.trim().length < 2){ haptic.err(); return go("name"); }
-  openOwnerChat(calcLeadText(), false);
-  S.sent = true; haptic.ok(); go("done");
+  sending = true; setButton("Отправляю…", null, false);
+  const box = app.querySelector("#send-error"); if (box) box.classList.remove("on");
+  try {
+    const x = scl(), s = svc();
+    const res = await submitLead({ kind:"calc", title: s && x ? svcLine(s, x) : "Расчёт стоимости",
+      rows: summaryRows().map(([, k, v]) => [k, v]), estimate: calcEstimateLine() });
+    S.sent = true; S.leadId = res.id; haptic.ok(); go("done");
+  } catch(err) {
+    haptic.err();
+    const b = app.querySelector("#send-error"); if (b) b.classList.add("on");
+    setButton(`Отправить ${CONFIG.OWNER_DAT}`, submit);
+  } finally { sending = false; }
 }
 
-/* Вторая нативная кнопка Telegram на главной: «Чат с помощником» */
-let secondaryBound = false;
-function syncSecondary(){
-  if (!can("7.10") || !tg.SecondaryButton) return;
-  const sb = tg.SecondaryButton;
-  if (!secondaryBound){ sb.onClick(() => openChat()); secondaryBound = true; }
-  if (S.screen === "home") sb.setParams({ text:"💬 Чат с помощником", is_visible:true, position:"top",
-    color: css("--ink-soft"), text_color: css("--ink") });
-  else sb.hide();
-}
+/* Вторая нативная кнопка Telegram больше не нужна: разделы внизу экрана */
+function syncSecondary(){ if (IN_TG && tg.SecondaryButton) try { tg.SecondaryButton.hide(); } catch(e) {} }
 
 /* ==========================================================
    ЧАТ С ПОМОЩНИКОМ: сценарий без нейросетей.
@@ -1246,7 +1647,7 @@ const CHAT = {
   assets: [["nothing","Пока ничего"],["site","Есть сайт"],["tilda","Сайт на Тильде или конструкторе"],["social","Только соцсети"],["other","✏️ Другое, напишу"]],
   budgets: [["b20","до 20 тыс ₽",20],["b50","20–50 тыс ₽",50],["b100","50–100 тыс ₽",100],["b100p","больше 100 тыс ₽",1e6],["unknown","Пока не знаю",null]],
   deadlines: [["rush","🔥 Срочно, на этой неделе"],["month","В течение месяца"],["quarter","В ближайшие 1–3 месяца"],["look","Пока присматриваюсь"]],
-  ways: [["tg","💬 Напишите мне в Telegram"],["call","📞 Позвоните мне"],["wa","🟢 Напишите в WhatsApp"]],
+  ways: [["tg","💬 Ответьте мне в Telegram"],["call","📞 Позвоните мне"],["wa","🟢 Напишите в WhatsApp"]],
   times: [["now","Сейчас"],["today","Сегодня до 19:00"],["tomorrow","Завтра"],["other","✏️ Укажу время"]],
 };
 
@@ -1266,7 +1667,7 @@ const O = CONFIG.OWNER_NAME, O_DAT = CONFIG.OWNER_DAT, O_INS = CONFIG.OWNER_INS,
 const KB = [
   /* ---------- служебное ---------- */
   { id:"menu",   act:"menu",   k:["=меню","главное меню","=начать","в начало","=старт","=назад","что еще умеешь"] },
-  { id:"human",  act:"human",  k:["менеджер","позвон","звонок","созвон","связаться","связать с","свяжит","=набери","живым человеком","поговорить с человеком","связь с человеком","оператор","дмитри","лично"] },
+  { id:"human",  act:"human",  k:["менеджер","позвон","звонок","созвон","связаться","связать с","свяжит","=набери","живым человеком","поговорить с человеком","связь с человеком","оператор","=мастер","=мастеру","=мастером","с мастером","лично"] },
   { id:"svc:seo",  act:"svc",  k:["=seo","=сео","продвиж","поисков","в поиске","в топ"], w:.9 },
   { id:"svc:ads",  act:"svc",  k:["директ","реклам","рся","контекст","таргет"], w:.9 },
   { id:"svc:app",  act:"svc",  k:["мини-прил","мини прил","миниприл","mini app","miniapp","приложени","магазин в телеграм"], w:.9 },
@@ -1329,8 +1730,8 @@ const KB = [
     a:"Поможем выбрать и купить домен и хостинг на ваше имя. Их оплачиваете напрямую провайдеру, обычно это несколько сотен рублей в месяц. Ботов и мини-приложения тоже размещаем так, чтобы вы им владели." },
   { id:"team", t:"Кто будет делать проект?", faq:true, k:["вести мой","будет вести","вести проект","людей","человек в команд","сколько вас","кто будет","кто делает","кто будет делать","команда","сколько человек","фрилансер","кто работает","штат","программист","дизайнер у вас"],
     a:`Проект ведёт ${O} лично, от разбора до запуска. Вы общаетесь напрямую с тем, кто отвечает за результат, без цепочки менеджеров.` },
-  { id:"owner", t:`Кто такой ${O}?`, k:["кто такой","кто это дмитри","о дмитри","основател","руководител","владелец"],
-    a:`${O} Бергхман, основатель ${BRAND}. Лично ведёт проекты: разбирает задачу, считает смету, делает и запускает. Ему и уходят заявки из этого приложения.` },
+  { id:"owner", t:`Кто такой ${O}?`, k:["кто такой","кто это мастер","о мастере","основател","руководител","владелец"],
+    a:`${O} ведёт проекты ${BRAND} лично: разбирает задачу, считает смету, делает и запускает. Ему и уходят заявки из этого приложения, а отвечает он через нашего бота.` },
   { id:"experience", t:"Какой у вас опыт?", k:["опыт","сколько лет","давно работаете","стаж","квалификац"],
     a:`Лучше один раз увидеть: ${O} на разборе покажет проекты, близкие к вашей задаче. А это приложение с анимацией, расчётом и этим чатом тоже наша работа.` },
   { id:"examples", t:"Есть примеры работ?", faq:true, k:["ваши клиенты","с кем работали","для кого делали",/клиент(ы|ов) у вас/,"пример","портфолио","кейс","ваши работы","что сделали","показать работ","посмотреть работ","реализованн"],
@@ -1344,11 +1745,11 @@ const KB = [
   { id:"hours", t:"Когда вы отвечаете?", k:["вы отвечаете","быстро отвечаете","быстро вы отвечаете","ответите","часы работ","до скольки","график","когда отвечаете","во сколько","выходн","ночью","круглосуточ","рабочее время","как быстро ответ"],
     a:`Я, помощник, отвечаю круглосуточно. ${O} отвечает на заявки в течение рабочего дня, обычно гораздо быстрее.` },
   { id:"contacts", t:"Как с вами связаться?", k:["=телефон","=номер","скиньте","скинь","как с вами связ","связаться с вами","ваш контакт","контакт","телефон ваш","ваш телефон","номер телефона ваш","почта","email","e-mail","телеграм ваш","написать вам","куда писать"],
-    a:`Самый быстрый способ: Telegram @${CONFIG.OWNER_USERNAME}. Нажмите кнопку ниже, и откроется чат с ${O_INS}, текст уже будет готов.` , next:[["✈️ Написать " + O_DAT, "go:dm", "primary"]] },
+    a:`Напишите вопрос прямо здесь: нажмите кнопку ниже, и я передам его ${O_DAT}. Ответ придёт вам в Telegram от нашего бота @${CONFIG.BOT_USERNAME}, личные контакты не нужны.` , next:[["✈️ Написать " + O_DAT, "go:dm", "primary"]] },
   { id:"small", t:"Подойдёт ли небольшому бизнесу?", k:["маленьк","небольш","малый бизнес","начинающ","только начинаю","стартап","частник","частный мастер","один работаю","самозанятый мастер"],
     a:`Да, это как раз наш формат. Начнём с того, что быстрее всего приведёт клиентов: часто это лендинг с рекламой или бот для записи. Бот-визитка стоит от ${pr("bot","lead")}, лендинг от ${pr("site","landing")}, без предоплаты.` },
   { id:"privacy", t:"Куда уходят мои данные?", k:["персональн","152","мои данные","данные хран","куда уход","политик конфиденц","согласие на обработк","cookie","куки"],
-    a:"Ответы в этом чате хранятся только на вашем телефоне, пока вы сами не отправите заявку " + O_DAT + " в Telegram. Для ваших сайтов и ботов поможем оформить согласие на обработку данных и политику конфиденциальности." },
+    a:"Ответы в этом чате хранятся только на вашем телефоне, пока вы сами не отправите заявку " + O_DAT + ". Для ваших сайтов и ботов поможем оформить согласие на обработку данных и политику конфиденциальности." },
 
   /* ---------- услуги и технологии ---------- */
   { id:"geo", t:"Что такое GEO?", faq:true, k:["=geo","=гео","нейросет","алис","chatgpt","чат gpt","чатgpt","чатгпт","яндекс нейро","=нейро","ии поиск","perplexity","deepseek","gigachat","гигачат"],
@@ -1366,7 +1767,7 @@ const KB = [
   { id:"app_what", t:"Что такое мини-приложение?", faq:true, k:["что такое мини","мини-приложение это","мини приложение это","чем отличается бот","бот или мини","бот или прил","разница между бот","отличается","отличие","разница"],
     a:"Мини-приложение: полноценный сайт внутри Telegram: каталог, корзина, запись, оплата, без скачивания из App Store. Как это приложение. Бот работает как переписка с кнопками, а мини-приложение состоит из экранов, как в обычном приложении. Часто их делают вместе." },
   { id:"native", t:"Делаете приложения для App Store и Google Play?", k:["app store","appstore","google play","гугл плей","плей маркет","айфон","iphone","андроид","android","ios","скачать приложение","мобильное приложение"],
-    a:"Основной формат: мини-приложения в Telegram. их не нужно скачивать, они работают и на iPhone, и на Android и запускаются в разы быстрее и дешевле. Если нужно именно приложение в магазинах, опишите задачу, " + O + " скажет, возьмёмся ли." },
+    a:"Основной формат: мини-приложения в Telegram. Их не нужно скачивать, они работают и на iPhone, и на Android и запускаются в разы быстрее и дешевле. Если нужно именно приложение в магазинах, опишите задачу, " + O + " скажет, возьмёмся ли." },
   { id:"landing_vs", t:"Лендинг или многостраничный сайт?", k:["что такое лендинг","лендинг это","лендинг или","многостраничный сайт","или многостранич","какой сайт выбрать","какой сайт нужен","многостраничный или","одностраничный или","что лучше сайт"],
     a:"Лендинг: одна страница под одну услугу или рекламу: быстро и недорого, хорошо собирает заявки. Сайт на 3–7 страниц нужен, когда услуг несколько и важно SEO. Каталог подойдёт, если много товаров. Не уверены? Пройдите подбор, подскажу.", next:[["🎯 Подобрать решение","go:quiz","primary"]] },
   { id:"mobile", t:"Сайт будет удобен на телефоне?", faq:true, k:["на телефоне","с телефона","мобильн","адаптив","смартфон","на айфоне","на андроиде"],
@@ -1396,7 +1797,7 @@ const KB = [
   { id:"booking", t:"Можно сделать онлайн-запись?", k:["запис","онлайн-запис","онлайн запис","запись клиент","записыват","расписани","бронир","свободное время","слоты"],
     a:`Да: клиент сам выбирает услугу, мастера и время, получает подтверждение и напоминание, а вам приходит уведомление. Можно в боте (${pr("bot","book")}) или в мини-приложении (${pr("app","booking")}).` },
   { id:"shop", t:"Можно продавать товары в Telegram?", k:["продавать товар","магазин","корзин","каталог товар","интернет-витрин","витрин","товары"],
-    a:`Да: витрина или магазин с корзиной прямо в Telegram: витрина ${pr("app","showcase")}, с корзиной ${pr("app","shop")}, классический сайт-магазин ${pr("site","catalog")}. Можно подключить оплату, бонусы и связь с 1С или МойСклад.` },
+    a:`Да. Витрина прямо в Telegram: ${pr("app","showcase")}, с корзиной ${pr("app","shop")}, классический сайт-магазин ${pr("site","catalog")}. Можно подключить оплату, бонусы и связь с 1С или МойСклад.` },
   { id:"quiz_site", t:"Сделаете такой же квиз для меня?", k:["такой же","как у вас","как этот","как это приложени","квиз","калькулятор","анимаци","как вы сделали","хочу так же","хочу такое"],
     a:`Конечно, это приложение и есть пример. Квиз или калькулятор на сайт: ${pr("site","quiz")}. Бот-квиз с расчётом: ${pr("bot","quiz")}. Мини-приложение с анимацией и расчётом: ${pr("app","showcase")}.`, next:[["🎯 Подобрать решение","go:quiz","primary"],["💰 Все цены","go:prices"]] },
   { id:"other_platforms", t:"Работаете с VK, WhatsApp, Авито?", k:["=вк","вконтакт","=vk","ватсап","whatsapp","вотсап","вацап","viber","вайбер","инстаграм","instagram","авито","avito","озон","ozon","wildberries","вайлдберриз","маркетплейс","=smm","=смм","соцсет"],
@@ -1418,7 +1819,7 @@ const KB = [
   { id:"compliment", k:["круто","классн","красиво","супер","здорово","отлично сдел","нравится","молодц","огонь","впечатля","шикарн","кайф","прикольн","клево","вау","=wow"],
     a:"Спасибо, очень приятно! 🙌 Это приложение тоже наша работа. Такое же можно сделать для вашего бизнеса." },
   { id:"rude", k:["бесит","раздража","достал","надоел","дурак","тупой","тупая","глуп","идиот","бесполез","ерунд","фигн","отстой","бред","=хрень","не работаешь","ты не понимаешь","не понимаешь"],
-    a:`Похоже, я не очень помог, извините. Я отвечаю по готовым сценариям и не всё понимаю. Можно написать ${O_DAT} напрямую, он разберётся.`, next:[["✈️ Написать " + O_DAT, "go:dm", "primary"],["☰ Меню","go:menu"]] },
+    a:`Похоже, я не очень помог, извините. Я отвечаю по готовым сценариям и не всё понимаю. Можно задать вопрос ${O_DAT}: я передам, и он ответит через бота.`, next:[["✈️ Написать " + O_DAT, "go:dm", "primary"],["☰ Меню","go:menu"]] },
   { id:"joke", k:["анекдот","шутк","пошути","рассмеши","смешн","развесели","скучно"],
     a:"Клиент спрашивает: «А где подвох, если без предоплаты?» Студия: «Подвох в том, что вам понравится, и вы придёте снова» 😄<br>Чем могу помочь всерьёз?" },
   { id:"offtopic", k:["=дата","какое число","который час","сколько времени сейчас","день недели","погод","курс доллар","курс евро","новост","политик","футбол","хоккей","рецепт","фильм","сериал","музык","гороскоп","биткоин","крипт","акции компан","выборы","войн","=бог","смысл жизни","знакомств"],
@@ -1462,7 +1863,6 @@ function Chat(){
   hideButton();
   return `<div class="chat" role="region" aria-label="Чат с помощником ${CONFIG.BRAND}">
     <div class="chat-head">
-      <button type="button" class="icon back" data-act="back" aria-label="Назад">${I.back}</button>
       <img src="assistant.webp" alt="">
       <div class="who"><b>Помощник ${CONFIG.BRAND}</b><small>отвечает сразу, заявку передаёт ${CONFIG.OWNER_DAT}</small></div>
       <button type="button" class="icon" data-act="chat-reset" aria-label="Начать заново" title="Начать заново">${I.reset}</button>
@@ -1575,14 +1975,16 @@ const actions = {
   quiz: () => beginQuiz(),
   prices: () => showPrices(),
   faq: () => faqMenu(0),
-  dm: () => openOwnerChat(chatDmText(), true),
-  ask_now: () => openOwnerChat(chatQuestionText(), true),
+  dm: () => { CH.await = "question"; chatSave(); say(`Напишите вопрос одним сообщением, и я передам его ${CONFIG.OWNER_DAT}. Ответ придёт вам в Telegram от бота.`); },
+  ask_now: () => sendQuestion((CH.a.questions || []).slice(-1)[0] || ""),
   menu: () => chatMenu(),
   resume: () => CH.await ? ask(CH.await) : chatMenu(),
-  resend: () => openOwnerChat(chatLeadText(), false),
-  copy: () => copyText(chatLeadText()).then(ok => say(ok ? "Скопировал текст заявки, можно вставить в любой мессенджер." : "Не получилось скопировать. Откройте чат кнопкой выше.")),
-  home: () => { trail.length = 0; go("home", { back:true }); },
+  resend: () => sendLead(),
+  retry_q: () => sendQuestion(CH.pendingQ || ""),
+  cabinet: () => switchTab("cabinet"),
+  home: () => switchTab("home"),
   calc: () => startCalc(),
+  works: () => switchTab("works"),
 };
 
 /* ---------- начало и меню ---------- */
@@ -1687,7 +2089,7 @@ function ask(step){
         .concat([Q("🪜 Сделать поэтапно", "s:budget_fit=stage", "wide"), Q("Оставить выбранный вариант", "s:budget_fit=keep", "wide"),
           Q(`Обсудить с ${CONFIG.OWNER_INS}`, "s:budget_fit=talk", "wide")]); break; }
     case "deadline": q = "Когда нужно запустить?"; quick = opts(CHAT.deadlines); break;
-    case "contact_way": q = `Как ${CONFIG.OWNER_DAT} лучше связаться с вами?`; quick = opts(CHAT.ways); break;
+    case "contact_way": q = `Как ${CONFIG.OWNER_DAT} лучше связаться с вами?`; quick = opts(CHAT.ways.filter(w => IN_TG || w[0] !== "tg")); break;
     case "phone": q = "Ваш номер телефона?";
       quick = (can("6.9") ? [Q("📱 Поделиться номером", "s:phone=share", "primary")] : []).concat([Q("Пропустить", "s:phone=skip")]);
       if (!can("6.9")) q += " Напишите его сообщением.";
@@ -1804,6 +2206,11 @@ function detect(text){
 function userText(text){
   me(text);
   const step = CH.await, a = CH.a, intent = detect(text), question = /\?\s*$/.test(text);
+  if (step === "question") return sendQuestion(text);
+  if (step === "question_phone"){
+    const p = normPhone(text); if (!p) return say("Похоже, в номере опечатка. Пример: +7 921 123-45-67.");
+    a.phone = p; chatSave(); return sendQuestion(CH.pendingQ || "");
+  }
   if (intent === "menu") return chatMenu("Хорошо. Чем помочь?");
   if (step.endsWith("_text")){
     const base = step.slice(0, -5);
@@ -1827,19 +2234,19 @@ function userText(text){
     chatSave(); return askNext();
   }
   if (freeText(text, intent, !!step)){ if (step) reask(); return; }
-  // не понял: сохраняем вопрос для Дмитрия
+  // не понял: сохраняем вопрос для мастера
   (a.questions = a.questions || []).push(text.slice(0, 300)); chatSave();
   say(`Хороший вопрос, на него точно ответит ${CONFIG.OWNER_NAME}. Добавлю его в заявку 📝` + (step ? "" : "<br>А ещё могу рассказать про цены, сроки, оплату и гарантии, загляните в частые вопросы."),
     [Q(`Спросить ${CONFIG.OWNER_DAT} сейчас`, "go:ask_now")].concat(step ? [] : [Q("❓ Частые вопросы", "go:faq"), Q("🎯 Подобрать решение", "go:quiz")]));
   if (step) reask();
 }
-function reask(){ if (CH.await){ say("Вернёмся к подбору 👇"); ask(CH.await); } }
+function reask(){ if (CH.await && !CH.await.startsWith("question")){ say("Вернёмся к подбору 👇"); ask(CH.await); } }
 function freeText(text, intent, inStep){
   if (!intent) return false;
   if (intent.startsWith("faq:")){ faqAnswer(intent.slice(4), inStep); return true; }
   if (intent.startsWith("svc:")){ serviceInfo(intent.slice(4), inStep); return true; }
   if (intent === "human"){
-    say(`Конечно! Можно написать ${CONFIG.OWNER_DAT} напрямую, откроется чат с ним в Telegram.`,
+    say(`Конечно! Напишите вопрос, и я передам его ${CONFIG.OWNER_DAT}. Он ответит вам в Telegram через нашего бота.`,
       [Q(`✈️ Написать ${CONFIG.OWNER_DAT}`, "go:dm", "primary")].concat(inStep ? [] : [Q("Сначала подобрать решение", "go:quiz")]));
     return true;
   }
@@ -1934,21 +2341,43 @@ function promise(a){
   const t = (a.call_time || "").toLowerCase();
   if (a.contact_way === "call") return t ? `позвонит: ${t}` : "позвонит в течение рабочего дня";
   if (a.contact_way === "wa") return t ? `напишет в WhatsApp: ${t}` : "напишет в WhatsApp";
-  return "ответит вам в Telegram в течение рабочего дня";
+  return "ответит вам в Telegram через бота в течение рабочего дня";
 }
-function sendLead(){
-  CH.sent = true; CH.await = ""; CH.flow = ""; CH.confirming = false; chatSave();
-  openOwnerChat(chatLeadText(), false);
-  haptic.ok();
-  say(`Открываю чат с ${CONFIG.OWNER_INS}, там уже готов текст заявки. <b>Нажмите «Отправить»</b> ✈️<br><br>${CONFIG.OWNER_NAME} ${promise(CH.a)}.`,
-    [Q("Открыть чат ещё раз", "go:resend", "primary"), Q("📋 Скопировать текст", "go:copy"), Q("☰ Меню", "go:menu")]);
+async function sendLead(){
+  const a = CH.a, e = chatEstimate(a), s = svcBy(a.need), x = scaleOf(a);
+  CH.await = ""; CH.flow = ""; CH.confirming = false; chatSave();
+  say("Отправляю заявку…");
+  try {
+    const rows = leadRows(a).concat((a.questions || []).length ? [["Вопросы", a.questions.join(" | ")]] : []);
+    const res = await submitLead({ kind:"chat", title: s && x ? svcLine(s, x) : s ? s.title : "Подбор решения", rows,
+      estimate: e ? `Ориентир: ${e.min}–${e.max} тыс ₽, ${e.weeks}` + (a.deadline === "rush" ? " (срочно, +25%)" : "") : "" });
+    CH.sent = true; chatSave(); haptic.ok();
+    say(`✅ Заявка №${esc(res.id)} отправлена ${CONFIG.OWNER_DAT}.<br><br>${CONFIG.OWNER_NAME} ${promise(a)}. Статус и ответы видны во вкладке «Кабинет».`,
+      [Q("👤 Открыть кабинет", "go:cabinet", "primary"), Q("☰ Меню", "go:menu")]);
+  } catch(err) {
+    haptic.err(); CH.confirming = true; CH.await = "confirm"; chatSave();
+    say("Не получилось отправить заявку: нет связи с сервером. Проверьте интернет и попробуйте ещё раз.", [Q("↻ Отправить ещё раз", "go:resend", "primary"), Q("☰ Меню", "go:menu")]);
+  }
 }
-function openOwnerChat(text, withNote){
-  const u = CONFIG.OWNER_USERNAME.replace(/^@/, "");
-  const url = `https://t.me/${u}?text=${encodeURIComponent(text)}`;
-  if (withNote) say(`Открываю чат с ${CONFIG.OWNER_INS}. Нажмите «Отправить» в Telegram.`);
-  if (IN_TG) tg.openTelegramLink(url);
-  else { const w = window.open(url, "_blank"); if (!w) location.href = url; }
+async function sendQuestion(text){
+  text = String(text || "").trim();
+  if (!text){ CH.await = "question"; chatSave(); return say("Напишите вопрос одним сообщением."); }
+  if (!IN_TG && !CH.a.phone){
+    CH.pendingQ = text; CH.await = "question_phone"; chatSave();
+    return say("Оставьте номер телефона: вы открыли приложение не в Telegram, и ответить получится только по телефону.");
+  }
+  CH.await = ""; delete CH.pendingQ; chatSave();
+  const rows = [["Вопрос", text.slice(0, 600)]].concat(leadRows(CH.a).filter(([k]) => k !== "Комментарий"));
+  if (!IN_TG && CH.a.phone && !rows.some(([k]) => k === "Телефон")) rows.push(["Телефон", CH.a.phone]);
+  try {
+    const res = await submitLead({ kind:"question", title:"Вопрос: " + text.slice(0, 50), rows });
+    CH.a.questions = (CH.a.questions || []).filter(q => q !== text); chatSave(); haptic.ok();
+    say(`✅ Передал ${CONFIG.OWNER_DAT} (№${esc(res.id)}). Ответ придёт ${IN_TG ? "в Telegram от бота" : "по телефону"} в течение рабочего дня.`,
+      [Q("🎯 Подобрать решение", "go:quiz"), Q("☰ Меню", "go:menu")]);
+  } catch(err) {
+    haptic.err(); CH.pendingQ = text; chatSave();
+    say("Не получилось отправить вопрос: нет связи с сервером. Попробуйте ещё раз.", [Q("↻ Отправить ещё раз", "go:retry_q", "primary")]);
+  }
 }
 async function copyText(text){
   try { await navigator.clipboard.writeText(text); return true; } catch(e) {}
@@ -1956,9 +2385,10 @@ async function copyText(text){
     const ok = document.execCommand("copy"); t.remove(); return ok; } catch(e) { return false; }
 }
 function openChat(preset){
-  if (preset && CH.started){ if (S.screen !== "chat") go("chat"); return beginQuiz(preset); }
+  const show = () => { if (S.screen !== "chat"){ trail.length = 0; S.screen = "chat"; render(); } };
+  if (preset && CH.started){ show(); return beginQuiz(preset); }
   if (preset) CH.preset = preset;
-  if (S.screen !== "chat") go("chat");
+  show();
 }
 
 /* ==========================================================
@@ -1977,7 +2407,12 @@ stageHeight();
 preloadFilm();
 chatLoad();
 applyTheme();
+{ const h = (location.hash || "").replace("#", "");          // бот открывает приложение сразу на нужной вкладке
+  const sp = IN_TG && tg.initDataUnsafe && tg.initDataUnsafe.start_param;
+  const want = ["works","chat","cabinet"].includes(h) ? h : ["works","chat","cabinet"].includes(sp) ? sp : null;
+  if (want) S.screen = want; }
 render();
+if (S.screen !== "cabinet" && (IN_TG || localLeads().length)) loadCabinet();
 </script>
 </body>
 </html>
