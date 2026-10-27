@@ -286,6 +286,20 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
 .done p{color:var(--muted);max-width:34ch;margin-bottom:10px}
 .textlink{color:var(--ink);font-weight:600;margin-top:22px;display:inline-block;text-decoration:underline;text-underline-offset:4px}
 
+/* ============ Акция на главной ============ */
+.promo{position:relative;display:grid;gap:6px;width:100%;text-align:left;border-radius:22px;padding:18px 18px 16px;margin:0 0 18px;overflow:hidden;
+  background:linear-gradient(135deg,#2433C4 0%,#4B5BF0 100%);color:#fff;box-shadow:0 18px 34px -18px rgba(36,51,196,.7)}
+.promo::after{content:"";position:absolute;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,228,92,.22)}
+.promo-tag{justify-self:start;background:#FFE45C;color:#1A1B2E;font-weight:800;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:4px 10px}
+.promo b{font-size:21px;font-weight:800;line-height:1.15;letter-spacing:-.01em;max-width:18ch}
+.promo small{font-size:13.5px;opacity:.85;line-height:1.35}
+.promo-row{display:flex;align-items:baseline;gap:10px;margin-top:2px}
+.promo-row s{opacity:.65;font-size:15px}
+.promo-row em{font-style:normal;font-weight:900;font-size:30px;letter-spacing:-.02em;color:#FFE45C}
+.promo-go{display:inline-flex;align-items:center;gap:4px;justify-self:start;background:#fff;color:#2433C4;font-weight:700;font-size:15px;border-radius:12px;padding:10px 14px;margin-top:4px}
+.promo-go svg{width:16px;height:16px}
+.promo:active{transform:scale(.985)}
+
 /* ============ Карточка чата на главной ============ */
 .chatcard{display:grid;grid-template-columns:52px 1fr;gap:4px 14px;align-items:center;width:100%;text-align:left;
   background:var(--surface);border-radius:18px;padding:14px 14px 14px;margin:0 0 36px}
@@ -549,91 +563,103 @@ const CONFIG = {
   OWNER_INS: "Мастером",         // «связаться с кем?»
   BOT_USERNAME: "thatsafact_bot",// бот, через который приходят заявки и ответы
   API_URL: "https://functions.yandexcloud.net/d4esj0b2o9lork76mk0r",   // функция бота в Yandex Cloud
+  /* Акция: карточка на главной, отдельная заявка в чате, ссылка t.me/thatsafact_bot?startapp=promo.
+     Чтобы выключить акцию, поставьте on:false. */
+  PROMO: {
+    on: true,
+    price: "4\u00a0990\u00a0₽",                // \u00a0: неразрывный пробел, чтобы цена не разрывалась
+    regular: "от 10\u00a0000\u00a0₽",
+    title: "Telegram-бот для вашего бизнеса за 4\u00a0990\u00a0₽",
+    limit: "Акция для первых 10 заказов",
+    includes: ["Бот с вашим названием и аватаркой", "Меню: услуги и цены, адрес, контакты",
+      "Ответы на 5–7 частых вопросов клиентов", "Кнопка «Записаться»: заявки приходят вам в Telegram",
+      "Ссылки на ваш сайт, онлайн-запись и соцсети", "Запуск за 3 дня, оплата после запуска"],
+  },
 };
 
-/* Цены в тысячах рублей [от, до]. Сроки в неделях [от, до].
+/* Цены в тысячах рублей [от, до] (с октября 2026 на 30% ниже прежних, бот-визитка от 10). Сроки в неделях [от, до].
    Это стартовые вилки, поправьте под себя. */
 const SERVICES = [
   { id:"site", icon:"site", title:"Сайт", home:"Сайты и лендинги",
     desc:"Лендинги, визитки и каталоги, которые собирают заявки",
     scales:[
-      { id:"landing", title:"Лендинг", desc:"Одна страница под услугу или рекламу", price:[20,35], weeks:[1,2] },
-      { id:"multi",   title:"Сайт на 3–7 страниц", desc:"Услуги, цены, работы, контакты", price:[35,60], weeks:[2,3] },
-      { id:"catalog", title:"Каталог или магазин", desc:"Товары, фильтры, корзина", price:[60,120], weeks:[3,6] },
+      { id:"landing", title:"Лендинг", desc:"Одна страница под услугу или рекламу", price:[14,25], weeks:[1,2] },
+      { id:"multi",   title:"Сайт на 3–7 страниц", desc:"Услуги, цены, работы, контакты", price:[25,42], weeks:[2,3] },
+      { id:"catalog", title:"Каталог или магазин", desc:"Товары, фильтры, корзина", price:[42,84], weeks:[3,6] },
     ],
     extras:[
-      { id:"quiz",  title:"Квиз или калькулятор", desc:"Как этот, только на сайте", price:[7,12], weeks:.5 },
-      { id:"texts", title:"Тексты под ключ", desc:"Напишем сами, вам останется проверить", price:[5,10], weeks:.5 },
-      { id:"seo",   title:"SEO и GEO-основа", desc:"Чтобы находили в Яндексе и советовали нейросети", price:[7,12], weeks:.5 },
-      { id:"pay",   title:"Онлайн-оплата", desc:"ЮKassa, СБП, карты", price:[7,10], weeks:.5 },
-      { id:"crm",   title:"Заявки в Telegram и CRM", desc:"Ни одна заявка не потеряется", price:[3,6], weeks:0 },
+      { id:"quiz",  title:"Квиз или калькулятор", desc:"Как этот, только на сайте", price:[5,8], weeks:.5 },
+      { id:"texts", title:"Тексты под ключ", desc:"Напишем сами, вам останется проверить", price:[4,7], weeks:.5 },
+      { id:"seo",   title:"SEO и GEO-основа", desc:"Чтобы находили в Яндексе и советовали нейросети", price:[5,8], weeks:.5 },
+      { id:"pay",   title:"Онлайн-оплата", desc:"ЮKassa, СБП, карты", price:[5,7], weeks:.5 },
+      { id:"crm",   title:"Заявки в Telegram и CRM", desc:"Ни одна заявка не потеряется", price:[2,4], weeks:0 },
     ]},
   { id:"bot", icon:"bot", title:"Telegram-бот", home:"Telegram-боты",
     desc:"Принимают заявки, записывают и отвечают клиентам круглосуточно",
     scales:[
-      { id:"lead",  title:"Бот-визитка с заявками", desc:"Меню, ответы на частые вопросы, заявка", price:[10,18], weeks:[1,1] },
-      { id:"quiz",  title:"Бот-квиз с расчётом", desc:"Задаёт вопросы и называет цену", price:[18,28], weeks:[1,2] },
-      { id:"book",  title:"Бот записи или заказов", desc:"Расписание, напоминания, отмены", price:[25,40], weeks:[2,3] },
+      { id:"lead",  title:"Бот-визитка с заявками", desc:"Меню, ответы на частые вопросы, заявка", price:[10,13], weeks:[1,1] },
+      { id:"quiz",  title:"Бот-квиз с расчётом", desc:"Задаёт вопросы и называет цену", price:[13,20], weeks:[1,2] },
+      { id:"book",  title:"Бот записи или заказов", desc:"Расписание, напоминания, отмены", price:[18,28], weeks:[2,3] },
     ],
     extras:[
-      { id:"ai",    title:"AI-консультант", desc:"Отвечает на вопросы как живой менеджер", price:[15,25], weeks:1 },
-      { id:"mail",  title:"Рассылки по базе", desc:"Акции и новости всем подписчикам", price:[3,6], weeks:0 },
-      { id:"pay",   title:"Оплата в боте", desc:"Клиент платит, не выходя из чата", price:[7,10], weeks:.5 },
-      { id:"table", title:"Таблица заявок", desc:"Все заявки в Google-таблице", price:[5,8], weeks:.5 },
+      { id:"ai",    title:"AI-консультант", desc:"Отвечает на вопросы как живой менеджер", price:[11,18], weeks:1 },
+      { id:"mail",  title:"Рассылки по базе", desc:"Акции и новости всем подписчикам", price:[2,4], weeks:0 },
+      { id:"pay",   title:"Оплата в боте", desc:"Клиент платит, не выходя из чата", price:[5,7], weeks:.5 },
+      { id:"table", title:"Таблица заявок", desc:"Все заявки в Google-таблице", price:[4,6], weeks:.5 },
     ]},
   { id:"app", icon:"app", title:"Мини-приложение", home:"Мини-приложения в Telegram",
     desc:"Магазин или запись прямо в Telegram, как это приложение",
     scales:[
-      { id:"showcase", title:"Витрина или каталог", desc:"Товары или услуги с фото и ценами", price:[40,65], weeks:[2,3] },
-      { id:"shop",     title:"Магазин с корзиной", desc:"Каталог, корзина, оформление заказа", price:[65,120], weeks:[3,6] },
-      { id:"booking",  title:"Онлайн-запись", desc:"Мастера, свободное время, подтверждение", price:[45,80], weeks:[3,4] },
+      { id:"showcase", title:"Витрина или каталог", desc:"Товары или услуги с фото и ценами", price:[28,46], weeks:[2,3] },
+      { id:"shop",     title:"Магазин с корзиной", desc:"Каталог, корзина, оформление заказа", price:[46,84], weeks:[3,6] },
+      { id:"booking",  title:"Онлайн-запись", desc:"Мастера, свободное время, подтверждение", price:[32,56], weeks:[3,4] },
     ],
     extras:[
-      { id:"pay",     title:"Онлайн-оплата", desc:"СБП и карты внутри Telegram", price:[10,15], weeks:.5 },
-      { id:"loyalty", title:"Бонусы и скидки", desc:"Кешбэк, промокоды, уровни клиента", price:[12,20], weeks:1 },
-      { id:"admin",   title:"Админка для товаров", desc:"Меняйте цены и фото сами", price:[12,25], weeks:1 },
-      { id:"1c",      title:"Связь с 1С или МойСклад", desc:"Остатки и заказы синхронизируются", price:[18,30], weeks:1.5 },
+      { id:"pay",     title:"Онлайн-оплата", desc:"СБП и карты внутри Telegram", price:[7,11], weeks:.5 },
+      { id:"loyalty", title:"Бонусы и скидки", desc:"Кешбэк, промокоды, уровни клиента", price:[8,14], weeks:1 },
+      { id:"admin",   title:"Админка для товаров", desc:"Меняйте цены и фото сами", price:[8,18], weeks:1 },
+      { id:"1c",      title:"Связь с 1С или МойСклад", desc:"Остатки и заказы синхронизируются", price:[13,21], weeks:1.5 },
     ]},
   { id:"ads", icon:"ads", title:"Яндекс Директ", home:"Реклама в Яндекс Директе",
     desc:"Настройка рекламы, которая приводит заявки, а не клики",
     scales:[
-      { id:"search", title:"Поисковая кампания", desc:"Показы тем, кто ищет вашу услугу", price:[12,18], weeks:[1,1] },
-      { id:"rsya",   title:"Поиск и РСЯ", desc:"Плюс баннеры на сайтах и в приложениях", price:[18,28], weeks:[1,2] },
-      { id:"full",   title:"Под ключ с посадочной", desc:"Кампании, квиз-лендинг, аналитика", price:[30,50], weeks:[2,3] },
+      { id:"search", title:"Поисковая кампания", desc:"Показы тем, кто ищет вашу услугу", price:[8,13], weeks:[1,1] },
+      { id:"rsya",   title:"Поиск и РСЯ", desc:"Плюс баннеры на сайтах и в приложениях", price:[13,20], weeks:[1,2] },
+      { id:"full",   title:"Под ключ с посадочной", desc:"Кампании, квиз-лендинг, аналитика", price:[21,35], weeks:[2,3] },
     ],
     extras:[
-      { id:"lead",    title:"Ведение рекламы", desc:"Оптимизация и отчёты каждую неделю", monthly:[10,15] },
-      { id:"metrika", title:"Метрика и цели", desc:"Видно, откуда пришла каждая заявка", price:[3,6], weeks:0 },
-      { id:"creo",    title:"Креативы для РСЯ", desc:"Баннеры и тексты объявлений", price:[3,8], weeks:.5 },
-      { id:"rivals",  title:"Разбор конкурентов", desc:"Что и за сколько рекламируют они", price:[3,6], weeks:.5 },
+      { id:"lead",    title:"Ведение рекламы", desc:"Оптимизация и отчёты каждую неделю", monthly:[7,11] },
+      { id:"metrika", title:"Метрика и цели", desc:"Видно, откуда пришла каждая заявка", price:[2,4], weeks:0 },
+      { id:"creo",    title:"Креативы для РСЯ", desc:"Баннеры и тексты объявлений", price:[2,6], weeks:.5 },
+      { id:"rivals",  title:"Разбор конкурентов", desc:"Что и за сколько рекламируют они", price:[2,4], weeks:.5 },
     ]},
   { id:"seo", icon:"seo", title:"SEO и GEO", home:"SEO и GEO-продвижение",
     desc:"Чтобы вас находили в Яндексе, на картах и советовали нейросети",
     scales:[
-      { id:"audit", title:"Аудит и план", desc:"Разбор сайта, конкурентов и того, что о вас отвечают нейросети", price:[8,15], weeks:[1,1] },
-      { id:"start", title:"SEO-старт под ключ", desc:"Структура, мета-теги, скорость, Вебмастер и Метрика", price:[20,35], weeks:[2,3] },
-      { id:"geo",   title:"SEO и GEO вместе", desc:"Плюс оптимизация под Алису, Нейро и ChatGPT: факты, ответы, разметка", price:[30,50], weeks:[3,4] },
+      { id:"audit", title:"Аудит и план", desc:"Разбор сайта, конкурентов и того, что о вас отвечают нейросети", price:[6,11], weeks:[1,1] },
+      { id:"start", title:"SEO-старт под ключ", desc:"Структура, мета-теги, скорость, Вебмастер и Метрика", price:[14,25], weeks:[2,3] },
+      { id:"geo",   title:"SEO и GEO вместе", desc:"Плюс оптимизация под Алису, Нейро и ChatGPT: факты, ответы, разметка", price:[21,35], weeks:[3,4] },
     ],
     extras:[
-      { id:"maps",    title:"Яндекс Карты и 2ГИС", desc:"Карточки, фото и отзывы, чтобы находили рядом", price:[5,10], weeks:.5 },
-      { id:"content", title:"Статьи и ответы для нейросетей", desc:"Экспертные тексты и FAQ, которые удобно цитировать ИИ", price:[8,15], weeks:1 },
-      { id:"schema",  title:"Микроразметка", desc:"Услуги, цены и отзывы понятны поисковикам и ИИ", price:[3,6], weeks:.5 },
-      { id:"monthly", title:"Ежемесячное продвижение", desc:"Позиции, упоминания в нейросетях, отчёт", monthly:[12,20] },
+      { id:"maps",    title:"Яндекс Карты и 2ГИС", desc:"Карточки, фото и отзывы, чтобы находили рядом", price:[4,7], weeks:.5 },
+      { id:"content", title:"Статьи и ответы для нейросетей", desc:"Экспертные тексты и FAQ, которые удобно цитировать ИИ", price:[6,11], weeks:1 },
+      { id:"schema",  title:"Микроразметка", desc:"Услуги, цены и отзывы понятны поисковикам и ИИ", price:[2,4], weeks:.5 },
+      { id:"monthly", title:"Ежемесячное продвижение", desc:"Позиции, упоминания в нейросетях, отчёт", monthly:[8,14] },
     ]},
   { id:"pack", icon:"pack", title:"Комплекс под ключ", home:null,
     desc:"Сайт или приложение, бот, реклама и SEO одной командой",
     scales:[
-      { id:"site_ads",     title:"Сайт и реклама", desc:"Лендинг плюс запуск Директа", price:[40,65], weeks:[2,3] },
-      { id:"site_seo",     title:"Сайт, SEO и GEO", desc:"Сайт, который находят в поиске и советуют нейросети", price:[45,75], weeks:[3,4] },
-      { id:"site_bot_ads", title:"Сайт, бот и реклама", desc:"Заявки с сайта и рекламы приходят в бота", price:[55,90], weeks:[3,4] },
-      { id:"app_bot_ads",  title:"Мини-приложение, бот и реклама", desc:"Продажи прямо в Telegram", price:[80,140], weeks:[4,6] },
+      { id:"site_ads",     title:"Сайт и реклама", desc:"Лендинг плюс запуск Директа", price:[28,46], weeks:[2,3] },
+      { id:"site_seo",     title:"Сайт, SEO и GEO", desc:"Сайт, который находят в поиске и советуют нейросети", price:[32,53], weeks:[3,4] },
+      { id:"site_bot_ads", title:"Сайт, бот и реклама", desc:"Заявки с сайта и рекламы приходят в бота", price:[39,63], weeks:[3,4] },
+      { id:"app_bot_ads",  title:"Мини-приложение, бот и реклама", desc:"Продажи прямо в Telegram", price:[56,98], weeks:[4,6] },
     ],
     extras:[
-      { id:"seo",   title:"SEO и GEO-основа", desc:"Чтобы находили в Яндексе и советовали нейросети", price:[7,12], weeks:.5 },
-      { id:"ai",    title:"AI-консультант", desc:"Отвечает клиентам круглосуточно", price:[15,25], weeks:1 },
-      { id:"lead",  title:"Ведение рекламы", desc:"Оптимизация и отчёты каждую неделю", monthly:[10,15] },
-      { id:"texts", title:"Тексты и обработка фото", desc:"Контент берём на себя", price:[7,12], weeks:.5 },
-      { id:"crm",   title:"CRM для заявок", desc:"Воронка, статусы, напоминания", price:[7,12], weeks:.5 },
+      { id:"seo",   title:"SEO и GEO-основа", desc:"Чтобы находили в Яндексе и советовали нейросети", price:[5,8], weeks:.5 },
+      { id:"ai",    title:"AI-консультант", desc:"Отвечает клиентам круглосуточно", price:[11,18], weeks:1 },
+      { id:"lead",  title:"Ведение рекламы", desc:"Оптимизация и отчёты каждую неделю", monthly:[7,11] },
+      { id:"texts", title:"Тексты и обработка фото", desc:"Контент берём на себя", price:[5,8], weeks:.5 },
+      { id:"crm",   title:"CRM для заявок", desc:"Воронка, статусы, напоминания", price:[5,8], weeks:.5 },
     ]},
 ];
 
@@ -906,6 +932,13 @@ function Home(){
       <div><b>0 ₽</b><span>предоплаты</span></div>
       <div><b>2 минуты</b><span>на расчёт стоимости</span></div>
     </div>
+    ${CONFIG.PROMO.on ? `<button type="button" class="promo" data-act="promo">
+      <span class="promo-tag">Акция</span>
+      <b>${CONFIG.PROMO.title}</b>
+      <small>${CONFIG.PROMO.includes.slice(0, 3).join(" · ")}</small>
+      <span class="promo-row"><s>${CONFIG.PROMO.regular}</s><em>${CONFIG.PROMO.price}</em></span>
+      <span class="promo-go">Хочу такого бота ${I.next}</span>
+    </button>` : ""}
     <button type="button" class="chatcard" data-act="open-chat">
       <img src="assistant.webp" alt="">
       <b>Обсудить задачу в чате</b>
@@ -1231,6 +1264,7 @@ function bind(){
   });
   app.querySelectorAll("[data-act=back]").forEach(b => b.onclick = goBack);
   app.querySelectorAll("[data-act=open-chat]").forEach(b => b.onclick = () => { haptic.tap(); openChat(); });
+  app.querySelectorAll("[data-act=promo]").forEach(b => b.onclick = () => { haptic.tap(); openPromo(); });
   app.querySelectorAll("[data-chatneed]").forEach(b => {
     const open = () => { haptic.tap(); openChat({ need: b.dataset.chatneed }); };
     b.onclick = open; b.onkeydown = ev => { if (ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); open(); } };
@@ -1706,6 +1740,10 @@ const KB = [
   { id:"thanks", act:"thanks", k:["спасибо","благодар","=спс","=пасиб","=сенкс","thank"], w:.7 },
   { id:"bye",    act:"bye",    k:["спокойной ночи","хорошего дня","хорошего вечера","до свидан","=пока","всего доброго","всего хорошего","до встречи","=бай","досвидос"], w:.7 },
 
+  { id:"promo", t:"Акция: бот за 4 990 ₽", faq:true, k:["акци","4990","4 990","бот за 5","бот за пять","спецпредлож","дешевый бот","недорогой бот","бот недорого"],
+    a:`🔥 <b>${CONFIG.PROMO.title}</b><br><br>${CONFIG.PROMO.includes.map(x => "• " + x).join("<br>")}<br><br>Обычная цена такого бота ${CONFIG.PROMO.regular}. ${CONFIG.PROMO.limit}. Предоплаты нет.`,
+    next:[["🔥 Хочу бота по акции", "go:promo", "primary"], ["❓ Другие вопросы", "go:faq"]] },
+
   /* ---------- о студии и условиях ---------- */
   { id:"about", t:"Кто вы и чем занимаетесь?", faq:true, k:["студи","чем занимает","ваша компания","о компании","кто такие","кто вы","что за студ","о студии","о вас","чем занимаетесь","чем вы занимаетесь","расскажите о себе","что вы делаете","что делаете","=факт"],
     a:`${BRAND}: digital-студия. Делаем сайты и лендинги, Telegram-ботов и мини-приложения, настраиваем рекламу в Яндекс Директе, продвигаем в поиске, на картах и в ответах нейросетей (SEO и GEO).<br><br>Главное правило: <b>оплата по факту</b>. Сначала показываем работающий результат, потом вы платите.` },
@@ -2012,6 +2050,7 @@ const actions = {
   home: () => switchTab("home"),
   calc: () => startCalc(),
   works: () => switchTab("works"),
+  promo: () => openPromo(),
 };
 
 /* ---------- начало и меню ---------- */
@@ -2060,13 +2099,17 @@ function faqAnswer(id, inStep, viaButton){
 function beginQuiz(preset){
   const keep = {}; ["name","phone"].forEach(k => { if (CH.a[k]) keep[k] = CH.a[k]; });
   CH.a = Object.assign(keep, preset || {}); CH.flow = "quiz"; CH.confirming = false; CH.sent = false;
-  say("Подберём решение, это 1–2 минуты, в основном кнопками. В любой момент можно задать вопрос текстом.");
+  if (CH.a.promo){
+    const P = CONFIG.PROMO;
+    say(`🔥 <b>${P.title}</b><br><br>Что входит:<br>${P.includes.map(x => "• " + x).join("<br>")}<br><br>Обычная цена такого бота ${P.regular}. ${P.limit}. Предоплаты нет.<br><br>Задам пару вопросов, и заявка уйдёт ${CONFIG.OWNER_DAT}.`);
+  } else say("Подберём решение, это 1–2 минуты, в основном кнопками. В любой момент можно задать вопрос текстом.");
   askNext();
 }
 function budgetMax(a){ const b = CHAT.budgets.find(x => x[0] === a.budget); return b ? b[2] : null; }
 function needed(step){
   const a = CH.a;
   if (step in a) return false;
+  if (a.promo && ["goal","recommend","scale","budget","budget_fit"].includes(step)) return false;
   switch (step){
     case "goal": return a.need === "unknown";
     case "recommend": return a.need === "unknown" && "goal" in a;
@@ -2314,6 +2357,7 @@ function answerText(step, text){
 
 /* ---------- итог и отправка ---------- */
 function chatEstimate(a){
+  if (a.promo) return { promo:true, text:`Акция: бот за ${CONFIG.PROMO.price} (обычно ${CONFIG.PROMO.regular})` };
   const x = scaleOf(a); if (!x) return null;
   const k = a.deadline === "rush" ? 1.25 : 1;
   return { min: r5(x.price[0] * k), max: r5(x.price[1] * k), weeks: weeksText(x.weeks) };
@@ -2325,7 +2369,8 @@ function contactLine(a){
 function leadRows(a){
   const x = scaleOf(a), s = svcBy(a.need);
   let task = s ? s.title : "";
-  if (x) task = svcLine(s, x); else if (a.scale === "advice") task += ": нужен совет по варианту";
+  if (a.promo) task = `Telegram-бот по акции за ${CONFIG.PROMO.price}`;
+  else if (x) task = svcLine(s, x); else if (a.scale === "advice") task += ": нужен совет по варианту";
   let assets = a.assets_text || lbl(CHAT.assets, a.assets);
   if (a.link && a.link !== "skip") assets += ` (${a.link})`;
   return [
@@ -2342,7 +2387,8 @@ function leadSummaryHtml(){
   const a = CH.a, e = chatEstimate(a);
   let h = `<b>Проверьте, всё ли верно:</b><div class="rows">` +
     leadRows(a).map(([k, v]) => `<div><span>${k}:</span> ${esc(v)}</div>`).join("") + `</div>`;
-  if (e) h += `<div class="est">Предварительно: <b>${e.min}–${e.max} тыс ₽</b>, ${e.weeks}${a.deadline === "rush" ? " (срочно, +25%)" : ""}.<br>
+  if (e && e.promo) h += `<div class="est">Цена по акции: <b>${CONFIG.PROMO.price}</b>. Обычная цена такого бота ${CONFIG.PROMO.regular}. Предоплаты нет: оплата после запуска.</div>`;
+  else if (e) h += `<div class="est">Предварительно: <b>${e.min}–${e.max} тыс ₽</b>, ${e.weeks}${a.deadline === "rush" ? " (срочно, +25%)" : ""}.<br>
     Точную сумму ${CONFIG.OWNER_NAME} назовёт после бесплатного разбора. Предоплаты нет.</div>`;
   return h;
 }
@@ -2350,7 +2396,7 @@ function chatLeadText(){
   const a = CH.a, e = chatEstimate(a);
   const lines = [`Здравствуйте, ${CONFIG.OWNER_NAME}! Заявка из приложения ${CONFIG.BRAND}:`, ""]
     .concat(leadRows(a).map(([k, v]) => `${k}: ${v}`));
-  if (e) lines.push(`Ориентир: ${e.min}–${e.max} тыс ₽, ${e.weeks}`);
+  if (e) lines.push(e.promo ? e.text : `Ориентир: ${e.min}–${e.max} тыс ₽, ${e.weeks}`);
   if (a.questions && a.questions.length) lines.push("", "Мои вопросы:", ...a.questions.map(q => "• " + q));
   return lines.join("\n").slice(0, 3900);
 }
@@ -2376,8 +2422,8 @@ async function sendLead(){
   say("Отправляю заявку…");
   try {
     const rows = leadRows(a).concat((a.questions || []).length ? [["Вопросы", a.questions.join(" | ")]] : []);
-    const res = await submitLead({ kind:"chat", title: s && x ? svcLine(s, x) : s ? s.title : "Подбор решения", rows,
-      estimate: e ? `Ориентир: ${e.min}–${e.max} тыс ₽, ${e.weeks}` + (a.deadline === "rush" ? " (срочно, +25%)" : "") : "" });
+    const res = await submitLead({ kind:"chat", title: a.promo ? `Бот по акции ${CONFIG.PROMO.price}` : s && x ? svcLine(s, x) : s ? s.title : "Подбор решения", rows,
+      estimate: e && e.promo ? e.text : e ? `Ориентир: ${e.min}–${e.max} тыс ₽, ${e.weeks}` + (a.deadline === "rush" ? " (срочно, +25%)" : "") : "" });
     CH.sent = true; chatSave(); haptic.ok();
     say(`✅ Заявка №${esc(res.id)} отправлена ${CONFIG.OWNER_DAT}.<br><br>${CONFIG.OWNER_NAME} ${promise(a)}. Статус и ответы видны во вкладке «Кабинет».`,
       [Q("👤 Открыть кабинет", "go:cabinet", "primary"), Q("☰ Меню", "go:menu")]);
@@ -2411,6 +2457,7 @@ async function copyText(text){
   try { const t = document.createElement("textarea"); t.value = text; document.body.appendChild(t); t.select();
     const ok = document.execCommand("copy"); t.remove(); return ok; } catch(e) { return false; }
 }
+function openPromo(){ openChat({ need:"bot", scale:"lead", promo:"1" }); }
 function openChat(preset){
   const show = () => { if (S.screen !== "chat"){ trail.length = 0; S.screen = "chat"; render(); } };
   if (preset && CH.started){ show(); return beginQuiz(preset); }
@@ -2435,8 +2482,8 @@ chatLoad();
 applyTheme();
 { const h = (location.hash || "").replace("#", "");          // бот открывает приложение сразу на нужной вкладке
   const sp = IN_TG && tg.initDataUnsafe && tg.initDataUnsafe.start_param;
-  const want = ["works","chat","cabinet"].includes(h) ? h : ["works","chat","cabinet"].includes(sp) ? sp : null;
-  if (want) S.screen = want; }
+  const want = ["works","chat","cabinet","promo"].includes(h) ? h : ["works","chat","cabinet","promo"].includes(sp) ? sp : null;
+  if (want === "promo") setTimeout(openPromo, 50); else if (want) S.screen = want; }
 render();
 if (S.screen !== "cabinet" && (IN_TG || localLeads().length)) loadCabinet();
 </script>
