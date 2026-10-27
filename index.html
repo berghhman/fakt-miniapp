@@ -1115,10 +1115,9 @@ const budgetText = () => S.budgetUnknown ? "пока не знаю" : `${budgetL
 /* ---------- смета и итог ---------- */
 function receiptHtml(e, landed){
   const today = new Date().toLocaleDateString("ru-RU");
-  const no = S.receiptNo || (S.receiptNo = String(1000 + Math.floor(Math.random()*9000)));
   const rows = e.items.map(it => `<div class="r-row"><span class="l">${it.label}</span><span class="dots"></span><span class="v">${fmtRange(it.price)}</span></div>`).join("");
   return `<div class="receipt" role="group" aria-label="Предварительная смета">
-    <div class="r-head"><div class="wm">${CONFIG.BRAND}</div><div>Предварительная смета № ${no}</div><div>от ${today}</div></div>
+    <div class="r-head"><div class="wm">${CONFIG.BRAND}</div><div>Предварительная смета</div><div>от ${today}</div></div>
     <hr class="r-cut">
     <div class="r-group">${svc().title}</div>
     ${rows}
