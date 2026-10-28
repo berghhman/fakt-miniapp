@@ -566,7 +566,8 @@ const CONFIG = {
   /* Акция: карточка на главной, отдельная заявка в чате, ссылка t.me/thatsafact_bot?startapp=promo.
      Чтобы выключить акцию, поставьте on:false. */
   PROMO: {
-    on: true,
+    on: true, key: "bot", need: "bot", scale: "lead", start: "promo",
+    what: "бот", whatGen: "бота", lead: "Бот по акции", go: "Хочу такого бота",
     price: "4\u00a0990\u00a0₽",                // \u00a0: неразрывный пробел, чтобы цена не разрывалась
     regular: "от 10\u00a0000\u00a0₽",
     title: "Telegram-бот для вашего бизнеса за 4\u00a0990\u00a0₽",
@@ -575,7 +576,21 @@ const CONFIG = {
       "Ответы на 5–7 частых вопросов клиентов", "Кнопка «Записаться»: заявки приходят вам в Telegram",
       "Ссылки на ваш сайт, онлайн-запись и соцсети", "Запуск за 3 дня, оплата после запуска"],
   },
+  /* Акция на сайт: ссылка t.me/thatsafact_bot?startapp=site. Выключить: on:false. */
+  PROMO_SITE: {
+    on: true, key: "site", need: "site", scale: "multi", start: "site",
+    what: "сайт", whatGen: "сайта", lead: "Сайт по акции", go: "Хочу такой сайт",
+    price: "9\u00a0990\u00a0₽",
+    regular: "19\u00a0990\u00a0₽",
+    title: "Сайт под ключ за 9\u00a0990\u00a0₽",
+    limit: "Акция для первых 10 заказов",
+    includes: ["До 3 страниц: главная, услуги и цены, контакты", "Удобно с телефона", "Форма заявки: заявки приходят вам в Telegram",
+      "Подключим к вашему домену", "Запуск за 7 дней, оплата после запуска"],
+    note: "Домен и хостинг оплачиваются отдельно",
+  },
 };
+const PROMOS = { bot: CONFIG.PROMO, site: CONFIG.PROMO_SITE };
+const promoOf = a => a && a.promo ? (PROMOS[a.promo] || CONFIG.PROMO) : null;   // "1" в старых черновиках = бот
 
 /* Цены в тысячах рублей [от, до] (с октября 2026 на 30% ниже прежних, бот-визитка от 10). Сроки в неделях [от, до].
    Это стартовые вилки, поправьте под себя. */
@@ -932,13 +947,13 @@ function Home(){
       <div><b>0 ₽</b><span>предоплаты</span></div>
       <div><b>2 минуты</b><span>на расчёт стоимости</span></div>
     </div>
-    ${CONFIG.PROMO.on ? `<button type="button" class="promo" data-act="promo">
+    ${[CONFIG.PROMO_SITE, CONFIG.PROMO].filter(P => P.on).map(P => `<button type="button" class="promo" data-act="promo" data-promo="${P.key}">
       <span class="promo-tag">Акция</span>
-      <b>${CONFIG.PROMO.title}</b>
-      <small>${CONFIG.PROMO.includes.slice(0, 3).join(" · ")}</small>
-      <span class="promo-row"><s>${CONFIG.PROMO.regular}</s><em>${CONFIG.PROMO.price}</em></span>
-      <span class="promo-go">Хочу такого бота ${I.next}</span>
-    </button>` : ""}
+      <b>${P.title}</b>
+      <small>${P.includes.slice(0, 3).join(" · ")}</small>
+      <span class="promo-row"><s>${P.regular}</s><em>${P.price}</em></span>
+      <span class="promo-go">${P.go} ${I.next}</span>
+    </button>`).join("")}
     <button type="button" class="chatcard" data-act="open-chat">
       <img src="assistant.webp" alt="">
       <b>Обсудить задачу в чате</b>
@@ -1263,7 +1278,7 @@ function bind(){
   });
   app.querySelectorAll("[data-act=back]").forEach(b => b.onclick = goBack);
   app.querySelectorAll("[data-act=open-chat]").forEach(b => b.onclick = () => { haptic.tap(); openChat(); });
-  app.querySelectorAll("[data-act=promo]").forEach(b => b.onclick = () => { haptic.tap(); openPromo(); });
+  app.querySelectorAll("[data-act=promo]").forEach(b => b.onclick = () => { haptic.tap(); openPromo(b.dataset.promo); });
   app.querySelectorAll("[data-chatneed]").forEach(b => {
     const open = () => { haptic.tap(); openChat({ need: b.dataset.chatneed }); };
     b.onclick = open; b.onkeydown = ev => { if (ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); open(); } };
@@ -1739,9 +1754,15 @@ const KB = [
   { id:"thanks", act:"thanks", k:["спасибо","благодар","=спс","=пасиб","=сенкс","thank"], w:.7 },
   { id:"bye",    act:"bye",    k:["спокойной ночи","хорошего дня","хорошего вечера","до свидан","=пока","всего доброго","всего хорошего","до встречи","=бай","досвидос"], w:.7 },
 
-  { id:"promo", t:"Акция: бот за 4 990 ₽", faq:true, k:["акци","4990","4 990","бот за 5","бот за пять","спецпредлож","дешевый бот","недорогой бот","бот недорого"],
+  { id:"promos", t:"Какие сейчас акции?", faq:true, k:["акци","спецпредлож","скидк","распродаж","=дешевле","подешевле"],
+    a:`Сейчас две акции, обе без предоплаты:<br><br>🔥 <b>${CONFIG.PROMO_SITE.title}</b> вместо ${CONFIG.PROMO_SITE.regular}<br>🔥 <b>${CONFIG.PROMO.title}</b>, обычно ${CONFIG.PROMO.regular}<br><br>${CONFIG.PROMO.limit}, на каждую.`,
+    next:[["🔥 Сайт за 9 990 ₽", "go:promo_site", "primary"], ["🔥 Бот за 4 990 ₽", "go:promo", "primary"], ["❓ Другие вопросы", "go:faq"]] },
+  { id:"promo", t:"Акция: бот за 4 990 ₽", k:["4990","4 990","бот за 5","бот за пять","дешевый бот","недорогой бот","бот недорого","бот по акции","акция на бот","бота по акции"],
     a:`🔥 <b>${CONFIG.PROMO.title}</b><br><br>${CONFIG.PROMO.includes.map(x => "• " + x).join("<br>")}<br><br>Обычная цена такого бота ${CONFIG.PROMO.regular}. ${CONFIG.PROMO.limit}. Предоплаты нет.`,
     next:[["🔥 Хочу бота по акции", "go:promo", "primary"], ["❓ Другие вопросы", "go:faq"]] },
+  { id:"promo_site", t:"Акция: сайт за 9 990 ₽", k:["9990","9 990","19990","19 990","сайт за 10","сайт за десять","сайт под ключ","дешевый сайт","недорогой сайт","сайт недорого","сайт по акции","акция на сайт","сайта по акции","сайт за 9"],
+    a:`🔥 <b>${CONFIG.PROMO_SITE.title}</b> вместо ${CONFIG.PROMO_SITE.regular}<br><br>${CONFIG.PROMO_SITE.includes.map(x => "• " + x).join("<br>")}<br><br>${CONFIG.PROMO_SITE.note}. ${CONFIG.PROMO_SITE.limit}. Предоплаты нет.`,
+    next:[["🔥 Хочу сайт по акции", "go:promo_site", "primary"], ["❓ Другие вопросы", "go:faq"]] },
 
   /* ---------- о студии и условиях ---------- */
   { id:"about", t:"Кто вы и чем занимаетесь?", faq:true, k:["студи","чем занимает","ваша компания","о компании","кто такие","кто вы","что за студ","о студии","о вас","чем занимаетесь","чем вы занимаетесь","расскажите о себе","что вы делаете","что делаете","=факт"],
@@ -2049,7 +2070,8 @@ const actions = {
   home: () => switchTab("home"),
   calc: () => startCalc(),
   works: () => switchTab("works"),
-  promo: () => openPromo(),
+  promo: () => openPromo("bot"),
+  promo_site: () => openPromo("site"),
 };
 
 /* ---------- начало и меню ---------- */
@@ -2099,8 +2121,8 @@ function beginQuiz(preset){
   const keep = {}; ["name","phone"].forEach(k => { if (CH.a[k]) keep[k] = CH.a[k]; });
   CH.a = Object.assign(keep, preset || {}); CH.flow = "quiz"; CH.confirming = false; CH.sent = false;
   if (CH.a.promo){
-    const P = CONFIG.PROMO;
-    say(`🔥 <b>${P.title}</b><br><br>Что входит:<br>${P.includes.map(x => "• " + x).join("<br>")}<br><br>Обычная цена такого бота ${P.regular}. ${P.limit}. Предоплаты нет.<br><br>Задам пару вопросов, и заявка уйдёт ${CONFIG.OWNER_DAT}.`);
+    const P = promoOf(CH.a);
+    say(`🔥 <b>${P.title}</b><br><br>Что входит:<br>${P.includes.map(x => "• " + x).join("<br>")}<br><br>Обычная цена такого ${P.whatGen} ${P.regular}.${P.note ? " " + P.note + "." : ""} ${P.limit}. Предоплаты нет.<br><br>Задам пару вопросов, и заявка уйдёт ${CONFIG.OWNER_DAT}.`);
   } else say("Подберём решение, это 1–2 минуты, в основном кнопками. В любой момент можно задать вопрос текстом.");
   askNext();
 }
@@ -2356,7 +2378,7 @@ function answerText(step, text){
 
 /* ---------- итог и отправка ---------- */
 function chatEstimate(a){
-  if (a.promo) return { promo:true, text:`Акция: бот за ${CONFIG.PROMO.price} (обычно ${CONFIG.PROMO.regular})` };
+  if (a.promo){ const P = promoOf(a); return { promo:true, text:`Акция: ${P.what} за ${P.price} (обычно ${P.regular})` }; }
   const x = scaleOf(a); if (!x) return null;
   const k = a.deadline === "rush" ? 1.25 : 1;
   return { min: r5(x.price[0] * k), max: r5(x.price[1] * k), weeks: weeksText(x.weeks) };
@@ -2368,7 +2390,7 @@ function contactLine(a){
 function leadRows(a){
   const x = scaleOf(a), s = svcBy(a.need);
   let task = s ? s.title : "";
-  if (a.promo) task = `Telegram-бот по акции за ${CONFIG.PROMO.price}`;
+  if (a.promo) task = promoOf(a).key === "site" ? `Сайт до 3 страниц по акции за ${promoOf(a).price}` : `Telegram-бот по акции за ${promoOf(a).price}`;
   else if (x) task = svcLine(s, x); else if (a.scale === "advice") task += ": нужен совет по варианту";
   let assets = a.assets_text || lbl(CHAT.assets, a.assets);
   if (a.link && a.link !== "skip") assets += ` (${a.link})`;
@@ -2386,7 +2408,7 @@ function leadSummaryHtml(){
   const a = CH.a, e = chatEstimate(a);
   let h = `<b>Проверьте, всё ли верно:</b><div class="rows">` +
     leadRows(a).map(([k, v]) => `<div><span>${k}:</span> ${esc(v)}</div>`).join("") + `</div>`;
-  if (e && e.promo) h += `<div class="est">Цена по акции: <b>${CONFIG.PROMO.price}</b>. Обычная цена такого бота ${CONFIG.PROMO.regular}. Предоплаты нет: оплата после запуска.</div>`;
+  if (e && e.promo){ const P = promoOf(a); h += `<div class="est">Цена по акции: <b>${P.price}</b>. Обычная цена такого ${P.whatGen} ${P.regular}.${P.note ? " " + P.note + "." : ""} Предоплаты нет: оплата после запуска.</div>`; }
   else if (e) h += `<div class="est">Предварительно: <b>${e.min}–${e.max} тыс ₽</b>, ${e.weeks}${a.deadline === "rush" ? " (срочно, +25%)" : ""}.<br>
     Точную сумму ${CONFIG.OWNER_NAME} назовёт после бесплатного разбора. Предоплаты нет.</div>`;
   return h;
@@ -2421,7 +2443,7 @@ async function sendLead(){
   say("Отправляю заявку…");
   try {
     const rows = leadRows(a).concat((a.questions || []).length ? [["Вопросы", a.questions.join(" | ")]] : []);
-    const res = await submitLead({ kind:"chat", title: a.promo ? `Бот по акции ${CONFIG.PROMO.price}` : s && x ? svcLine(s, x) : s ? s.title : "Подбор решения", rows,
+    const res = await submitLead({ kind:"chat", title: a.promo ? `${promoOf(a).lead} ${promoOf(a).price}` : s && x ? svcLine(s, x) : s ? s.title : "Подбор решения", rows,
       estimate: e && e.promo ? e.text : e ? `Ориентир: ${e.min}–${e.max} тыс ₽, ${e.weeks}` + (a.deadline === "rush" ? " (срочно, +25%)" : "") : "" });
     CH.sent = true; chatSave(); haptic.ok();
     say(`✅ Заявка №${esc(res.id)} отправлена ${CONFIG.OWNER_DAT}.<br><br>${CONFIG.OWNER_NAME} ${promise(a)}. Статус и ответы видны во вкладке «Кабинет».`,
@@ -2456,7 +2478,7 @@ async function copyText(text){
   try { const t = document.createElement("textarea"); t.value = text; document.body.appendChild(t); t.select();
     const ok = document.execCommand("copy"); t.remove(); return ok; } catch(e) { return false; }
 }
-function openPromo(){ openChat({ need:"bot", scale:"lead", promo:"1" }); }
+function openPromo(key){ const P = PROMOS[key] || CONFIG.PROMO; openChat({ need:P.need, scale:P.scale, promo:P.key }); }
 function openChat(preset){
   const show = () => { if (S.screen !== "chat"){ trail.length = 0; S.screen = "chat"; render(); } };
   if (preset && CH.started){ show(); return beginQuiz(preset); }
@@ -2481,8 +2503,11 @@ chatLoad();
 applyTheme();
 { const h = (location.hash || "").replace("#", "");          // бот открывает приложение сразу на нужной вкладке
   const sp = IN_TG && tg.initDataUnsafe && tg.initDataUnsafe.start_param;
-  const want = ["works","chat","cabinet","promo"].includes(h) ? h : ["works","chat","cabinet","promo"].includes(sp) ? sp : null;
-  if (want === "promo") setTimeout(openPromo, 50); else if (want) S.screen = want; }
+  const OK = ["works","chat","cabinet","promo","site"];
+  const want = OK.includes(h) ? h : OK.includes(sp) ? sp : null;
+  if (want === "promo") setTimeout(() => openPromo("bot"), 50);
+  else if (want === "site") setTimeout(() => openPromo("site"), 50);
+  else if (want) S.screen = want; }
 render();
 if (S.screen !== "cabinet" && (IN_TG || localLeads().length)) loadCabinet();
 </script>
