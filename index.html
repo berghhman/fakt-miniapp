@@ -588,8 +588,22 @@ const CONFIG = {
       "Подключим к вашему домену", "Запуск за 7 дней, оплата после запуска"],
     note: "Домен и хостинг оплачиваются отдельно",
   },
+  /* Акция на CRM в Telegram: ссылка t.me/thatsafact_bot?startapp=crm. Выключить: on:false. */
+  PROMO_CRM: {
+    on: true, key: "crm", need: "bot", scale: "lead", start: "crm",
+    what: "CRM", whatGen: "CRM", such: "такой CRM", lead: "CRM по акции", go: "Хочу такую CRM",
+    task: "CRM в Telegram с напоминаниями по акции",
+    price: "29\u00a0990\u00a0₽",
+    regular: "59\u00a0990\u00a0₽",
+    title: "Своя CRM в Telegram за 29\u00a0990\u00a0₽",
+    limit: "Акция для первых 10 заказов",
+    includes: ["Все заявки с сайта, бота и мини-приложения в одной базе", "Статусы и карточка клиента с историей и суммами",
+      "Напоминания клиентам через бота: о записи и повторном визите", "Отчёт: заявки и деньги",
+      "До 5 сотрудников без доплат за каждого", "Запуск за 14 дней, оплата после запуска"],
+    note: "Сервер для CRM оплачивается отдельно",
+  },
 };
-const PROMOS = { bot: CONFIG.PROMO, site: CONFIG.PROMO_SITE };
+const PROMOS = { bot: CONFIG.PROMO, site: CONFIG.PROMO_SITE, crm: CONFIG.PROMO_CRM };
 const promoOf = a => a && a.promo ? (PROMOS[a.promo] || CONFIG.PROMO) : null;   // "1" в старых черновиках = бот
 
 /* Цены в тысячах рублей [от, до] (с октября 2026 на 30% ниже прежних, бот-визитка от 10). Сроки в неделях [от, до].
@@ -947,7 +961,7 @@ function Home(){
       <div><b>0 ₽</b><span>предоплаты</span></div>
       <div><b>2 минуты</b><span>на расчёт стоимости</span></div>
     </div>
-    ${[CONFIG.PROMO_SITE, CONFIG.PROMO].filter(P => P.on).map(P => `<button type="button" class="promo" data-act="promo" data-promo="${P.key}">
+    ${[CONFIG.PROMO_SITE, CONFIG.PROMO_CRM, CONFIG.PROMO].filter(P => P.on).map(P => `<button type="button" class="promo" data-act="promo" data-promo="${P.key}">
       <span class="promo-tag">Акция</span>
       <b>${P.title}</b>
       <small>${P.includes.slice(0, 3).join(" · ")}</small>
@@ -1755,14 +1769,17 @@ const KB = [
   { id:"bye",    act:"bye",    k:["спокойной ночи","хорошего дня","хорошего вечера","до свидан","=пока","всего доброго","всего хорошего","до встречи","=бай","досвидос"], w:.7 },
 
   { id:"promos", t:"Какие сейчас акции?", faq:true, k:["акци","спецпредлож","скидк","распродаж","=дешевле","подешевле"],
-    a:`Сейчас две акции, обе без предоплаты:<br><br>🔥 <b>${CONFIG.PROMO_SITE.title}</b> вместо ${CONFIG.PROMO_SITE.regular}<br>🔥 <b>${CONFIG.PROMO.title}</b>, обычно ${CONFIG.PROMO.regular}<br><br>${CONFIG.PROMO.limit}, на каждую.`,
-    next:[["🔥 Сайт за 9 990 ₽", "go:promo_site", "primary"], ["🔥 Бот за 4 990 ₽", "go:promo", "primary"], ["❓ Другие вопросы", "go:faq"]] },
+    a:`Сейчас три акции, все без предоплаты:<br><br>🔥 <b>${CONFIG.PROMO_SITE.title}</b> вместо ${CONFIG.PROMO_SITE.regular}<br>🔥 <b>${CONFIG.PROMO_CRM.title}</b> вместо ${CONFIG.PROMO_CRM.regular}<br>🔥 <b>${CONFIG.PROMO.title}</b>, обычно ${CONFIG.PROMO.regular}<br><br>${CONFIG.PROMO.limit}, на каждую.`,
+    next:[["🔥 Сайт за 9 990 ₽", "go:promo_site", "primary"], ["🔥 CRM за 29 990 ₽", "go:promo_crm", "primary"], ["🔥 Бот за 4 990 ₽", "go:promo", "primary"], ["❓ Другие вопросы", "go:faq"]] },
   { id:"promo", t:"Акция: бот за 4 990 ₽", k:["4990","4 990","бот за 5","бот за пять","дешевый бот","недорогой бот","бот недорого","бот по акции","акция на бот","бота по акции"],
     a:`🔥 <b>${CONFIG.PROMO.title}</b><br><br>${CONFIG.PROMO.includes.map(x => "• " + x).join("<br>")}<br><br>Обычная цена такого бота ${CONFIG.PROMO.regular}. ${CONFIG.PROMO.limit}. Предоплаты нет.`,
     next:[["🔥 Хочу бота по акции", "go:promo", "primary"], ["❓ Другие вопросы", "go:faq"]] },
   { id:"promo_site", t:"Акция: сайт за 9 990 ₽", k:["9990","9 990","19990","19 990","сайт за 10","сайт за десять","сайт под ключ","дешевый сайт","недорогой сайт","сайт недорого","сайт по акции","акция на сайт","сайта по акции","сайт за 9"],
     a:`🔥 <b>${CONFIG.PROMO_SITE.title}</b> вместо ${CONFIG.PROMO_SITE.regular}<br><br>${CONFIG.PROMO_SITE.includes.map(x => "• " + x).join("<br>")}<br><br>${CONFIG.PROMO_SITE.note}. ${CONFIG.PROMO_SITE.limit}. Предоплаты нет.`,
     next:[["🔥 Хочу сайт по акции", "go:promo_site", "primary"], ["❓ Другие вопросы", "go:faq"]] },
+  { id:"promo_crm", t:"Акция: CRM за 29 990 ₽", faq:true, k:["crm","црм","срм","своя crm","crm в телеграм","crm систем","crm-систем","нужна crm","сделать crm","crm за","29990","29 990","59990","59 990","учет клиентов","учёт клиентов","база клиентов","клиентская база","клиентскую базу","напоминания клиент","напоминать клиент","срм систем","црм систем","вести клиентов","учет заявок","учёт заявок"],
+    a:`🔥 <b>${CONFIG.PROMO_CRM.title}</b> вместо ${CONFIG.PROMO_CRM.regular}<br><br>${CONFIG.PROMO_CRM.includes.map(x => "• " + x).join("<br>")}<br><br>Для сравнения: подписка на amoCRM стоит больше 1 000 ₽ в месяц за каждого сотрудника, а простое внедрение у подрядчика от 30 000 ₽. ${CONFIG.PROMO_CRM.note}. ${CONFIG.PROMO_CRM.limit}. Предоплаты нет.`,
+    next:[["🔥 Хочу CRM по акции", "go:promo_crm", "primary"], ["❓ Другие вопросы", "go:faq"]] },
 
   /* ---------- о студии и условиях ---------- */
   { id:"about", t:"Кто вы и чем занимаетесь?", faq:true, k:["студи","чем занимает","ваша компания","о компании","кто такие","кто вы","что за студ","о студии","о вас","чем занимаетесь","чем вы занимаетесь","расскажите о себе","что вы делаете","что делаете","=факт"],
@@ -2072,6 +2089,7 @@ const actions = {
   works: () => switchTab("works"),
   promo: () => openPromo("bot"),
   promo_site: () => openPromo("site"),
+  promo_crm: () => openPromo("crm"),
 };
 
 /* ---------- начало и меню ---------- */
@@ -2122,7 +2140,7 @@ function beginQuiz(preset){
   CH.a = Object.assign(keep, preset || {}); CH.flow = "quiz"; CH.confirming = false; CH.sent = false;
   if (CH.a.promo){
     const P = promoOf(CH.a);
-    say(`🔥 <b>${P.title}</b><br><br>Что входит:<br>${P.includes.map(x => "• " + x).join("<br>")}<br><br>Обычная цена такого ${P.whatGen} ${P.regular}.${P.note ? " " + P.note + "." : ""} ${P.limit}. Предоплаты нет.<br><br>Задам пару вопросов, и заявка уйдёт ${CONFIG.OWNER_DAT}.`);
+    say(`🔥 <b>${P.title}</b><br><br>Что входит:<br>${P.includes.map(x => "• " + x).join("<br>")}<br><br>Обычная цена ${P.such || "такого " + P.whatGen} ${P.regular}.${P.note ? " " + P.note + "." : ""} ${P.limit}. Предоплаты нет.<br><br>Задам пару вопросов, и заявка уйдёт ${CONFIG.OWNER_DAT}.`);
   } else say("Подберём решение, это 1–2 минуты, в основном кнопками. В любой момент можно задать вопрос текстом.");
   askNext();
 }
@@ -2390,7 +2408,7 @@ function contactLine(a){
 function leadRows(a){
   const x = scaleOf(a), s = svcBy(a.need);
   let task = s ? s.title : "";
-  if (a.promo) task = promoOf(a).key === "site" ? `Сайт до 3 страниц по акции за ${promoOf(a).price}` : `Telegram-бот по акции за ${promoOf(a).price}`;
+  if (a.promo){ const P = promoOf(a); task = P.task ? `${P.task} за ${P.price}` : P.key === "site" ? `Сайт до 3 страниц по акции за ${P.price}` : `Telegram-бот по акции за ${P.price}`; }
   else if (x) task = svcLine(s, x); else if (a.scale === "advice") task += ": нужен совет по варианту";
   let assets = a.assets_text || lbl(CHAT.assets, a.assets);
   if (a.link && a.link !== "skip") assets += ` (${a.link})`;
@@ -2408,7 +2426,7 @@ function leadSummaryHtml(){
   const a = CH.a, e = chatEstimate(a);
   let h = `<b>Проверьте, всё ли верно:</b><div class="rows">` +
     leadRows(a).map(([k, v]) => `<div><span>${k}:</span> ${esc(v)}</div>`).join("") + `</div>`;
-  if (e && e.promo){ const P = promoOf(a); h += `<div class="est">Цена по акции: <b>${P.price}</b>. Обычная цена такого ${P.whatGen} ${P.regular}.${P.note ? " " + P.note + "." : ""} Предоплаты нет: оплата после запуска.</div>`; }
+  if (e && e.promo){ const P = promoOf(a); h += `<div class="est">Цена по акции: <b>${P.price}</b>. Обычная цена ${P.such || "такого " + P.whatGen} ${P.regular}.${P.note ? " " + P.note + "." : ""} Предоплаты нет: оплата после запуска.</div>`; }
   else if (e) h += `<div class="est">Предварительно: <b>${e.min}–${e.max} тыс ₽</b>, ${e.weeks}${a.deadline === "rush" ? " (срочно, +25%)" : ""}.<br>
     Точную сумму ${CONFIG.OWNER_NAME} назовёт после бесплатного разбора. Предоплаты нет.</div>`;
   return h;
@@ -2503,10 +2521,10 @@ chatLoad();
 applyTheme();
 { const h = (location.hash || "").replace("#", "");          // бот открывает приложение сразу на нужной вкладке
   const sp = IN_TG && tg.initDataUnsafe && tg.initDataUnsafe.start_param;
-  const OK = ["works","chat","cabinet","promo","site"];
+  const OK = ["works","chat","cabinet","promo","site","crm"];
   const want = OK.includes(h) ? h : OK.includes(sp) ? sp : null;
   if (want === "promo") setTimeout(() => openPromo("bot"), 50);
-  else if (want === "site") setTimeout(() => openPromo("site"), 50);
+  else if (want === "site" || want === "crm") setTimeout(() => openPromo(want), 50);
   else if (want) S.screen = want; }
 render();
 if (S.screen !== "cabinet" && (IN_TG || localLeads().length)) loadCabinet();
