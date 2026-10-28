@@ -508,6 +508,17 @@ body.has-tabs .chat-input{padding-bottom:10px}
   .msg.new,.quick.new,.typing i{animation:none}
 }
 </style>
+<!-- Yandex.Metrika counter: цели lead_sent (заявка отправлена) и promo_open (начал заявку по акции) -->
+<script type="text/javascript">
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js?id=113848941', 'ym');
+ym(113848941, 'init', {ssr:true, webvisor:false, clickmap:true, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/113848941" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 </head>
 <body>
 <main id="app" aria-live="polite"></main>
@@ -1381,9 +1392,29 @@ const LOCAL_LEADS = "fakt-leads-v1";
 function localLeads(){ try { return JSON.parse(localStorage.getItem(LOCAL_LEADS)) || []; } catch(e) { return []; } }
 function saveLocalLeads(list){ try { localStorage.setItem(LOCAL_LEADS, JSON.stringify(list.slice(0, 30))); } catch(e) {} }
 /* Отправить заявку. lead = { kind, title, rows:[[подпись, значение]], estimate } */
+/* Метрика и источник заявки. Ссылки для рекламы: ?utm_source=yandex&utm_campaign=site#site
+   или t.me/thatsafact_bot?startapp=site_tg (после «_» метка источника). */
+const YM_ID = 113848941;
+function goal(name, params){ try { if (window.ym) window.ym(YM_ID, "reachGoal", name, params || {}); } catch(e) {} }
+const SRC_TAGS = { tg:"Реклама в Telegram-каналах", ya:"Яндекс Директ", ch:"Канал @uiuxfact", post:"Пост в канале" };
+function leadSource(){
+  try {
+    const q = new URLSearchParams(location.search);
+    const sp = IN_TG && tg.initDataUnsafe && tg.initDataUnsafe.start_param || "";
+    if (q.get("utm_source")) return ["utm", q.get("utm_source"), q.get("utm_campaign"), q.get("utm_term")].filter(Boolean).join(" / ").slice(0, 120);
+    if (q.get("yclid")) return "Яндекс Директ";
+    if (sp.includes("_")) { const tag = sp.split("_").slice(1).join("_"); return SRC_TAGS[tag] || "Метка " + tag; }
+    if (sp) return "Telegram, ссылка ?startapp=" + sp;
+    if (IN_TG) return "Telegram";
+    return document.referrer ? "Браузер, переход с " + new URL(document.referrer).hostname : "Браузер";
+  } catch(e) { return ""; }
+}
 async function submitLead(lead){
   await askWrite();
+  const src = leadSource();
+  if (src && !(lead.rows || []).some(([k]) => k === "Источник")) lead = Object.assign({}, lead, { rows:(lead.rows || []).concat([["Источник", src]]) });
   const res = await api("lead", { lead });
+  goal(lead.kind === "question" ? "question_sent" : "lead_sent", { kind:lead.kind, title:lead.title });
   saveLocalLeads([{ id:res.id, ts:Math.floor(Date.now() / 1000), title:lead.title, kind:lead.kind, status:"new",
     estimate:lead.estimate || "", rows:lead.rows, msgs:[] }].concat(localLeads()));
   CAB.leads = null;                                         // кабинет перезагрузит список
@@ -2496,7 +2527,7 @@ async function copyText(text){
   try { const t = document.createElement("textarea"); t.value = text; document.body.appendChild(t); t.select();
     const ok = document.execCommand("copy"); t.remove(); return ok; } catch(e) { return false; }
 }
-function openPromo(key){ const P = PROMOS[key] || CONFIG.PROMO; openChat({ need:P.need, scale:P.scale, promo:P.key }); }
+function openPromo(key){ const P = PROMOS[key] || CONFIG.PROMO; goal("promo_open", { promo:P.key }); openChat({ need:P.need, scale:P.scale, promo:P.key }); }
 function openChat(preset){
   const show = () => { if (S.screen !== "chat"){ trail.length = 0; S.screen = "chat"; render(); } };
   if (preset && CH.started){ show(); return beginQuiz(preset); }
@@ -2520,7 +2551,7 @@ stageHeight();
 chatLoad();
 applyTheme();
 { const h = (location.hash || "").replace("#", "");          // бот открывает приложение сразу на нужной вкладке
-  const sp = IN_TG && tg.initDataUnsafe && tg.initDataUnsafe.start_param;
+  const sp = String(IN_TG && tg.initDataUnsafe && tg.initDataUnsafe.start_param || "").split("_")[0];   // site_tg → site
   const OK = ["works","chat","cabinet","promo","site","crm"];
   const want = OK.includes(h) ? h : OK.includes(sp) ? sp : null;
   if (want === "promo") setTimeout(() => openPromo("bot"), 50);
